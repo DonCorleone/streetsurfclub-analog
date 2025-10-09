@@ -1,16 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { BloggerService } from '../services/blogger.service';
-import { ContentService } from '../services/content.service';
-import { MetaService } from '../services/meta.service';
-import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
-import { Post } from '../models/posts';
-import { IContent } from '../models/IContent';
+import { BloggerService } from '../../services/blogger.service';
+import { ContentService } from '../../services/content.service';
+import { MetaService } from '../../services/meta.service';
+import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
+import { Post } from '../../models/posts';
+import { IContent } from '../../models/IContent';
 import { map, take } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { AncalNavbarComponent } from '../components/ancal-navbar/ancal-navbar.component';
-import { AncalFooterComponent } from '../components/ancal-footer/ancal-footer.component';
-import { LoadingSkeletonComponent } from '../components/loading-skeleton/loading-skeleton.component';
+import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar.component';
+import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
+import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
 
 @Component({
   selector: 'app-blog',

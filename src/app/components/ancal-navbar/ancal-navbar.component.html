@@ -1,0 +1,62 @@
+<a [routerLink]="'/'">
+  <div class="flex flex-row items-center justify-center gap-6 bg-stone-100 md:gap-8 lg:gap-10 xl:gap-14 2xl:gap-18 -mb-8">
+    <img id="img-logo" src="assets/images/logo.png" class="hidden lg:inline mt10- z-1" alt="logo">
+    <img id="img-logo-full" src="assets/images/logo-full.png" class="inline lg:hidden z-1" alt="logo">
+    <img id="img-logo-icon" src="assets/images/logo-icon.png" class="hidden lg:inline py-3 md:py-4 lg:py-5 xl:py-6 2xl:py-7 z-1" alt="logo">
+  </div>
+</a>
+
+@let pages = (pages$ | async);
+<div
+  class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-stone-100 pt-6 pb-6 lg:pt-auto lg:pb-auto xl:h-28"
+  [ngClass]="{'isSticky sticky top-0 left-0 right-0 z-991': isSticky}" data-aos="fade-up">
+  <div
+    class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[80px] 3xl:px-[120px]">
+    <nav class="navbar relative lg:flex flex-wrap" 
+      [class.active]="menuOpen"
+      [class.stickymode]="isSticky">  
+      @if(isSticky){
+        <div class="self-center text-center px-12 lg:hidden">
+          <img src="assets/images/logo.png" alt="logo">
+        </div>
+      }
+      <button
+        class="navbar-toggler absolute ml-auto right-0 -top-[16px] lg:hidden"
+        [class.stickymode]="isSticky"
+        (click)="toggleMenu()"
+        type="button">
+        <span class="burger-menu text-black cursor-pointer leading-none text-[30px]">
+          <i class="ri-menu-line"></i>
+        </span>
+      </button>
+
+      <div class="navbar-collapse flex self-center grow basis-auto">
+        @if(pages && pages.length > 0) {
+          <ul class="navbar-nav self-center flex-row lg:my-[20px] lg:mt-[10px] xl:mt-[15px] 2xl:mt-[20px] lg:flex">
+            <li
+              class="nav-item text-center text-[14px] md:text-[15px] xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 lg:ml-[7px] lg:mr-[7px] xl:ml-[15px] xl:mr-[15px] 2xl:ml-[19px] 2xl:mr-[19px] first:ml-0 last:mr-0"
+              [routerLink]="'/blog'">
+              <span class="nav-link text-slate-900 relative z-1 cursor-pointer">
+                Neues
+              </span>
+            </li>
+            @for (page of pages; track page.id) {
+              <li
+                class="nav-item text-center text-[14px] md:text-[15px] xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 first:mt-0 lg:ml-[7px] lg:mr-[7px] xl:ml-[15px] xl:mr-[15px] 2xl:ml-[19px] 2xl:mr-[19px] first:ml-0 last:mr-0"
+                [routerLink]="'/blog/blog-details/page/' + page.id">
+                <span [innerHTML]="page.title | safeHtml"
+                  class="nav-link text-slate-900 relative z-1 cursor-pointer">
+                </span>
+              </li>
+            }
+            <li>
+              <div class="w-30 -mt-12 py-2">
+                <img id="img-logo-sticky" src="assets/images/logo-icon.png" [ngClass]="isSticky ? 'hidden lg:block' : 'hidden'" alt="logo">
+              </div>
+            </li>
+          </ul>
+        }
+      </div>
+    </nav>
+  </div>
+</div>

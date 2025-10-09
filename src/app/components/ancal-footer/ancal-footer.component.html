@@ -1,0 +1,140 @@
+<footer class="pt-[60px] md:pt-[80px] lg:pt-[100px] xl:pt-[120px] 2xl:pt-[150px] bg-stone-100">
+  <div class="container mx-auto px-[12px] 2xl:px-0">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[25px]">
+      <div data-aos="fade-in" data-aos-duration="500">
+        <h3 class="text-slate-900 font-semibold text-[18px] md:text-[20px] mb-[15px] lg:mb-[20px] leading-[1.3]">
+          Quick Links
+        </h3>
+        <ul class="text-[13px] md:text-[14px] lg:text-[15px]">
+          <li class="mb-[15px] last:mb-0">
+            <a [routerLink]="'/'" class="inline-block text-stone-500 transition-all hover:underline">
+              Home
+            </a>
+          </li>
+          @for (quickLink of quickLinks; track quickLink) {
+            <li class="mb-[15px] last:mb-0">
+              <a [routerLink]="'/blog/blog-details/page/' + quickLink.id" [innerHTML]="quickLink.title | safeHtml"
+                class="inline-block text-stone-500 transition-all hover:underline">
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+      <div data-aos="fade-in" data-aos-duration="500" data-aos-delay="200">
+        <h3 class="text-slate-900 font-semibold text-[18px] md:text-[20px] mb-[15px] lg:mb-[20px] leading-[1.3]">
+          Resources
+        </h3>
+        <ul class="text-[13px] md:text-[14px] lg:text-[15px]">
+          <li class="mb-[15px] last:mb-0">
+            <a [routerLink]="'/blog'" class="inline-block text-stone-500 transition-all hover:underline">
+              Blog
+            </a>
+          </li>
+          @for (resource of resources; track resource) {
+            <li class="mb-[15px] last:mb-0">
+              <a [routerLink]="'/blog/blog-details/page/' + resource.id" [innerHTML]="resource.title | safeHtml"
+                class="inline-block text-stone-500 transition-all hover:underline">
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+      <div data-aos="fade-in" data-aos-duration="500" data-aos-delay="300">
+        @if (terms) {
+          <h3 class="text-slate-900 font-semibold text-[18px] md:text-[20px] mb-[15px] lg:mb-[20px] leading-[1.3]">
+            Terms
+          </h3>
+        }
+        <ul class="text-[13px] md:text-[14px] lg:text-[15px]">
+          @for (term of terms; track term) {
+            <li class="mb-[15px] last:mb-0">
+              <a [routerLink]="'/blog/blog-details/page/' + term.id" [innerHTML]="term.title | safeHtml"
+                class="inline-block text-stone-500 transition-all hover:underline">
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+      <div data-aos="fade-in" data-aos-duration="500" data-aos-delay="400">
+        @if (supports) {
+          <h3 class="text-slate-900 font-semibold text-[18px] md:text-[20px] mb-[15px] lg:mb-[20px] leading-[1.3]">
+            Supports
+          </h3>
+        }
+        <ul class="text-[13px] md:text-[14px] lg:text-[15px]">
+          @for (support of supports; track support) {
+            <li class="mb-[15px] last:mb-0">
+              <a [routerLink]="'/blog/blog-details/page/' + support.id" [innerHTML]="support.title | safeHtml"
+                class="inline-block text-stone-500 transition-all hover:underline">
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+    <div
+      class="border-t border-neutral-300 py-[25px] md:py-[30px] lg:py-[40px] mt-[60px] md:mt-[80px] lg:mt-[100px] xl:mt-[120px] 2xl:mt-[140px]">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-[15px] md:gap-[25px]">
+        <div class="self-center">
+          <div class="flex justify-center md:justify-end">
+            <div class="flex flex-col md:flex-row">
+              <span class="inline-block self-center text-[13px] mb-3 md:mb-0 md:mr-4 md:text-[14px] lg:text-[15px] text-stone-500">
+                Follow us on:
+              </span>
+              <div class="flex gap-2">
+                <span class="inline-block self-center text-[13px] md:text-[14px] lg:text-[15px] text-amber-200 hover:text-indigo-300">
+                  <a href="https://www.facebook.com/StreetSurfClub/" target="_blank">
+                    Facebook
+                  </a>
+                </span>
+                <a href="https://www.facebook.com/StreetSurfClub/" target="_blank"
+                  class="inline-block self-center w-[30px] h-[30px] mr-2 bg-cyan-300 rounded-full text-center leading-[26px] transition-all hover:bg-amber-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="inline-block" width="17" height="17"
+                    viewBox="0 0 17 17" fill="none">
+                    <g clip-path="url(#clip0_125_211)">
+                      <path
+                        d="M11.4179 2.20996H9.44453C8.57227 2.20996 7.73572 2.55647 7.11894 3.17325C6.50215 3.79004 6.15564 4.62658 6.15564 5.49885V7.47218H4.18231V10.1033H6.15564V15.3655H8.78676V10.1033H10.7601L11.4179 7.47218H8.78676V5.49885C8.78676 5.3244 8.85606 5.15709 8.97941 5.03373C9.10277 4.91037 9.27008 4.84107 9.44453 4.84107H11.4179V2.20996Z"
+                        class="stroke-gray-900 stroke-1"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_125_211">
+                        <rect width="15.7867" height="15.7867" fill="white" transform="translate(0.235657 0.894531)"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </a>
+                <span class="inline-block self-center text-[13px] md:text-[14px] lg:text-[15px] text-amber-200 hover:text-indigo-300">
+                  <a href="https://www.instagram.com/Streetsurfclub_luzern/" target="_blank">
+                    Instagram
+                  </a>
+                </span>
+                <a href="https://www.instagram.com/Streetsurfclub_luzern/" target="_blank"
+                  class="inline-block self-center w-[30px] h-[30px] mr-2 bg-cyan-300 rounded-full text-center leading-[26px] transition-all hover:bg-amber-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="inline-block" width="17" height="17"
+                    viewBox="0 0 17 17" fill="none">
+                    <g clip-path="url(#clip0_125_225)">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M5.54587 1.59517C6.31744 1.55965 6.56345 1.55176 8.52889 1.55176C10.4943 1.55176 10.7403 1.56031 11.5113 1.59517C12.2822 1.63003 12.8084 1.75304 13.2688 1.9313C13.751 2.1135 14.1884 2.39832 14.5502 2.76667C14.9185 3.12779 15.2027 3.56456 15.3842 4.04737C15.5632 4.50781 15.6855 5.03403 15.721 5.80363C15.7566 6.57652 15.7644 6.82253 15.7644 8.78731C15.7644 10.7528 15.7559 10.9988 15.721 11.7703C15.6862 12.5399 15.5632 13.0662 15.3842 13.5266C15.2027 14.0095 14.9181 14.447 14.5502 14.8086C14.1884 15.177 13.751 15.4611 13.2688 15.6427C12.8084 15.8216 12.2822 15.9439 11.5126 15.9795C10.7403 16.015 10.4943 16.0229 8.52889 16.0229C6.56345 16.0229 6.31744 16.0143 5.54587 15.9795C4.77627 15.9446 4.25005 15.8216 3.7896 15.6427C3.30674 15.4611 2.86925 15.1765 2.50759 14.8086C2.13949 14.4473 1.85463 14.01 1.67287 13.5273C1.49461 13.0668 1.37227 12.5406 1.33675 11.771C1.30123 10.9981 1.29333 10.7521 1.29333 8.78731C1.29333 6.82187 1.30189 6.57586 1.33675 5.80495C1.37161 5.03403 1.49461 4.50781 1.67287 4.04737C1.85489 3.56461 2.13997 3.12734 2.50825 2.76602C2.8694 2.39799 3.30645 2.11313 3.78894 1.9313C4.24939 1.75304 4.77561 1.63069 5.54521 1.59517H5.54587ZM11.4527 2.89757C10.6897 2.86271 10.4608 2.85547 8.52889 2.85547C6.597 2.85547 6.36809 2.86271 5.60507 2.89757C4.89927 2.9298 4.51645 3.04754 4.26123 3.14687C3.92379 3.27842 3.68238 3.43432 3.42914 3.68756C3.18908 3.92111 3.00433 4.20542 2.88845 4.51965C2.78912 4.77487 2.67138 5.15769 2.63915 5.86349C2.60429 6.62651 2.59705 6.85542 2.59705 8.78731C2.59705 10.7192 2.60429 10.9481 2.63915 11.7111C2.67138 12.4169 2.78912 12.7998 2.88845 13.055C3.00421 13.3687 3.18905 13.6536 3.42914 13.8871C3.66265 14.1272 3.94747 14.312 4.26123 14.4278C4.51645 14.5271 4.89927 14.6448 5.60507 14.6771C6.36809 14.7119 6.59634 14.7192 8.52889 14.7192C10.4614 14.7192 10.6897 14.7119 11.4527 14.6771C12.1585 14.6448 12.5413 14.5271 12.7966 14.4278C13.134 14.2962 13.3754 14.1403 13.6286 13.8871C13.8687 13.6536 14.0536 13.3687 14.1693 13.055C14.2687 12.7998 14.3864 12.4169 14.4186 11.7111C14.4535 10.9481 14.4607 10.7192 14.4607 8.78731C14.4607 6.85542 14.4535 6.62651 14.4186 5.86349C14.3864 5.15769 14.2687 4.77487 14.1693 4.51965C14.0378 4.18221 13.8819 3.94081 13.6286 3.68756C13.3951 3.44752 13.1108 3.26278 12.7966 3.14687C12.5413 3.04754 12.1585 2.9298 11.4527 2.89757ZM7.60471 11.0178C8.12084 11.2327 8.69556 11.2617 9.23069 11.0999C9.76583 10.9381 10.2282 10.5955 10.5388 10.1307C10.8494 9.66582 10.989 9.10756 10.9338 8.55124C10.8785 7.99491 10.6318 7.47503 10.2358 7.08038C9.98339 6.82811 9.67817 6.63494 9.34212 6.51479C9.00608 6.39463 8.64757 6.35048 8.29242 6.38551C7.93726 6.42054 7.59429 6.53388 7.28819 6.71737C6.9821 6.90086 6.72049 7.14994 6.52221 7.44666C6.32393 7.74339 6.1939 8.08039 6.1415 8.4334C6.08909 8.78641 6.1156 9.14665 6.21913 9.48818C6.32266 9.82972 6.50062 10.1441 6.74021 10.4086C6.9798 10.6731 7.27505 10.8811 7.60471 11.0178ZM5.89909 6.15752C6.24444 5.81217 6.65443 5.53822 7.10565 5.35132C7.55688 5.16442 8.04049 5.06822 8.52889 5.06822C9.01729 5.06822 9.5009 5.16442 9.95212 5.35132C10.4033 5.53822 10.8133 5.81217 11.1587 6.15752C11.504 6.50287 11.778 6.91286 11.9649 7.36408C12.1518 7.8153 12.248 8.29891 12.248 8.78731C12.248 9.27571 12.1518 9.75933 11.9649 10.2105C11.778 10.6618 11.504 11.0718 11.1587 11.4171C10.4612 12.1146 9.51525 12.5064 8.52889 12.5064C7.54252 12.5064 6.59656 12.1146 5.89909 11.4171C5.20163 10.7196 4.8098 9.77368 4.8098 8.78731C4.8098 7.80095 5.20163 6.85498 5.89909 6.15752ZM13.0728 5.62209C13.1584 5.54136 13.2269 5.44428 13.2743 5.33659C13.3217 5.22891 13.347 5.11281 13.3487 4.99518C13.3504 4.87754 13.3285 4.76076 13.2843 4.65174C13.2401 4.54272 13.1744 4.44368 13.0912 4.36049C13.008 4.2773 12.909 4.21165 12.8 4.16742C12.6909 4.12319 12.5742 4.10129 12.4565 4.103C12.3389 4.10472 12.2228 4.13002 12.1151 4.17741C12.0074 4.22479 11.9103 4.29331 11.8296 4.37889C11.6726 4.54532 11.5867 4.7664 11.59 4.99518C11.5933 5.22396 11.6857 5.44243 11.8475 5.60422C12.0093 5.76601 12.2277 5.85838 12.4565 5.86171C12.6853 5.86505 12.9064 5.77909 13.0728 5.62209Z"
+                        class="fill-gray-900"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_125_225">
+                        <rect width="15.7867" height="15.7867" fill="white" transform="translate(0.635559 0.894531)"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="self-center text-center md:text-left">
+          <p class="text-[13px] md:text-[14px] lg:text-[15px] text-stone-500 leading-[1.8]">
+            Template © Canora by <a href="https://angular.hibootstrap.com/canora/"
+              class="inline text-slate-900 transition-all hover:underline" target="_blank">HiBootstrap</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

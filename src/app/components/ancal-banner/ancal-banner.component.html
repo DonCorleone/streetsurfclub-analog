@@ -1,0 +1,33 @@
+<div
+  class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[30px] 3xl:px-[120px]">
+  <div
+    class="bg-white py-[60px] px-[15px] sm:px-[25px] md:py-[80px] md:px-[40px] lg:py-[100px] lg:px-[50px] xl:py-[45px] xl:px-[40px] 2xl:px-[50px] 3xl:pl-[100px] 3xl:pr-[95px]">
+    @if (isLoading) {
+    <app-loading-skeleton type="banner" />
+    } @else {
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-[25px]">
+      @if (parsedContent) {
+      <div class="self-center" data-aos="fade-up">
+        @if (parsedContent.lead) {
+        <span
+          class="text-[14px] md:text-[16px] lg:text-[18px] 2xl:text-[20px] text-slate-900 bg-amber-200 py-[1px] px-[10px] mb-[12px] inline-block">
+          {{ parsedContent.lead }}
+        </span>
+        }
+        <h1 [innerHTML]="parsedContent.title | safeHtml"
+          class="text-slate-900 font-bold text-[28px] md:text-[38px] lg:text-[50px] 2xl:text-[56px] leading-[1.22] mb-[10px] md:mb-[12px] lg:mb-[15px] xl:mb-[18px]">
+        </h1>
+        <div [innerHTML]="parsedContent.content | safeHtml"
+          class="text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] text-slate-900 leading-[1.8]">
+        </div>
+      </div>
+      }
+      @if (parsedContent?.headerImg) {
+      <div class="self-center" data-aos="fade-up">
+        <img [src]="parsedContent?.headerImg" class="inline" alt="banner-image">
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>

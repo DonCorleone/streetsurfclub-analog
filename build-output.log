@@ -1,0 +1,424 @@
+
+> streetsurfclub-analog@0.0.0 build
+> vite build
+
+vite v7.1.9 building for production...
+vite v7.1.9 building SSR bundle for production...
+transforming...
+transforming...
+✓ 325 modules transformed.
+rendering chunks...
+✓ 63 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/client/index.html                                       1.04 kB │ gzip:   0.63 kB
+dist/client/assets/index-C6o3Z05o.css                       19.58 kB │ gzip:   4.72 kB
+dist/client/assets/blog.page-BQSq80ny.js                     4.47 kB │ gzip:   1.89 kB
+dist/client/assets/blog-details._id_.page-CFOfkBiK.js        6.54 kB │ gzip:   2.36 kB
+dist/client/assets/index.page-CVnAVOCv.js                    7.31 kB │ gzip:   2.45 kB
+dist/client/assets/rxjs-interop-DqYHl1mH.js                 12.60 kB │ gzip:   4.52 kB
+dist/client/assets/loading-skeleton.component-DEiHMurT.js   22.20 kB │ gzip:   7.99 kB
+dist/client/assets/analogjs-content-CHA8dg0J.js             99.67 kB │ gzip:  33.75 kB
+dist/client/assets/index-DyvrXKX8.js                       341.94 kB │ gzip: 107.55 kB
+✓ built in 4.68s
+dist/ssr/assets/blog.page-DQmqCh2-.js                       8.87 kB
+dist/ssr/assets/blog-details._id_.page-hAK-BgDj.js         12.74 kB
+dist/ssr/assets/index.page-5EIdZgKs.js                     13.71 kB
+dist/ssr/assets/analogjs-content-8TGF_ytd.js               21.09 kB
+dist/ssr/assets/rxjs-interop-Be4kL5l4.js                   34.61 kB
+dist/ssr/assets/loading-skeleton.component-BMKKE9Pc.js     35.25 kB
+dist/ssr/assets/xhr2-51O2Aa3r.js                           37.61 kB
+dist/ssr/main.server.js                                 1,368.33 kB
+✓ built in 4.75s
+Prerendering static pages...
+Production Mode
+Production Mode
+[request error] [unhandled] [GET] http://localhost/api/v1/list-pages
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-pages.mjs:7:11)
+    ... 6 lines matching cause stack trace ...
+    at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-pages.mjs:7:11)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1932:43
+      at _ZoneDelegate.invoke (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:364:160)
+      at _ZoneImpl.run (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:118:39)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:1078:32
+      at _ZoneDelegate.invokeTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:389:173)
+      at _ZoneImpl.runTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:168:41)
+      at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-pages
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-pages.mjs:7:11)
+    ... 5 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-pages.mjs:7:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/get-blog
+ H3Error: Missing required environment variables: GOOGLE_BLOGGER_API_KEY or GOOGLE_BLOGGER_ID
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/get-blog.mjs:7:11)
+    ... 6 lines matching cause stack trace ...
+    at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25) {
+  cause: Error: Missing required environment variables: GOOGLE_BLOGGER_API_KEY or GOOGLE_BLOGGER_ID
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/get-blog.mjs:7:11)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1932:43
+      at _ZoneDelegate.invoke (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:364:160)
+      at _ZoneImpl.run (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:118:39)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:1078:32
+      at _ZoneDelegate.invokeTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:389:173)
+      at _ZoneImpl.runTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:168:41)
+      at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-posts
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+    ... 6 lines matching cause stack trace ...
+    at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1932:43
+      at _ZoneDelegate.invoke (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:364:160)
+      at _ZoneImpl.run (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:118:39)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:1078:32
+      at _ZoneDelegate.invokeTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:389:173)
+      at _ZoneImpl.runTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:168:41)
+      at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-posts
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+    ... 6 lines matching cause stack trace ...
+    at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1932:43
+      at _ZoneDelegate.invoke (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:364:160)
+      at _ZoneImpl.run (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:118:39)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:1078:32
+      at _ZoneDelegate.invokeTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:389:173)
+      at _ZoneImpl.runTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:168:41)
+      at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/find-post
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/find-post.mjs:9:11)
+    ... 6 lines matching cause stack trace ...
+    at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/find-post.mjs:9:11)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1932:43
+      at _ZoneDelegate.invoke (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:364:160)
+      at _ZoneImpl.run (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:118:39)
+      at file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:1078:32
+      at _ZoneDelegate.invokeTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:389:173)
+      at _ZoneImpl.runTask (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:168:41)
+      at drainMicroTaskQueue (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/ssr/main.server.js:549:25),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+FetchError: [GET] "/api/v1/list-pages": 500 Server Error
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:453:9)
+[request error] [unhandled] [GET] http://localhost/api/v1/get-blog
+ H3Error: Missing required environment variables: GOOGLE_BLOGGER_API_KEY or GOOGLE_BLOGGER_ID
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/get-blog.mjs:7:11)
+    ... 7 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables: GOOGLE_BLOGGER_API_KEY or GOOGLE_BLOGGER_ID
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/get-blog.mjs:7:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processImmediate (node:internal/timers:453:9)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-posts
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+    ... 7 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processImmediate (node:internal/timers:453:9)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-posts
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+    ... 7 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processImmediate (node:internal/timers:453:9)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/find-post
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/find-post.mjs:9:11)
+    ... 5 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/find-post.mjs:9:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+Error fetching blog: FetchError: [GET] "/api/v1/get-blog": 500 Server Error
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:453:9)
+Error fetching posts: FetchError: [GET] "/api/v1/list-posts": 500 Server Error
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:453:9)
+Error fetching posts: FetchError: [GET] "/api/v1/list-posts": 500 Server Error
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:453:9)
+[FetchError: [GET] "/api/v1/find-post": 500 Server Error]
+Production Mode
+[request error] [unhandled] [GET] http://localhost/api/v1/list-pages
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-pages.mjs:7:11)
+    ... 5 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-pages.mjs:7:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/get-blog
+ H3Error: Missing required environment variables: GOOGLE_BLOGGER_API_KEY or GOOGLE_BLOGGER_ID
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/get-blog.mjs:7:11)
+    ... 5 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables: GOOGLE_BLOGGER_API_KEY or GOOGLE_BLOGGER_ID
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/get-blog.mjs:7:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-posts
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+    ... 5 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-posts
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+    ... 5 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-pages
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-pages.mjs:7:11)
+    ... 7 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-pages.mjs:7:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processImmediate (node:internal/timers:453:9)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/get-blog
+ H3Error: Missing required environment variables: GOOGLE_BLOGGER_API_KEY or GOOGLE_BLOGGER_ID
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/get-blog.mjs:7:11)
+    ... 7 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables: GOOGLE_BLOGGER_API_KEY or GOOGLE_BLOGGER_ID
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/get-blog.mjs:7:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processImmediate (node:internal/timers:453:9)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-posts
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+    ... 7 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processImmediate (node:internal/timers:453:9)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+[request error] [unhandled] [GET] http://localhost/api/v1/list-posts
+ H3Error: Missing required environment variables
+    at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+    ... 5 lines matching cause stack trace ...
+    at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159) {
+  cause: Error: Missing required environment variables
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/.nitro/prerender/chunks/routes/api/v1/list-posts.mjs:10:11)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:1930:24)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2243:34)
+      at Object.handler (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2004:31)
+      at async toNodeHandle (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/h3/dist/index.mjs:2296:7)
+      at async b (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:6876)
+      at async C (file:///Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/node_modules/node-mock-http/dist/index.mjs:1:7159),
+  statusCode: 500,
+  fatal: false,
+  unhandled: true,
+  statusMessage: undefined,
+  data: undefined
+}
+FetchError: [GET] "/api/v1/list-pages": 500 Server Error
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:453:9)
+Error fetching blog: FetchError: [GET] "/api/v1/get-blog": 500 Server Error
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:453:9)
+Error fetching posts: FetchError: [GET] "/api/v1/list-posts": 500 Server Error
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:453:9)
+Error fetching posts: [FetchError: [GET] "/api/v1/list-posts": 500 Server Error]
+Building Server...
+Building Sitemap...
+Writing sitemap at /Users/linuswieland/Documents/scm/streetsurfclub/streetsurfclub-analog/dist/analog/public/sitemap.xml
+
+
+The '@analogjs/platform' server has been successfully built.

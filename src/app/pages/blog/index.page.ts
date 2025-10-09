@@ -48,7 +48,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
           <article class="group bg-white transition-all hover:shadow-lg">
             @if (item.content.headerImg) {
             <div class="overflow-hidden">
-              <a [routerLink]="['/blog/blog-details', item.post.id]">
+              <a [routerLink]="['/blog/blog-details/post', item.post.id]">
                 <img [src]="item.content.headerImg" 
                      class="w-full h-[240px] object-cover transition-all group-hover:scale-110" 
                      [alt]="item.content.title">
@@ -67,7 +67,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
                 }
               </div>
               <h2 class="text-[20px] md:text-[22px] lg:text-[24px] font-bold leading-[1.3] mb-[15px]">
-                <a [routerLink]="['/blog/blog-details', item.post.id]" 
+                <a [routerLink]="['/blog/blog-details/post', item.post.id]" 
                    class="text-slate-900 transition-all hover:text-cyan-500"
                    [innerHTML]="item.content.title | safeHtml">
                 </a>
@@ -86,7 +86,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
                 }
               </div>
               }
-              <a [routerLink]="['/blog/blog-details', item.post.id]" 
+              <a [routerLink]="['/blog/blog-details/post', item.post.id]" 
                  class="inline-block text-[14px] md:text-[15px] font-semibold text-slate-900 transition-all hover:text-cyan-500">
                 Read More <i class="ri-arrow-right-line"></i>
               </a>

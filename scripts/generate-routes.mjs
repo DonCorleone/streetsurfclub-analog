@@ -19,27 +19,37 @@ async function generateRoutes() {
   }
 
   try {
-    const url = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/posts?key=${GOOGLE_BLOGGER_API_KEY}&maxResults=${BLOG_MAX_RESULTS}`;
-    
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.statusText}`);
+    // Fetch posts
+    const postsUrl = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/posts?key=${GOOGLE_BLOGGER_API_KEY}&maxResults=${BLOG_MAX_RESULTS}`;
+    const postsResponse = await fetch(postsUrl);
+    if (!postsResponse.ok) {
+      throw new Error(`Posts API request failed: ${postsResponse.statusText}`);
     }
+    const postsData = await postsResponse.json();
+    const posts = postsData.items || [];
 
-    const data = await response.json();
-    const posts = data.items || [];
+    // Fetch pages
+    const pagesUrl = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/pages?key=${GOOGLE_BLOGGER_API_KEY}`;
+    const pagesResponse = await fetch(pagesUrl);
+    if (!pagesResponse.ok) {
+      throw new Error(`Pages API request failed: ${pagesResponse.statusText}`);
+    }
+    const pagesData = await pagesResponse.json();
+    const pages = pagesData.items || [];
 
-    // Generate routes for all blog posts
+    // Generate routes for posts and pages
     const routes = [
       '/',
       '/blog',
-      ...posts.map(post => `/blog/blog-details/${post.id}`)
+      ...posts.map(post => `/blog/blog-details/post/${post.id}`),
+      ...pages.map(page => `/blog/blog-details/page/${page.id}`)
     ];
 
     console.log(`✅ Generated ${routes.length} routes for pre-rendering:`);
     console.log(`   - Homepage: /`);
     console.log(`   - Blog list: /blog`);
     console.log(`   - Blog posts: ${posts.length} posts`);
+    console.log(`   - Static pages: ${pages.length} pages`);
 
     return routes;
   } catch (error) {

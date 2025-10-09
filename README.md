@@ -13,8 +13,11 @@ npm install
 # Start dev server
 npm start
 
-# Build for production
+# Build for production (SSR only)
 npm run build
+
+# Build with pre-rendering (SSG - faster, SEO-optimized)
+PRERENDER=true npm run build
 
 # Preview production build
 npm run preview
@@ -29,15 +32,18 @@ Visit http://localhost:5173
 ### Pages
 - **Homepage** (`/`) - Banner + blog preview
 - **Blog List** (`/blog`) - All blog posts
-- **Blog Details** (`/blog/blog-details/:id`) - Individual posts
+- **Blog Post Details** (`/blog/blog-details/post/:id`) - Individual posts
+- **Static Page Details** (`/blog/blog-details/page/:id`) - Static pages (About, Contact, etc.)
 
 ### Features
 - ⚡ Fast SSR/SSG with Analog.js
-- 💾 80% fewer API calls (intelligent caching)
+- � Optional pre-rendering for ~86 routes (instant page loads!)
+- �💾 80% fewer API calls (intelligent caching)
 - 🎯 Loading skeleton screens
-- �� SEO-optimized meta tags
+- 📝 SEO-optimized meta tags
 - 📱 Fully responsive
 - 🚀 Node.js API routes (h3)
+- 🔀 Separate routes for posts and pages
 
 ---
 

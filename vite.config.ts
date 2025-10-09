@@ -3,15 +3,20 @@
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
+// @ts-ignore - .mjs file without types
+import { generateRoutes } from './scripts/generate-routes.mjs';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(async ({ mode }) => {
   const shouldPrerender = process.env?.['PRERENDER'] === 'true';
   const hasEnvVars = process.env?.['GOOGLE_BLOGGER_API_KEY'] && process.env?.['GOOGLE_BLOGGER_ID'];
 
   console.log('Build mode:', mode);
   console.log('Should prerender:', shouldPrerender);
   console.log('Has env vars:', hasEnvVars);
+
+  // Generate routes dynamically if prerendering is enabled
+  const prerenderRoutes = shouldPrerender && hasEnvVars ? await generateRoutes() : [];
 
   return {
     build: {
@@ -25,9 +30,9 @@ export default defineConfig(({ mode }) => {
         nitro: {
           preset: 'node-server',
           serveStatic: true,
-          // Disable prerendering during normal builds to avoid API call issues
+          // Prerender all pages and posts when PRERENDER=true
           prerender: {
-            routes: shouldPrerender && hasEnvVars ? ['/', '/blog'] : [],
+            routes: prerenderRoutes,
             crawlLinks: false,
             failOnError: false, // Don't fail build if prerender fails
           },

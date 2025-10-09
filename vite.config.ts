@@ -6,8 +6,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const shouldPrerender = process.env.PRERENDER === 'true';
-  const hasEnvVars = process.env.GOOGLE_BLOGGER_API_KEY && process.env.GOOGLE_BLOGGER_ID;
+  const shouldPrerender = process.env?.['PRERENDER'] === 'true';
+  const hasEnvVars = process.env?.['GOOGLE_BLOGGER_API_KEY'] && process.env?.['GOOGLE_BLOGGER_ID'];
 
   console.log('Build mode:', mode);
   console.log('Should prerender:', shouldPrerender);

@@ -19,7 +19,8 @@ This is an **Analog.js (Angular 20 + Vite)** project being developed to **replac
 - **File-based routing**: Create `src/app/pages/*.page.ts` for routes
   - `index.page.ts` → `/` route
   - `blog.page.ts` → `/blog` route
-  - `(blog)/blog-details.[id].page.ts` → `/blog/blog-details/:id` dynamic route
+  - `blog/blog-details.[id].page.ts` → `/blog/blog-details/:id` dynamic route
+  - Note: `(folder)` syntax creates layout groups WITHOUT adding to URL path
 - **Standalone components**: Use `export default class` with `@Component` decorator
 - **No NgModule**: Imports directly in component decorator
 - **SSR/SSG enabled**: Pages pre-rendered at build time for fast loading

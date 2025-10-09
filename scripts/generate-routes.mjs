@@ -19,8 +19,8 @@ async function generateRoutes() {
   }
 
   try {
-    // Fetch posts
-    const postsUrl = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/posts?key=${GOOGLE_BLOGGER_API_KEY}&maxResults=${BLOG_MAX_RESULTS}`;
+    // Fetch only the 10 newest posts for prerendering
+    const postsUrl = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/posts?key=${GOOGLE_BLOGGER_API_KEY}&maxResults=10`;
     const postsResponse = await fetch(postsUrl);
     if (!postsResponse.ok) {
       throw new Error(`Posts API request failed: ${postsResponse.statusText}`);
@@ -28,7 +28,7 @@ async function generateRoutes() {
     const postsData = await postsResponse.json();
     const posts = postsData.items || [];
 
-    // Fetch pages
+    // Fetch all pages (usually just a few static pages)
     const pagesUrl = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/pages?key=${GOOGLE_BLOGGER_API_KEY}`;
     const pagesResponse = await fetch(pagesUrl);
     if (!pagesResponse.ok) {
@@ -37,7 +37,7 @@ async function generateRoutes() {
     const pagesData = await pagesResponse.json();
     const pages = pagesData.items || [];
 
-    // Generate routes for posts and pages
+    // Generate routes for the 10 newest posts and all pages
     const routes = [
       '/',
       '/blog',
@@ -48,8 +48,9 @@ async function generateRoutes() {
     console.log(`✅ Generated ${routes.length} routes for pre-rendering:`);
     console.log(`   - Homepage: /`);
     console.log(`   - Blog list: /blog`);
-    console.log(`   - Blog posts: ${posts.length} posts`);
+    console.log(`   - Blog posts: ${posts.length} newest posts (out of ${BLOG_MAX_RESULTS} total)`);
     console.log(`   - Static pages: ${pages.length} pages`);
+    console.log(`   - Older posts will use SSR on-demand`);
 
     return routes;
   } catch (error) {

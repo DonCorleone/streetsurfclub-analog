@@ -1,4 +1,5 @@
 import { defineEventHandler, getQuery, createError } from 'h3';
+import { fetchWithRetry } from '../../../utils/retry';
 
 export default defineEventHandler(async (event) => {
   const apiKey = process.env['GOOGLE_BLOGGER_API_KEY'];
@@ -17,7 +18,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const res = await fetch(
+  const res = await fetchWithRetry(
     `https://www.googleapis.com/blogger/v3/blogs/${blogId}/pages/${pageid}?key=${apiKey}`,
     {
       method: 'GET',
@@ -26,10 +27,6 @@ export default defineEventHandler(async (event) => {
       },
     }
   );
-
-  if (!res.ok) {
-    throw new Error(`HTTP error! status: ${res.status}`);
-  }
 
   return res.json();
 });

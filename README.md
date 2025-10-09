@@ -37,13 +37,14 @@ Visit http://localhost:5173
 
 ### Features
 - ⚡ Fast SSR/SSG with Analog.js
-- � Optional pre-rendering for ~86 routes (instant page loads!)
-- �💾 80% fewer API calls (intelligent caching)
+- 🔥 Pre-rendering for homepage, blog list, 10 newest posts + all pages
+- � 80% fewer API calls (intelligent caching)
 - 🎯 Loading skeleton screens
 - 📝 SEO-optimized meta tags
 - 📱 Fully responsive
 - 🚀 Node.js API routes (h3)
 - 🔀 Separate routes for posts and pages
+- 🌐 Older posts use SSR on-demand (no rate limit issues)
 
 ---
 

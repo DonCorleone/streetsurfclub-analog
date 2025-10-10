@@ -1,4 +1,5 @@
 import { defineEventHandler, getQuery } from 'h3';
+import { getBloggerApiData } from '../../../utils/api-cache';
 
 export default defineEventHandler(async (event) => {
   const apiKey = process.env['GOOGLE_BLOGGER_API_KEY'];
@@ -6,10 +7,6 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const mobile = query['mobile'] as string;
   let maxResults: string | number = query['maxResults'] as string;
-
-  if (!apiKey || !blogId) {
-    throw new Error('Missing required environment variables');
-  }
 
   if (maxResults === '-1') {
     if (mobile === 'true') {
@@ -23,19 +20,9 @@ export default defineEventHandler(async (event) => {
     maxResults = '300';
   }
 
-  const res = await fetch(
-    `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?key=${apiKey}&fetchImages=true&fetchBodies=false&maxResults=${maxResults}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error(`HTTP error! status: ${res.status}`);
-  }
-
-  return res.json();
+  return getBloggerApiData('/posts', apiKey!, blogId!, {
+    fetchImages: 'true',
+    fetchBodies: 'false',
+    maxResults: maxResults.toString(),
+  });
 });

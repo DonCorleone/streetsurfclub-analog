@@ -3,6 +3,8 @@
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
+import { existsSync, readFileSync } from 'fs';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -15,6 +17,24 @@ export default defineConfig(({ mode }) => {
 
   // Define basic routes that should always be prerendered
   const basicRoutes = shouldPrerender ? ['/', '/blog'] : [];
+
+  // Try to load prerender-routes.json if it exists
+  let prerenderRoutes = basicRoutes;
+  if (shouldPrerender) {
+    const prerenderRoutesPath = resolve(__dirname, 'prerender-routes.json');
+    if (existsSync(prerenderRoutesPath)) {
+      try {
+        const file = readFileSync(prerenderRoutesPath, 'utf-8');
+        const parsed = JSON.parse(file);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          prerenderRoutes = parsed;
+          console.log(`Loaded ${parsed.length} prerender routes from prerender-routes.json`);
+        }
+      } catch (e) {
+        console.warn('Could not parse prerender-routes.json:', e);
+      }
+    }
+  }
 
   return {
     build: {
@@ -32,8 +52,8 @@ export default defineConfig(({ mode }) => {
         // Prerender configuration when PRERENDER=true
         ...(shouldPrerender && {
           prerender: {
-            routes: basicRoutes,
-            discover: true, // Auto-discover routes by crawling page links
+            routes: prerenderRoutes,
+            // discover: true, // Disabled to avoid crawling invalid dynamic routes
             ...(hasEnvVars && {
               sitemap: {
                 host: 'https://streetsurfclub.ch',

@@ -93,7 +93,7 @@ import { of } from 'rxjs';
             <div class="group bg-white transition-all hover:shadow-lg">
               @if (item.content.headerImg) {
               <div class="overflow-hidden">
-                <a [routerLink]="['/blog/blog-details', item.post.id]">
+                <a [routerLink]="['/blog/blog-details/post', item.post.id]">
                   <img [src]="item.content.headerImg" 
                        class="w-full h-[180px] object-cover transition-all group-hover:scale-110" 
                        [alt]="item.content.title">
@@ -102,7 +102,7 @@ import { of } from 'rxjs';
               }
               <div class="p-[20px]">
                 <h3 class="text-[16px] md:text-[18px] font-bold leading-[1.3] mb-[10px]">
-                  <a [routerLink]="['/blog/blog-details', item.post.id]" 
+                  <a [routerLink]="['/blog/blog-details/post', item.post.id]" 
                      class="text-slate-900 transition-all hover:text-cyan-500"
                      [innerHTML]="item.content.title | safeHtml">
                   </a>
@@ -112,7 +112,7 @@ import { of } from 'rxjs';
                   {{ item.content.lead }}
                 </p>
                 }
-                <a [routerLink]="['/blog/blog-details', item.post.id]" 
+                <a [routerLink]="['/blog/blog-details/post', item.post.id]" 
                    class="inline-block text-[13px] md:text-[14px] font-semibold text-slate-900 transition-all hover:text-cyan-500">
                   Read More <i class="ri-arrow-right-line"></i>
                 </a>

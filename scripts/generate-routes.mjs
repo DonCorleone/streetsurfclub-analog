@@ -19,16 +19,19 @@ async function generateRoutes() {
   }
 
   try {
-    // Fetch only the 10 newest posts for prerendering
-    const postsUrl = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/posts?key=${GOOGLE_BLOGGER_API_KEY}&maxResults=10`;
+    // Fetch ALL posts for full static site generation
+    const postsUrl = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/posts?key=${GOOGLE_BLOGGER_API_KEY}&maxResults=${BLOG_MAX_RESULTS}`;
+    console.log(`🔄 Fetching all posts (max ${BLOG_MAX_RESULTS})...`);
     const postsResponse = await fetch(postsUrl);
     if (!postsResponse.ok) {
       throw new Error(`Posts API request failed: ${postsResponse.statusText}`);
     }
     const postsData = await postsResponse.json();
     const posts = postsData.items || [];
+    console.log(`✅ Fetched ${posts.length} posts`);
 
     // Fetch all pages (usually just a few static pages)
+    console.log(`🔄 Fetching all pages...`);
     const pagesUrl = `https://www.googleapis.com/blogger/v3/blogs/${GOOGLE_BLOGGER_ID}/pages?key=${GOOGLE_BLOGGER_API_KEY}`;
     const pagesResponse = await fetch(pagesUrl);
     if (!pagesResponse.ok) {
@@ -36,8 +39,9 @@ async function generateRoutes() {
     }
     const pagesData = await pagesResponse.json();
     const pages = pagesData.items || [];
+    console.log(`✅ Fetched ${pages.length} pages`);
 
-    // Generate routes for the 10 newest posts and all pages
+    // Generate routes for ALL posts and ALL pages
     const routes = [
       '/',
       '/blog',
@@ -45,12 +49,12 @@ async function generateRoutes() {
       ...pages.map(page => `/blog/blog-details/page/${page.id}`)
     ];
 
-    console.log(`✅ Generated ${routes.length} routes for pre-rendering:`);
+    console.log(`\n✅ Generated ${routes.length} routes for FULL static pre-rendering:`);
     console.log(`   - Homepage: /`);
     console.log(`   - Blog list: /blog`);
-    console.log(`   - Blog posts: ${posts.length} newest posts (out of ${BLOG_MAX_RESULTS} total)`);
+    console.log(`   - Blog posts: ${posts.length} posts`);
     console.log(`   - Static pages: ${pages.length} pages`);
-    console.log(`   - Older posts will use SSR on-demand`);
+    console.log(`   - 🎯 All pages will work without JavaScript!`);
 
     return routes;
   } catch (error) {

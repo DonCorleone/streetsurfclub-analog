@@ -41,26 +41,22 @@ async function generateRoutes() {
     const pages = pagesData.items || [];
     console.log(`✅ Fetched ${pages.length} pages`);
 
-    // Generate routes for CRITICAL pages only:
-    // - Homepage and blog listing (always needed)
-    // - All static pages (few and important)
-    // - Latest 10 blog posts (for SEO and quick loading)
-    // Older posts will be server-rendered on-demand (still works without JS!)
-    const latestPosts = posts.slice(0, 10);
-
+    // Generate routes for ALL pages:
+    // - Homepage and blog listing
+    // - All static pages
+    // - ALL blog posts (prerendered for optimal performance and SEO)
     const routes = [
       '/',
       '/blog',
-      ...latestPosts.map(post => `/blog/blog-details/post/${post.id}`),
+      ...posts.map(post => `/blog/blog-details/post/${post.id}`),
       ...pages.map(page => `/blog/blog-details/page/${page.id}`)
     ];
 
     console.log(`\n✅ Generated ${routes.length} routes for pre-rendering:`);
     console.log(`   - Homepage: /`);
     console.log(`   - Blog list: /blog`);
-    console.log(`   - Latest posts: ${latestPosts.length} posts (prerendered)`);
-    console.log(`   - Static pages: ${pages.length} pages (prerendered)`);
-    console.log(`   - Older posts: ${posts.length - latestPosts.length} posts (server-rendered on-demand)`);
+    console.log(`   - Blog posts: ${posts.length} posts (all prerendered)`);
+    console.log(`   - Static pages: ${pages.length} pages (all prerendered)`);
     console.log(`   - 🎯 All pages work without JavaScript via SSR!`);
 
     return routes;

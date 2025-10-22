@@ -154,36 +154,41 @@ export default class BlogDetailsComponent implements OnInit {
   isLoading = true;
 
   ngOnInit(): void {
-    // Get ID from route snapshot (SSR-safe with injectActivatedRoute)
-    const id = this.route.snapshot.params['id'];
+    // Subscribe to route parameter changes to handle navigation between pages
+    this.route.params.subscribe(params => {
+      const id = params['id'];
 
-    if (!id) {
-      console.error('No page ID found in route params');
-      this.isLoading = false;
-      return;
-    }
-
-    // Use path-based API endpoint (works with SSR unlike query params)
-    this.bloggerService.getPageByPath(id).pipe(
-      take(1)
-    ).subscribe(post => {
-      if (post) {
-        this.post = post;
-        this.content = this.contentService.parseContent(post);
-
-        // Update meta tags
-        if (this.content) {
-          this.metaService.updateMetaTags({
-            title: this.content.title,
-            description: this.content.lead || this.content.title,
-            image: this.content.headerImg || ''
-          });
-        }
-
-        // Load related posts
-        this.loadRelatedPosts();
+      if (!id) {
+        console.error('No page ID found in route params');
+        this.isLoading = false;
+        return;
       }
-      this.isLoading = false;
+
+      // Reset loading state when navigating
+      this.isLoading = true;
+
+      // Use path-based API endpoint (works with SSR unlike query params)
+      this.bloggerService.getPageByPath(id).pipe(
+        take(1)
+      ).subscribe(post => {
+        if (post) {
+          this.post = post;
+          this.content = this.contentService.parseContent(post);
+
+          // Update meta tags
+          if (this.content) {
+            this.metaService.updateMetaTags({
+              title: this.content.title,
+              description: this.content.lead || this.content.title,
+              image: this.content.headerImg || ''
+            });
+          }
+
+          // Load related posts
+          this.loadRelatedPosts();
+        }
+        this.isLoading = false;
+      });
     });
   }
 

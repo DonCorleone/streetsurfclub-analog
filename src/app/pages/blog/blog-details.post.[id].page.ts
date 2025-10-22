@@ -1,17 +1,17 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { injectActivatedRoute } from '@analogjs/router';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
 import { MetaService } from '../../services/meta.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { Post } from '../../models/posts';
 import { IContent } from '../../models/IContent';
-import { map, take, switchMap } from 'rxjs';
+import { map, take } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar.component';
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-blog-details',
@@ -154,10 +154,12 @@ import { of } from 'rxjs';
   `
 })
 export default class BlogDetailsComponent implements OnInit {
-  private route = inject(ActivatedRoute);
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
   private metaService = inject(MetaService);
+
+  // Use Analog's injectActivatedRoute for SSR-safe route access
+  readonly route = injectActivatedRoute();
 
   post: Post | null = null;
   content: IContent | null = null;
@@ -165,26 +167,23 @@ export default class BlogDetailsComponent implements OnInit {
   isLoading = true;
 
   ngOnInit(): void {
-    // Subscribe to route changes to reload content when navigating between posts
-    this.route.paramMap.pipe(
-      map(params => params.get('id')),
-      switchMap(id => {
-        this.isLoading = true;
-        this.post = null;
-        this.content = null;
-        this.relatedPosts = [];
-        
-        if (!id) {
-          this.isLoading = false;
-          return of(null);
-        }
-        return this.bloggerService.getPost(id);
-      })
+    // Get ID from route snapshot (SSR-safe with injectActivatedRoute)
+    const id = this.route.snapshot.params['id'];
+
+    if (!id) {
+      console.error('No post ID found in route params');
+      this.isLoading = false;
+      return;
+    }
+
+    // Fetch post data
+    this.bloggerService.getPost(id).pipe(
+      take(1)
     ).subscribe(post => {
       if (post) {
         this.post = post;
         this.content = this.contentService.parseContent(post);
-        
+
         // Update meta tags
         if (this.content) {
           this.metaService.updateMetaTags({

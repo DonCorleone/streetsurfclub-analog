@@ -167,8 +167,8 @@ export default class BlogDetailsComponent implements OnInit {
       // Reset loading state when navigating
       this.isLoading = true;
 
-      // Use path-based API endpoint (works with SSR unlike query params)
-      this.bloggerService.getPageByPath(id).pipe(
+      // Fetch page data
+      this.bloggerService.getPage(id).pipe(
         take(1)
       ).subscribe(post => {
         if (post) {

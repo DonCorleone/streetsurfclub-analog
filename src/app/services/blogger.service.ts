@@ -80,10 +80,7 @@ export class BloggerService {
   }
 
   getPage(pageid: string): Observable<Page | null> {
-    // NOTE: During SSR/prerendering, HttpParams don't work with internal h3 routes
-    // We must construct the query string manually in the URL
-    const url = `${this.apiBaseUrl}/get-page?pageid=${encodeURIComponent(pageid)}`;
-    return this.httpClient.get<Page>(url).pipe(
+    return this.httpClient.get<Page>(`${this.apiBaseUrl}/page/${pageid}`).pipe(
       catchError(err => {
         console.error('Error fetching page:', err);
         return of(null);
@@ -91,39 +88,7 @@ export class BloggerService {
     );
   }
 
-  // Path-based API call (works with SSR - use this for SSR-safe page fetching)
-  getPageByPath(pageid: string): Observable<Page | null> {
-    return this.httpClient.get<Page>(`${this.apiBaseUrl}/page/${pageid}`).pipe(
-      catchError(err => {
-        console.error('Error fetching page by path:', err);
-        return of(null);
-      })
-    );
-  }
-
   getPost(postid: string): Observable<Post | null> {
-    // Return cached post if available
-    if (this.postCache[postid]) {
-      return of(this.postCache[postid]);
-    }
-
-    const params = new HttpParams().set('postid', postid);
-    return this.httpClient.get<Post>(`${this.apiBaseUrl}/get-post`, { params }).pipe(
-      map(post => {
-        if (post) {
-          this.postCache[postid] = post;
-        }
-        return post;
-      }),
-      catchError(err => {
-        console.error('Error fetching post:', err);
-        return of(null);
-      })
-    );
-  }
-
-  // Path-based API call (works with SSR - use this for SSR-safe post fetching)
-  getPostByPath(postid: string): Observable<Post | null> {
     // Return cached post if available
     if (this.postCache[postid]) {
       return of(this.postCache[postid]);
@@ -137,7 +102,7 @@ export class BloggerService {
         return post;
       }),
       catchError(err => {
-        console.error('Error fetching post by path:', err);
+        console.error('Error fetching post:', err);
         return of(null);
       })
     );

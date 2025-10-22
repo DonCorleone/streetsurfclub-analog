@@ -176,8 +176,8 @@ export default class BlogDetailsComponent implements OnInit {
       return;
     }
 
-    // Fetch post data
-    this.bloggerService.getPost(id).pipe(
+    // Use path-based API endpoint (works with SSR unlike query params)
+    this.bloggerService.getPostByPath(id).pipe(
       take(1)
     ).subscribe(post => {
       if (post) {

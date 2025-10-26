@@ -9,6 +9,7 @@ import { DarkmodeService } from "../../services/darkmode.service";
 
 @Component({
   selector: 'app-ancal-navbar',
+  styleUrls: ['./ancal-navbar.component.css'],
   templateUrl: './ancal-navbar.component.html',
   imports: [NgClass, AsyncPipe, RouterLink, SafeHtmlPipe],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,19 +1,24 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { BloggerService } from '../../services/blogger.service';
+import { DarkmodeService } from '../../services/darkmode.service';
 import { map, take } from 'rxjs';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { ContentService } from '../../services/content.service';
 import { IContent } from '../../models/IContent';
 import { LoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-ancal-banner',
-  imports: [SafeHtmlPipe, LoadingSkeletonComponent],
+  imports: [SafeHtmlPipe, LoadingSkeletonComponent, AsyncPipe],
   templateUrl: './ancal-banner.component.html'
 })
 export class AncalBannerComponent implements OnInit {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
+  private darkmodeService = inject(DarkmodeService);
+
+  isDarkMode$ = this.darkmodeService.isDarkMode$;
 
   parsedContent: IContent | null | undefined;
   isLoading = true;

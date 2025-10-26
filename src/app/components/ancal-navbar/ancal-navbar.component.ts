@@ -5,6 +5,7 @@ import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import { Observable } from "rxjs";
 import { Page } from "../../models/pages";
 import { BloggerService } from "../../services/blogger.service";
+import { DarkmodeService } from "../../services/darkmode.service";
 
 @Component({
   selector: 'app-ancal-navbar',
@@ -14,7 +15,10 @@ import { BloggerService } from "../../services/blogger.service";
 })
 export class AncalNavbarComponent {
   private bloggerService = inject(BloggerService);
+  private darkmodeService = inject(DarkmodeService);
+
   pages$: Observable<Page[]> = this.bloggerService.pages$;
+  isDarkMode$ = this.darkmodeService.isDarkMode$;
 
   menuOpen = false;
 

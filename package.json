@@ -28,6 +28,8 @@
     "@angular/platform-server": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@tailwindcss/vite": "^4.1.4",
+    "@types/aos": "^3.0.7",
+    "aos": "^2.3.4",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.4",

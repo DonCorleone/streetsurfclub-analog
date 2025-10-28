@@ -3,18 +3,24 @@ import { Page } from "../../models/pages";
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import { RouterLink } from "@angular/router";
 import { BloggerService } from "../../services/blogger.service";
+import { DarkmodeService } from "../../services/darkmode.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-ancal-footer',
   templateUrl: './ancal-footer.component.html',
   imports: [
     SafeHtmlPipe,
-    RouterLink
+    RouterLink,
+    AsyncPipe
   ]
 })
 export class AncalFooterComponent {
   private bloggerService = inject(BloggerService);
+  private darkmodeService = inject(DarkmodeService);
+
+  isDarkMode$ = this.darkmodeService.isDarkMode$;
 
   supports: Page[] = [];
   terms: Page[] = [];

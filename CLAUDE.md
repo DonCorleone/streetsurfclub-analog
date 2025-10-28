@@ -186,3 +186,13 @@ BLOG_MAX_RESULTS_MOBILE=50    # Mobile max results
 - **NOT used in production** - this is just the template source
 - Original Angular 17 template purchased from HiBootstrap
 - Can be safely ignored when working on the blog
+
+### Legacy Folder
+- Current Solution with Angular 19 SPA with Netlify Functions for API calls. Canora Template based Blog with added Darkmde.
+
+### ToDo for Claude
+- Please implement the same Blog with the same look & feel as you find it in the "Legacy" Folder and integrate it here in this Solution. 
+- Please keep the server / client structure we made with SSR / SSG.
+- Please implement it the Analog.js way 
+- Please use modern Angular (New Template syntax, Standalone)
+- Dark mode is implmented very straight foreward with adding new color - classes in the legacy solution. if there is a more sophisticated approach for achiving dark mode with modern Tailwind css, please do that.

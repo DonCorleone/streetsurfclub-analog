@@ -1,22 +1,16 @@
 import { Component, PLATFORM_ID, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   template: `<router-outlet />`,
-  styles: `
-    :host {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 2rem;
-      text-align: center;
-    }
-  `,
 })
 export class AppComponent {
   private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
 
   constructor() {
     // Only initialize AOS in the browser (not during SSR)
@@ -27,6 +21,13 @@ export class AppComponent {
           once: true,
         });
       });
+
+      // Scroll to top on route navigation
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
   }
 }

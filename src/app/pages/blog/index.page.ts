@@ -1,12 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, computed, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
 import { MetaService } from '../../services/meta.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
-import { Post } from '../../models/posts';
 import { IContent } from '../../models/IContent';
-import { map, take } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar.component';
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
@@ -36,7 +34,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
           </p>
         </div>
 
-        @if (isLoading) {
+        @if (isLoading()) {
         <div class="grid gap-[30px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           @for (i of [1,2,3,4,5,6]; track i) {
           <app-loading-skeleton type="post-card" />
@@ -44,7 +42,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
         </div>
         } @else {
         <div class="grid gap-[30px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          @for (item of posts; track item.post.id) {
+          @for (item of posts(); track item.post.id) {
           <article class="group bg-white dark:bg-rose-800 transition-all hover:shadow-lg">
             @if (item.content.headerImg) {
             <div class="overflow-hidden">
@@ -101,32 +99,36 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
     <app-ancal-footer />
   `
 })
-export default class BlogComponent implements OnInit {
+export default class BlogComponent {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
   private metaService = inject(MetaService);
 
-  posts: Array<{ post: Post; content: IContent }> = [];
-  isLoading = true;
+  // Use the posts resource from the service
+  postsResource = this.bloggerService.postsResource;
 
-  ngOnInit(): void {
+  // Computed signal that parses posts into content
+  posts = computed(() => {
+    const rawPosts = this.postsResource.value();
+    if (!rawPosts) return [];
+
+    return rawPosts
+      .map(post => {
+        const content = this.contentService.parseContent(post);
+        return content ? { post, content } : null;
+      })
+      .filter((item): item is { post: any; content: IContent } => item !== null);
+  });
+
+  // Computed loading state
+  isLoading = computed(() => this.postsResource.isLoading());
+
+  constructor() {
+    // Update meta tags on initialization
     this.metaService.updateMetaTags({
       title: 'Blog - Street Surf Club',
       description: 'Latest news, articles, and insights from Street Surf Club',
       image: ''
     });
-
-    this.bloggerService.getPosts().pipe(
-      take(1),
-      map(posts => {
-        this.posts = posts
-          .map(post => {
-            const content = this.contentService.parseContent(post);
-            return content ? { post, content } : null;
-          })
-          .filter((item): item is { post: Post; content: IContent } => item !== null);
-        this.isLoading = false;
-      })
-    ).subscribe();
   }
 }

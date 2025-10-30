@@ -1,10 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, resource, computed } from '@angular/core';
 import { HttpClient, HttpParams } from "@angular/common/http";
-import {BehaviorSubject, Observable, catchError, map, of} from 'rxjs';
-import {Page, PageResponse} from "../models/pages";
-import {Post, PostResponse} from "../models/posts";
-import {BlogResponse} from "../models/blog";
-import {environment} from "../../environments/environment";
+import { firstValueFrom } from 'rxjs';
+import { Page, PageResponse } from "../models/pages";
+import { Post, PostResponse } from "../models/posts";
+import { BlogResponse } from "../models/blog";
+import { environment } from "../../environments/environment";
 
 
 @Injectable({
@@ -12,111 +12,146 @@ import {environment} from "../../environments/environment";
 })
 export class BloggerService {
   private httpClient = inject(HttpClient);
-
   private apiBaseUrl = environment.apiBaseUrl;
 
-  quickLinks: Page[] = [];
-  resources: Page[] = [];
-  terms: Page[] = [];
-  supports: Page[] = [];
+  // Resource for all pages - loads once on initialization
+  pagesResource = resource({
+    loader: () => this.loadPages()
+  });
 
-  private blogSubject = new BehaviorSubject<BlogResponse>({} as BlogResponse);
-  public blog$ = this.blogSubject.asObservable();
+  // Resource for blog metadata
+  blogResource = resource({
+    loader: () => this.loadBlog()
+  });
 
-  private pagesSubject = new BehaviorSubject<Page[]>([]);
-  public pages$ = this.pagesSubject.asObservable();
+  // Resource for all posts - loads once on initialization
+  postsResource = resource({
+    loader: () => this.loadPosts()
+  });
 
-  private postsSubject = new BehaviorSubject<Post[]>([]);
-  public posts$ = this.postsSubject.asObservable();
+  // Computed signals for grouped pages
+  quickLinks = computed(() => this.getPagesByGroup(this.pagesResource.value() ?? [], 'Quick Links'));
+  resources = computed(() => this.getPagesByGroup(this.pagesResource.value() ?? [], 'Resources'));
+  terms = computed(() => this.getPagesByGroup(this.pagesResource.value() ?? [], 'Terms'));
+  supports = computed(() => this.getPagesByGroup(this.pagesResource.value() ?? [], 'Supports'));
 
-  private postsCache: { [maxResults: string]: Post[] } = {};
   private postCache: { [id: string]: Post } = {};
 
-  constructor() {
-    this.getPagesByMode().subscribe(pages => {
-
-      this.quickLinks = this.getPagesByGroup(pages,'Quick Links');
-      this.resources = this.getPagesByGroup(pages,'Resources');
-      this.terms = this.getPagesByGroup(pages, 'Terms');
-      this.supports = this.getPagesByGroup(pages,'Supports');
-
-      this.pagesSubject.next(pages);
-    });
-
-    this.getBlog().subscribe(blog => {
-      this.blogSubject.next(blog ?? {} as BlogResponse);
-    });
-
-    // Pre-fetch posts for caching
-    this.getPosts().subscribe(posts => {
-      this.postsSubject.next(posts);
-    });
-  }
-
-  getPagesByGroup(pages: Page[], group: string): Page[]  {
-
+  getPagesByGroup(pages: Page[], group: string): Page[] {
     // find pages where title contains attribute "group", the value should match the group parameter by regex
     // "title": "<div style=\"display: none;\" lead=\"\" sortorder=\"50\" group=\"Supports\"></div>Kontakt",
     return pages?.filter(page => page.title.match(new RegExp(`group="${group}"`, 'g'))) ?? [];
   }
 
-  private getPagesByMode(): Observable<Page[]> {
-    console.log('Production Mode');
-    return this.httpClient.get<PageResponse>(`${this.apiBaseUrl}/list-pages`).pipe(
-      map(response => response.items ? this.sortItems(response.items) : []),
-      catchError(err => {
-        console.error(err);
-        return of([]);
-      }));
+  // Loader for pages resource
+  private async loadPages(): Promise<Page[]> {
+    try {
+      const response = await firstValueFrom(
+        this.httpClient.get<PageResponse>(`${this.apiBaseUrl}/list-pages`)
+      );
+      return response.items ? this.sortItems(response.items) : [];
+    } catch (err) {
+      console.error('Error loading pages:', err);
+      return [];
+    }
   }
 
-  private getBlog(): Observable<BlogResponse | null> {
-    return this.httpClient.get<BlogResponse>(`${this.apiBaseUrl}/get-blog`).pipe(
-      catchError(err => {
-        console.error('Error fetching blog:', err);
-        return of({} as BlogResponse);
-      })
-    );
+  // Loader for blog resource
+  private async loadBlog(): Promise<BlogResponse> {
+    try {
+      return await firstValueFrom(
+        this.httpClient.get<BlogResponse>(`${this.apiBaseUrl}/get-blog`)
+      );
+    } catch (err) {
+      console.error('Error loading blog:', err);
+      return {} as BlogResponse;
+    }
   }
 
-  getPage(pageid: string): Observable<Page | null> {
-    return this.httpClient.get<Page>(`${this.apiBaseUrl}/page/${pageid}`).pipe(
-      catchError(err => {
-        console.error('Error fetching page:', err);
-        return of(null);
-      })
-    );
+  // Loader for posts resource
+  private async loadPosts(): Promise<Post[]> {
+    try {
+      let params = new HttpParams();
+      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        params = params.set('mobile', 'true');
+      }
+
+      const response = await firstValueFrom(
+        this.httpClient.get<PostResponse>(`${this.apiBaseUrl}/list-posts`, { params })
+      );
+      return response.items ?? [];
+    } catch (err) {
+      console.error('Error loading posts:', err);
+      return [];
+    }
   }
 
-  getPost(postid: string): Observable<Post | null> {
+  // Async method for loading a single page (used in resources)
+  async loadPage(pageid: string): Promise<Page | null> {
+    try {
+      return await firstValueFrom(
+        this.httpClient.get<Page>(`${this.apiBaseUrl}/page/${pageid}`)
+      );
+    } catch (err) {
+      console.error('Error loading page:', err);
+      return null;
+    }
+  }
+
+  // Async method for loading a single post (used in resources)
+  async loadPost(postid: string): Promise<Post | null> {
     // Return cached post if available
     if (this.postCache[postid]) {
-      return of(this.postCache[postid]);
+      return this.postCache[postid];
     }
 
-    return this.httpClient.get<Post>(`${this.apiBaseUrl}/post/${postid}`).pipe(
-      map(post => {
-        if (post) {
-          this.postCache[postid] = post;
-        }
-        return post;
-      }),
-      catchError(err => {
-        console.error('Error fetching post:', err);
-        return of(null);
-      })
-    );
+    try {
+      const post = await firstValueFrom(
+        this.httpClient.get<Post>(`${this.apiBaseUrl}/post/${postid}`)
+      );
+      if (post) {
+        this.postCache[postid] = post;
+      }
+      return post;
+    } catch (err) {
+      console.error('Error loading post:', err);
+      return null;
+    }
   }
 
-  findPost(q: string): Observable<Post | null> {
-    console.log('Production Mode');
-    const encodedQ = encodeURIComponent(q);
-    return this.httpClient.get<PostResponse>(`${this.apiBaseUrl}/find-post?encodedQ=${encodedQ}`).pipe(
-      map(response => response.items ?  response.items[0] : null),
-      catchError(err => {
-        console.error(err);
-        return of(null);
-      }));
+  // Async method for finding a post by query (used in resources)
+  async findPost(q: string): Promise<Post | null> {
+    try {
+      const encodedQ = encodeURIComponent(q);
+      const response = await firstValueFrom(
+        this.httpClient.get<PostResponse>(`${this.apiBaseUrl}/find-post?encodedQ=${encodedQ}`)
+      );
+      return response.items ? response.items[0] : null;
+    } catch (err) {
+      console.error('Error finding post:', err);
+      return null;
+    }
+  }
+
+  // Method for loading posts with custom maxResults (used in resources)
+  async loadPostsWithLimit(maxResults?: number): Promise<Post[]> {
+    try {
+      let params = new HttpParams();
+      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        params = params.set('mobile', 'true');
+      }
+      if (maxResults) {
+        params = params.set('maxResults', maxResults.toString());
+      }
+
+      const response = await firstValueFrom(
+        this.httpClient.get<PostResponse>(`${this.apiBaseUrl}/list-posts`, { params })
+      );
+      return response.items ?? [];
+    } catch (err) {
+      console.error('Error loading posts:', err);
+      return [];
+    }
   }
 
   private sortItems(items: Page[]): Page[] {
@@ -128,39 +163,5 @@ export class BloggerService {
       const sortOrderB = matchB ? parseInt(matchB[1], 10) : 0;
       return sortOrderA - sortOrderB;
     });
-  }
-
-  getPosts(maxResults?: number): Observable<Post[]> {
-    const cacheKey = maxResults?.toString() ?? 'all';
-    
-    // Return cached posts if available
-    if (this.postsCache[cacheKey]) {
-      return of(this.postsCache[cacheKey]);
-    }
-
-    // evaluate if running on a mobile device
-    // add a query parameter declaring if running on a mobile device
-    let params = new HttpParams();
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-      params = params.set('mobile', 'true');
-    }
-    if (maxResults) {
-      params = params.set('maxResults', maxResults.toString());
-    }
-
-    return this.httpClient.get<PostResponse>(`${this.apiBaseUrl}/list-posts`, { params }).pipe(
-      map(response => {
-        const posts = response.items ?? [];
-        this.postsCache[cacheKey] = posts;
-        if (!maxResults) {
-          this.postsSubject.next(posts);
-        }
-        return posts;
-      }),
-      catchError(err => {
-        console.error('Error fetching posts:', err);
-        return of([]);
-      })
-    );
   }
 }

@@ -7,7 +7,7 @@
   </div>
 </a>
 
-@let pages = (pages$ | async);
+@let pages = pagesResource.value();
 <div
   class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-stone-100 dark:bg-stone-800 pt-6 pb-6 lg:pt-auto lg:pb-auto xl:h-28 sticky top-0 left-0 right-0 z-[991]"
   [ngClass]="{'isSticky': isSticky}" data-aos="fade-up">

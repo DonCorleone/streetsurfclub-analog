@@ -1,10 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { Page } from "../../models/pages";
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import { RouterLink } from "@angular/router";
 import { BloggerService } from "../../services/blogger.service";
 import { DarkmodeService } from "../../services/darkmode.service";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -22,21 +20,9 @@ export class AncalFooterComponent {
 
   isDarkMode$ = this.darkmodeService.isDarkMode$;
 
-  supports: Page[] = [];
-  terms: Page[] = [];
-  resources: Page[] = [];
-  quickLinks: Page[] = [];
-
-  constructor() {
-    this.bloggerService.pages$.pipe(
-      takeUntilDestroyed()
-    ).subscribe(pages => {
-      if (pages.length > 0) {
-        this.quickLinks = this.bloggerService.quickLinks;
-        this.resources = this.bloggerService.resources;
-        this.terms = this.bloggerService.terms;
-        this.supports = this.bloggerService.supports;
-      }
-    });
-  }
+  // Use computed signals for grouped pages
+  quickLinks = this.bloggerService.quickLinks;
+  resources = this.bloggerService.resources;
+  terms = this.bloggerService.terms;
+  supports = this.bloggerService.supports;
 }

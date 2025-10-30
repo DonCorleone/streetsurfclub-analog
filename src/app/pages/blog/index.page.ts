@@ -1,4 +1,4 @@
-import { Component, inject, computed, effect } from '@angular/core';
+import { Component, inject, computed, effect, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar.component';
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
+import { MasonryDirective } from '../../directives/masonry.directive';
 
 @Component({
   selector: 'app-blog',
@@ -18,7 +19,8 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
     DatePipe,
     AncalNavbarComponent,
     AncalFooterComponent,
-    LoadingSkeletonComponent
+    LoadingSkeletonComponent,
+    MasonryDirective
   ],
   template: `
     <app-ancal-navbar />
@@ -41,14 +43,14 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
           }
         </div>
         } @else {
-        <div class="grid gap-[30px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div appMasonry [columns]="masonryColumns()" [gap]="30">
           @for (item of posts(); track item.post.id) {
           <article class="group bg-white dark:bg-rose-800 transition-all hover:shadow-lg">
             @if (item.content.headerImg) {
             <div class="overflow-hidden">
               <a [routerLink]="['/blog/blog-details/post', item.post.id]">
                 <img [src]="item.content.headerImg"
-                     class="w-full h-[240px] object-cover transition-all group-hover:scale-110"
+                     class="w-full h-auto transition-all group-hover:scale-110"
                      [alt]="item.content.title">
               </a>
             </div>
@@ -107,6 +109,9 @@ export default class BlogComponent {
   // Use the posts resource from the service
   postsResource = this.bloggerService.postsResource;
 
+  // Signal for responsive masonry columns
+  masonryColumns = signal(3);
+
   // Computed signal that parses posts into content
   posts = computed(() => {
     const rawPosts = this.postsResource.value();
@@ -130,5 +135,22 @@ export default class BlogComponent {
       description: 'Latest news, articles, and insights from Street Surf Club',
       image: ''
     });
+
+    // Set up responsive columns (browser only)
+    if (typeof window !== 'undefined') {
+      this.updateColumns();
+      window.addEventListener('resize', () => this.updateColumns());
+    }
+  }
+
+  private updateColumns() {
+    const width = window.innerWidth;
+    if (width < 768) {
+      this.masonryColumns.set(1);
+    } else if (width < 1024) {
+      this.masonryColumns.set(2);
+    } else {
+      this.masonryColumns.set(3);
+    }
   }
 }

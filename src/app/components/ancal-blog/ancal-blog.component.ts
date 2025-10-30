@@ -20,10 +20,10 @@ export class AncalBlogComponent {
 
   isDarkMode$ = this.darkmodeService.isDarkMode$;
 
-  // Resource for loading limited posts (5 for homepage)
+  // Resource for loading limited posts (3 for homepage)
   postsResource = resource({
     loader: async () => {
-      return await this.bloggerService.loadPostsWithLimit(5);
+      return await this.bloggerService.loadPostsWithLimit(3);
     }
   });
 

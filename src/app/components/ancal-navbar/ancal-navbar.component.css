@@ -1,14 +1,19 @@
 #img-logo {
   width: 55vw;
+  max-width: 100%;
+  height: auto;
 }
 
 #img-logo-icon {
   width: 15vw;
-  height: 100%;
+  height: auto;
+  max-width: 100%;
 }
 
 #img-logo-full {
-  max-height: 30vw;
+  width: 80vw;
+  max-width: 100%;
+  height: auto;
 }
 
 nav.navbar {
@@ -60,9 +65,10 @@ nav.navbar {
 @media only screen and (max-width: 767px) {
 
   .navbar-toggler {
-    top: -20px;
+    top: 10px;
     right: 10px;
-  
+    z-index: 1000;
+
     &.stickymode {
       top: 20px;
     }
@@ -85,9 +91,10 @@ nav.navbar {
 @media only screen and (min-width: 768px) and (max-width: 991px) {
 
   .navbar-toggler {
-    top: -20px;
-    right: -27px;
-  
+    top: 20px;
+    right: 10px;
+    z-index: 1000;
+
     &.stickymode {
       top: 80px;
     }

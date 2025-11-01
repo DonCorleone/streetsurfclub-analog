@@ -41,7 +41,7 @@ export class MetaService {
   updateMetaForBlog(blog: Blog): void {
     try {
       this.clearMetaTags();
-      this.titleService.setTitle(blog.name);
+      this.titleService.setTitle('StreetSurfClub');
       
       const nameTags: MetaDefinition[] = [
         { name: 'description', content: `${blog.name} - ${blog.description}` },
@@ -78,7 +78,7 @@ export class MetaService {
       const cleanTitle = this.stripHtml(meta.title);
       const cleanDescription = this.stripHtml(meta.description);
 
-      this.titleService.setTitle(cleanTitle);
+      this.titleService.setTitle('StreetSurfClub');
 
       const nameTags: MetaDefinition[] = [
         { name: 'description', content: cleanDescription },

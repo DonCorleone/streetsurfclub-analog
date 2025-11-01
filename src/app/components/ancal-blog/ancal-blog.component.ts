@@ -27,12 +27,13 @@ export class AncalBlogComponent {
     }
   });
 
-  // Computed signal that parses posts into content
+  // Computed signal that parses posts into content (limit to 3 posts)
   posts = computed(() => {
     const rawPosts = this.postsResource.value();
     if (!rawPosts) return [];
 
     return rawPosts
+      .slice(0, 3) // Always take only first 3 posts
       .map(post => {
         const content = this.contentService.parseContent(post);
         return content ? { post, content } : null;

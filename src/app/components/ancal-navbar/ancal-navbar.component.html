@@ -43,7 +43,8 @@
           <ul class="navbar-nav self-center flex-row lg:my-[20px] lg:mt-[10px] xl:mt-[15px] 2xl:mt-[20px] lg:flex">
             <li
               class="nav-item text-center text-[14px] md:text-[15px] xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 lg:ml-[7px] lg:mr-[7px] xl:ml-[15px] xl:mr-[15px] 2xl:ml-[19px] 2xl:mr-[19px] first:ml-0 last:mr-0"
-              [routerLink]="'/blog'">
+              [routerLink]="'/blog'"
+              (click)="menuOpen = false">
               <span class="nav-link text-slate-900 dark:text-slate-300 relative z-1 cursor-pointer">
                 Neues
               </span>
@@ -51,7 +52,8 @@
             @for (page of pages; track page.id) {
               <li
                 class="nav-item text-center text-[14px] md:text-[15px] xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 first:mt-0 lg:ml-[7px] lg:mr-[7px] xl:ml-[15px] xl:mr-[15px] 2xl:ml-[19px] 2xl:mr-[19px] first:ml-0 last:mr-0"
-                [routerLink]="'/blog/blog-details/page/' + page.id">
+                [routerLink]="'/blog/blog-details/page/' + page.id"
+                (click)="menuOpen = false">
                 <span [innerHTML]="page.title | safeHtml"
                   class="nav-link text-slate-900 dark:text-slate-300 relative z-1 cursor-pointer">
                 </span>

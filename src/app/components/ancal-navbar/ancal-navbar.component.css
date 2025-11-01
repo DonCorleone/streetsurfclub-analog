@@ -20,46 +20,13 @@ nav.navbar {
   justify-content: space-around;
 }
 
-/*.navbar-nav {
-  .nav-item {
-    .nav-link {
-      &:hover {
-        img {
-          @apply opacity-100;
-        }
-      }
-    }
-
-    &.active {
-      .nav-link {
-        img {
-          @apply opacity-100;
-        }
-      }
-    }
-  }
-}*/
 .isSticky {
   box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);
 }
 
-.overlay-popup {
-  background-color: rgba(59, 61, 80, 0.5);
-}
 
-
-/* Max width 767px */
+/* Mobile - Max width 767px */
 @media only screen and (max-width: 767px) {
-
-  .navbar-toggler {
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
-
-    &.stickymode {
-      top: 20px;
-    }
-  }
   .navbar-area .navbar .navbar-collapse {
     display: none;
     padding: 23px 23px 60px 23px;
@@ -68,27 +35,12 @@ nav.navbar {
     overflow-y: auto;
   }
 
-  .navbar-area .navbar.active .navbar-toggler .burger-menu i::before {
-    content: "\eb98";
-  }
   .navbar-area .navbar.active .navbar-collapse {
-
     display: block;
   }
 }
-/* Min width 768px to Max width 991px */
+/* Tablet - Min width 768px to Max width 991px */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-
-  .navbar-toggler {
-    top: 20px;
-    right: 10px;
-    z-index: 1000;
-
-    &.stickymode {
-      top: 80px;
-    }
-  }
-
   .navbar-area .navbar .navbar-collapse {
     display: none;
     padding: 25px 25px 60px 25px;
@@ -98,14 +50,11 @@ nav.navbar {
     overflow-x: hidden;
   }
 
-  .navbar-area .navbar.active .navbar-toggler .burger-menu i::before {
-    content: "\eb98";
-  }
   .navbar-area .navbar.active .navbar-collapse {
     display: block;
   }
 }
-/* Min width 1980px */
+/* Large screens - Min width 1980px */
 @media only screen and (min-width: 1980px) {
   #img-logo {
     width: unset;

@@ -40,24 +40,11 @@ nav.navbar {
   }
 }*/
 .isSticky {
-
   box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);
-  animation: fadeInDown 500ms ease-in-out;
 }
 
 .overlay-popup {
   background-color: rgba(59, 61, 80, 0.5);
-}
-
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, -100%, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translateZ(0);
-  }
 }
 
 

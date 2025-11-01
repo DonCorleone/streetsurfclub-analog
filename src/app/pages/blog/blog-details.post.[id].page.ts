@@ -1,13 +1,14 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, computed, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { toSignal, rxResource } from '@angular/core/rxjs-interop';
 import { injectActivatedRoute } from '@analogjs/router';
+import { map, from, Observable, of } from 'rxjs';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
 import { MetaService } from '../../services/meta.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
-import { Post } from '../../models/posts';
 import { IContent } from '../../models/IContent';
-import { map, take } from 'rxjs';
+import { Post } from '../../models/posts';
 import { DatePipe } from '@angular/common';
 import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar.component';
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
@@ -25,14 +26,14 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
   ],
   template: `
     <app-ancal-navbar />
-    
-    @if (isLoading) {
+
+    @if (isLoading()) {
     <article class="py-[50px] md:py-[60px] lg:py-[80px]">
       <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
         <app-loading-skeleton type="post-detail" />
       </div>
     </article>
-    } @else if (post && content) {
+    } @else if (post() && content()) {
     <article class="py-[50px] md:py-[60px] lg:py-[80px]">
       <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
         <!-- Back to Blog -->
@@ -44,49 +45,51 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
         </div>
 
         <!-- Header Image -->
-        @if (content.headerImg) {
+        @if (content()?.headerImg) {
         <div class="mb-[30px] md:mb-[40px]">
-          <img [src]="content.headerImg"
+          <img [src]="content()!.headerImg"
                class="w-full h-auto rounded-lg shadow-lg"
-               [alt]="content.title">
+               [alt]="content()!.title">
         </div>
         }
 
         <!-- Post Meta -->
         <div class="mb-[20px] md:mb-[25px]">
-          @if (content.lead) {
+          @if (content()?.lead) {
           <span class="text-[14px] md:text-[16px] text-slate-900 bg-amber-200 dark:bg-indigo-300 py-[1px] px-[10px] mb-[12px] inline-block">
-            {{ content.lead }}
+            {{ content()!.lead }}
           </span>
           }
+          @if (post()) {
           <div class="flex flex-wrap items-center gap-[15px] mt-[15px] text-[14px] md:text-[15px] text-stone-500 dark:text-yellow-400">
             <span>
-              <i class="ri-calendar-line"></i> {{ post.published | date:'MMMM d, yyyy' }}
+              <i class="ri-calendar-line"></i> {{ post()!.published | date:'MMMM d, yyyy' }}
             </span>
-            @if (post.author && post.author.displayName) {
+            @if (post()!.author && post()!.author.displayName) {
             <span>
-              <i class="ri-user-line"></i> {{ post.author.displayName }}
+              <i class="ri-user-line"></i> {{ post()!.author.displayName }}
             </span>
             }
           </div>
+          }
         </div>
 
         <!-- Title -->
-        <h1 [innerHTML]="content.title | safeHtml"
+        <h1 [innerHTML]="content()!.title | safeHtml"
             class="text-slate-900 dark:text-slate-300 font-bold text-[28px] md:text-[38px] lg:text-[48px] leading-[1.22] mb-[25px] md:mb-[35px]">
         </h1>
 
         <!-- Content -->
-        <div [innerHTML]="content.content | safeHtml"
+        <div [innerHTML]="content()!.content | safeHtml"
              class="prose prose-slate dark:prose-invert max-w-none text-[15px] md:text-[16px] leading-[1.8] text-slate-900 dark:text-slate-300">
         </div>
 
         <!-- Labels/Tags -->
-        @if (post.labels && post.labels.length > 0) {
+        @if (post()?.labels && (post()?.labels?.length ?? 0) > 0) {
         <div class="mt-[40px] pt-[30px] border-t border-gray-200 dark:border-neutral-600">
           <h3 class="text-[18px] font-bold text-slate-900 dark:text-slate-300 mb-[15px]">Tags:</h3>
           <div class="flex flex-wrap gap-[10px]">
-            @for (label of post.labels; track label) {
+            @for (label of post()!.labels; track label) {
             <span class="text-[13px] md:text-[14px] bg-amber-100 dark:bg-indigo-300 text-slate-900 px-[15px] py-[5px] rounded">
               {{ label }}
             </span>
@@ -96,41 +99,36 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
         }
 
         <!-- Related Posts Section -->
-        @if (relatedPosts.length > 0) {
+        @if (relatedPosts().length > 0) {
         <div class="mt-[60px] md:mt-[80px]">
           <h2 class="text-[24px] md:text-[28px] font-bold text-slate-900 dark:text-slate-300 mb-[30px]">
             Related Posts
           </h2>
-          <div class="grid gap-[25px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            @for (item of relatedPosts; track item.post.id) {
-            <div class="group bg-white dark:bg-rose-800 transition-all hover:shadow-lg">
+          <div class="grid gap-[25px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-rows-[1fr]">
+            @for (item of relatedPosts(); track item.post.id) {
+            <a [routerLink]="['/blog/blog-details/post', item.post.id]"
+               class="group bg-white dark:bg-rose-800 transition-all hover:shadow-lg flex flex-col cursor-pointer">
               @if (item.content.headerImg) {
-              <div class="overflow-hidden">
-                <a [routerLink]="['/blog/blog-details/post', item.post.id]">
-                  <img [src]="item.content.headerImg"
-                       class="w-full h-[180px] object-cover transition-all group-hover:scale-110"
-                       [alt]="item.content.title">
-                </a>
+              <div class="overflow-hidden flex-shrink-0">
+                <img [src]="item.content.headerImg"
+                     class="w-full h-auto transition-all group-hover:scale-110"
+                     [alt]="item.content.title">
               </div>
               }
-              <div class="p-[20px]">
-                <h3 class="text-[16px] md:text-[18px] font-bold leading-[1.3] mb-[10px]">
-                  <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-                     class="text-slate-900 dark:text-slate-900 transition-all hover:text-cyan-500 dark:hover:text-yellow-600"
-                     [innerHTML]="item.content.title | safeHtml">
-                  </a>
+              <div class="p-[20px] flex-grow flex flex-col">
+                <h3 class="text-[16px] md:text-[18px] font-bold leading-[1.3] mb-[10px] text-slate-900 dark:text-slate-900 transition-all group-hover:text-cyan-500 dark:group-hover:text-yellow-600"
+                    [innerHTML]="item.content.title | safeHtml">
                 </h3>
                 @if (item.content.lead) {
-                <p class="text-[13px] md:text-[14px] text-stone-500 dark:text-yellow-400 mb-[12px] line-clamp-2">
+                <p class="text-[13px] md:text-[14px] text-stone-500 dark:text-yellow-400 mb-[12px] line-clamp-2 flex-grow">
                   {{ item.content.lead }}
                 </p>
                 }
-                <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-                   class="inline-block text-[13px] md:text-[14px] font-semibold text-slate-900 dark:text-slate-900 transition-all hover:text-cyan-500 dark:hover:text-yellow-600">
+                <span class="inline-block text-[13px] md:text-[14px] font-semibold text-slate-900 dark:text-slate-900 transition-all group-hover:text-cyan-500 dark:group-hover:text-yellow-600 mt-auto">
                   Read More <i class="ri-arrow-right-line"></i>
-                </a>
+                </span>
               </div>
-            </div>
+            </a>
             }
           </div>
         </div>
@@ -153,7 +151,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
     <app-ancal-footer />
   `
 })
-export default class BlogDetailsComponent implements OnInit {
+export default class BlogDetailsComponent {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
   private metaService = inject(MetaService);
@@ -161,66 +159,68 @@ export default class BlogDetailsComponent implements OnInit {
   // Use Analog's injectActivatedRoute for SSR-safe route access
   readonly route = injectActivatedRoute();
 
-  post: Post | null = null;
-  content: IContent | null = null;
-  relatedPosts: Array<{ post: Post; content: IContent }> = [];
-  isLoading = true;
+  // Convert route params to a signal
+  private postId = toSignal(
+    this.route.params.pipe(map(params => params['id'] as string))
+  );
 
-  ngOnInit(): void {
-    // Subscribe to route parameter changes to handle navigation between posts
-    this.route.params.subscribe(params => {
-      const id = params['id'];
+  // Resource for loading the current post
+  postResource = rxResource<Post | null, string | undefined>({
+    params: () => this.postId(),
+    stream: ({ params: postId }): Observable<Post | null> => {
+      if (!postId) return of(null);
+      return from(this.bloggerService.loadPost(postId));
+    }
+  });
 
-      if (!id) {
-        console.error('No post ID found in route params');
-        this.isLoading = false;
-        return;
-      }
+  // Computed post value for easier access in template
+  post = computed<Post | null | undefined>(() => this.postResource.value() as Post | null | undefined);
 
-      // Reset loading state when navigating
-      this.isLoading = true;
+  // Computed content from post
+  content = computed(() => {
+    const post = this.postResource.value();
+    return post ? this.contentService.parseContent(post) : null;
+  });
 
-      // Fetch post data
-      this.bloggerService.getPost(id).pipe(
-        take(1)
-      ).subscribe(post => {
-        if (post) {
-          this.post = post;
-          this.content = this.contentService.parseContent(post);
+  // Resource for related posts
+  relatedPostsResource = rxResource<Post[], string | undefined>({
+    params: () => this.postId(),
+    stream: (): Observable<Post[]> => from(this.bloggerService.loadPostsWithLimit(4))
+  });
 
-          // Update meta tags
-          if (this.content) {
-            this.metaService.updateMetaTags({
-              title: this.content.title,
-              description: this.content.lead || this.content.title,
-              image: this.content.headerImg || ''
-            });
-          }
+  // Computed related posts (filtered and parsed)
+  relatedPosts = computed(() => {
+    const posts = this.relatedPostsResource.value();
+    const currentId = this.postId();
+    if (!posts) return [];
 
-          // Load related posts
-          this.loadRelatedPosts();
-        }
-        this.isLoading = false;
-      });
-    });
-  }
+    // Filter out current post and get first 3
+    const filtered = posts
+      .filter(p => p.id !== currentId)
+      .slice(0, 3);
 
-  private loadRelatedPosts(): void {
-    this.bloggerService.getPosts(4).pipe(
-      take(1),
-      map(posts => {
-        // Filter out current post and get first 3
-        const filtered = posts
-          .filter(p => p.id !== this.post?.id)
-          .slice(0, 3);
-        
-        this.relatedPosts = filtered
-          .map(post => {
-            const content = this.contentService.parseContent(post);
-            return content ? { post, content } : null;
-          })
-          .filter((item): item is { post: Post; content: IContent } => item !== null);
+    return filtered
+      .map(post => {
+        const content = this.contentService.parseContent(post);
+        return content ? { post, content } : null;
       })
-    ).subscribe();
+      .filter((item): item is { post: any; content: IContent } => item !== null);
+  });
+
+  // Computed loading state
+  isLoading = computed(() => this.postResource.isLoading());
+
+  constructor() {
+    // Effect to update meta tags when content changes
+    effect(() => {
+      const contentData = this.content();
+      if (contentData) {
+        this.metaService.updateMetaTags({
+          title: contentData.title,
+          description: contentData.lead || contentData.title,
+          image: contentData.headerImg || ''
+        });
+      }
+    });
   }
 }

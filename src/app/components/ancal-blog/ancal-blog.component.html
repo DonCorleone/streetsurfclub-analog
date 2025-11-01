@@ -9,7 +9,7 @@
       </h2>
     </div>
 
-    @if (isLoading) {
+    @if (isLoading()) {
     <div class="grid gap-[25px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up">
       @for (i of [1,2,3]; track i) {
       <app-loading-skeleton type="post-card" />
@@ -17,7 +17,7 @@
     </div>
     } @else {
     <div class="grid gap-[25px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up">
-      @for (item of posts; track item.post.id) {
+      @for (item of posts(); track item.post.id) {
       <div class="group bg-white dark:bg-rose-800 transition-all hover:shadow-lg">
         @if (item.content.headerImg) {
         <div class="overflow-hidden">

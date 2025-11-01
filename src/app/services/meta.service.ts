@@ -16,10 +16,32 @@ export class MetaService {
   private readonly titleService = inject(Title);
   private readonly meta = inject(Meta);
 
+  private stripHtml(html: string): string {
+    if (!html) return '';
+
+    // Create a temporary div element to decode HTML entities and strip tags
+    if (typeof document !== 'undefined') {
+      const tmp = document.createElement('DIV');
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || '';
+    }
+
+    // Fallback for SSR: simple regex-based stripping
+    return html
+      .replace(/<[^>]*>/g, '') // Remove HTML tags
+      .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space
+      .replace(/&amp;/g, '&')  // Replace &amp; with &
+      .replace(/&lt;/g, '<')   // Replace &lt; with <
+      .replace(/&gt;/g, '>')   // Replace &gt; with >
+      .replace(/&quot;/g, '"') // Replace &quot; with "
+      .replace(/&#39;/g, "'")  // Replace &#39; with '
+      .trim();
+  }
+
   updateMetaForBlog(blog: Blog): void {
     try {
       this.clearMetaTags();
-      this.titleService.setTitle(blog.name);
+      this.titleService.setTitle('StreetSurfClub');
       
       const nameTags: MetaDefinition[] = [
         { name: 'description', content: `${blog.name} - ${blog.description}` },
@@ -51,19 +73,24 @@ export class MetaService {
   updateMetaTags(meta: { title: string; description: string; image: string }): void {
     try {
       this.clearMetaTags();
-      this.titleService.setTitle(meta.title);
-      
+
+      // Strip HTML from title and description for meta tags
+      const cleanTitle = this.stripHtml(meta.title);
+      const cleanDescription = this.stripHtml(meta.description);
+
+      this.titleService.setTitle('StreetSurfClub');
+
       const nameTags: MetaDefinition[] = [
-        { name: 'description', content: meta.description },
+        { name: 'description', content: cleanDescription },
         { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:title', content: meta.title },
-        { name: 'twitter:description', content: meta.description },
+        { name: 'twitter:title', content: cleanTitle },
+        { name: 'twitter:description', content: cleanDescription },
         { name: 'twitter:image', content: meta.image }
       ];
 
       const propertyTags: MetaDefinition[] = [
-        { property: 'og:title', content: meta.title },
-        { property: 'og:description', content: meta.description },
+        { property: 'og:title', content: cleanTitle },
+        { property: 'og:description', content: cleanDescription },
         { property: 'og:type', content: 'article' },
         { property: 'og:image', content: meta.image },
         { property: 'og:url', content: typeof window !== 'undefined' ? window.location.href : '' },

@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostListener, inject } from '@angular/core';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { RouterLink } from "@angular/router";
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
-import { Observable } from "rxjs";
-import { Page } from "../../models/pages";
 import { BloggerService } from "../../services/blogger.service";
 import { DarkmodeService } from "../../services/darkmode.service";
 
@@ -18,7 +16,8 @@ export class AncalNavbarComponent {
   private bloggerService = inject(BloggerService);
   private darkmodeService = inject(DarkmodeService);
 
-  pages$: Observable<Page[]> = this.bloggerService.pages$;
+  // Use resource directly - provides automatic loading state
+  pagesResource = this.bloggerService.pagesResource;
   isDarkMode$ = this.darkmodeService.isDarkMode$;
 
   menuOpen = false;

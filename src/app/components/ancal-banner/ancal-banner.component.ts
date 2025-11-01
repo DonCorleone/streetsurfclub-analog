@@ -1,10 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, computed, resource } from '@angular/core';
 import { BloggerService } from '../../services/blogger.service';
 import { DarkmodeService } from '../../services/darkmode.service';
-import { map, take } from 'rxjs';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { ContentService } from '../../services/content.service';
-import { IContent } from '../../models/IContent';
 import { LoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.component';
 import { AsyncPipe } from '@angular/common';
 
@@ -13,27 +11,28 @@ import { AsyncPipe } from '@angular/common';
   imports: [SafeHtmlPipe, LoadingSkeletonComponent, AsyncPipe],
   templateUrl: './ancal-banner.component.html'
 })
-export class AncalBannerComponent implements OnInit {
+export class AncalBannerComponent {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
   private darkmodeService = inject(DarkmodeService);
 
   isDarkMode$ = this.darkmodeService.isDarkMode$;
 
-  parsedContent: IContent | null | undefined;
-  isLoading = true;
+  // Resource for loading the main banner post
+  mainPostResource = resource({
+    loader: async () => {
+      return await this.bloggerService.findPost('**Main**');
+    }
+  });
 
-  ngOnInit(): void {
-    this.bloggerService.findPost('**Main**').pipe(
-      take(1),
-      map(post => {
-        if (post) {
-          this.parsedContent = this.contentService.parseContent(post);
-        }
-        this.isLoading = false;
-      })
-    ).subscribe();
-  }
+  // Computed parsed content
+  parsedContent = computed(() => {
+    const post = this.mainPostResource.value();
+    return post ? this.contentService.parseContent(post) : null;
+  });
+
+  // Computed loading state
+  isLoading = computed(() => this.mainPostResource.isLoading());
 
   // Video Popup
   isOpen = false;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject, ChangeDetectorRef } from '@angular/core';
 import { NgClass, AsyncPipe } from '@angular/common';
 import { RouterLink } from "@angular/router";
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
@@ -32,10 +32,11 @@ export class AncalNavbarComponent {
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
     const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    if (scrollPosition >= 50) {
+    if (scrollPosition >= 200) {
       this.isSticky = true;
     } else {
       this.isSticky = false;
     }
+
   }
 }

@@ -9,13 +9,18 @@
   </div>
 </a>
 
-<!-- Spacer for fixed navbar on mobile -->
-<div class="lg:hidden h-[80px]"></div>
+<!-- Spacer for fixed navbar -->
+<div class="h-[80px]" [ngClass]="{'lg:h-0': !isSticky, 'lg:h-28': isSticky}"></div>
 
 <!-- Fixed navbar on mobile, sticky on desktop -->
 <div
-  class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-stone-100 dark:bg-stone-800 pt-6 pb-6 lg:pt-auto lg:pb-auto xl:h-28 fixed lg:sticky top-0 left-0 right-0 z-[991]"
-  [ngClass]="{'isSticky': isSticky}"
+  class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-stone-100 dark:bg-stone-800 pt-6 pb-6 lg:pt-auto lg:pb-auto xl:h-28 left-0 right-0 z-[991]"
+  [ngClass]="{
+    'isSticky': isSticky,
+    'fixed top-0': true,
+    'lg:fixed lg:top-0': isSticky,
+    'lg:relative lg:top-auto': !isSticky
+  }"
   data-aos-disable="true">
   <div
     class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[80px] 3xl:px-[120px]">

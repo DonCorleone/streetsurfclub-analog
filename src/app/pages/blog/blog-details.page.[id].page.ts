@@ -40,7 +40,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
         <!-- Back to Blog -->
         <div class="mb-[30px]">
           <a routerLink="/blog" 
-             class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-slate-900 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-yellow-600 transition-all">
+             class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-slate-900 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-stone-900 transition-all">
             <i class="ri-arrow-left-line"></i> Back to Blog
           </a>
         </div>

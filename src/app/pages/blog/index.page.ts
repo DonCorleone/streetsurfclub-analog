@@ -47,7 +47,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
         } @else {
         <div appMasonry [columns]="masonryColumns()" [gap]="30">
           @for (item of posts(); track item.post.id) {
-          <article class="group bg-white dark:bg-rose-800 transition-all hover:shadow-lg">
+          <article class="group bg-white dark:bg-rose-900 transition-all hover:shadow-lg">
             @if (item.content.headerImg) {
             <div class="overflow-hidden">
               <a [routerLink]="['/blog/blog-details/post', item.post.id]">
@@ -71,7 +71,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
               </div>
               <h2 class="text-[20px] md:text-[22px] lg:text-[24px] font-bold leading-[1.3] mb-[15px]">
                 <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-                   class="text-slate-900 dark:text-slate-900 transition-all hover:text-cyan-500 dark:hover:text-yellow-600"
+                   class="text-slate-900 dark:text-stone-300 transition-all hover:text-cyan-500 dark:hover:text-stone-900"
                    [innerHTML]="item.content.title | safeHtml">
                 </a>
               </h2>
@@ -90,7 +90,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
               </div>
               }
               <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-                 class="inline-block text-[14px] md:text-[15px] font-semibold text-slate-900 dark:text-slate-900 transition-all hover:text-cyan-500 dark:hover:text-yellow-600">
+                 class="inline-block text-[14px] md:text-[15px] font-semibold text-slate-900 dark:text-stone-300 transition-all hover:text-cyan-500 dark:hover:text-stone-900">
                 Read More <i class="ri-arrow-right-line"></i>
               </a>
             </div>

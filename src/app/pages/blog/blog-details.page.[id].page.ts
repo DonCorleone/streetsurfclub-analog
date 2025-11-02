@@ -8,9 +8,7 @@ import { ContentService } from '../../services/content.service';
 import { MetaService } from '../../services/meta.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { NetlifyImagePipe } from '../../pipes/netlify-image.pipe';
-import { IContent } from '../../models/IContent';
 import { Page } from '../../models/pages';
-import { Post } from '../../models/posts';
 import { DatePipe } from '@angular/common';
 import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar.component';
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
@@ -87,42 +85,6 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
         <div [innerHTML]="content()!.content | safeHtml"
              class="prose prose-slate dark:prose-invert max-w-none text-[15px] md:text-[16px] leading-[1.8] text-slate-900 dark:text-slate-300">
         </div>
-
-        <!-- Related Posts Section -->
-        @if (relatedPosts().length > 0) {
-        <div class="mt-[60px] md:mt-[80px]">
-          <h2 class="text-[24px] md:text-[28px] font-bold text-slate-900 dark:text-slate-300 mb-[30px]">
-            Related Posts
-          </h2>
-          <div class="grid gap-[25px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-rows-[1fr]">
-            @for (item of relatedPosts(); track item.post.id) {
-            <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-               class="group bg-white dark:bg-rose-800 transition-all hover:shadow-lg flex flex-col cursor-pointer">
-              @if (item.content.headerImg) {
-              <div class="overflow-hidden flex-shrink-0">
-                <img [src]="item.content.headerImg"
-                     class="w-full h-auto transition-all group-hover:scale-110"
-                     [alt]="item.content.title">
-              </div>
-              }
-              <div class="p-[20px] flex-grow flex flex-col">
-                <h3 class="text-[16px] md:text-[18px] font-bold leading-[1.3] mb-[10px] text-slate-900 dark:text-slate-900 transition-all group-hover:text-cyan-500 dark:group-hover:text-yellow-600"
-                    [innerHTML]="item.content.title | safeHtml">
-                </h3>
-                @if (item.content.lead) {
-                <p class="text-[13px] md:text-[14px] text-stone-500 dark:text-yellow-400 mb-[12px] line-clamp-2 flex-grow">
-                  {{ item.content.lead }}
-                </p>
-                }
-                <span class="inline-block text-[13px] md:text-[14px] font-semibold text-slate-900 dark:text-slate-900 transition-all group-hover:text-cyan-500 dark:group-hover:text-yellow-600 mt-auto">
-                  Read More <i class="ri-arrow-right-line"></i>
-                </span>
-              </div>
-            </a>
-            }
-          </div>
-        </div>
-        }
       </div>
     </article>
     } @else {
@@ -170,31 +132,6 @@ export default class BlogDetailsComponent {
   content = computed(() => {
     const page = this.pageResource.value();
     return page ? this.contentService.parseContent(page) : null;
-  });
-
-  // Resource for related posts
-  relatedPostsResource = rxResource<Post[], string | undefined>({
-    params: () => this.pageId(),
-    stream: (): Observable<Post[]> => from(this.bloggerService.loadPostsWithLimit(4))
-  });
-
-  // Computed related posts (filtered and parsed)
-  relatedPosts = computed(() => {
-    const posts = this.relatedPostsResource.value();
-    const currentId = this.pageId();
-    if (!posts) return [];
-
-    // Filter out current page and get first 3
-    const filtered = posts
-      .filter((p: Post) => p.id !== currentId)
-      .slice(0, 3);
-
-    return filtered
-      .map((post: Post) => {
-        const content = this.contentService.parseContent(post);
-        return content ? { post, content } : null;
-      })
-      .filter((item): item is { post: Post; content: IContent } => item !== null);
   });
 
   // Computed loading state

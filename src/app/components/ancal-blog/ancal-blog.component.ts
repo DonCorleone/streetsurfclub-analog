@@ -21,10 +21,10 @@ export class AncalBlogComponent {
 
   isDarkMode$ = this.darkmodeService.isDarkMode$;
 
-  // Resource for loading limited posts (3 for homepage)
+  // Resource for loading limited posts (load 6 to ensure 3 after filtering **Main**)
   postsResource = resource({
     loader: async () => {
-      return await this.bloggerService.loadPostsWithLimit(3);
+      return await this.bloggerService.loadPostsWithLimit(6);
     }
   });
 
@@ -34,7 +34,8 @@ export class AncalBlogComponent {
     if (!rawPosts) return [];
 
     return rawPosts
-      .slice(0, 3) // Always take only first 3 posts
+      .filter(post => !post.title.includes('**Main**')) // Filter out the **Main** post
+      .slice(0, 3) // Take only first 3 posts (after filtering)
       .map(post => {
         const content = this.contentService.parseContent(post);
         return content ? { post, content } : null;

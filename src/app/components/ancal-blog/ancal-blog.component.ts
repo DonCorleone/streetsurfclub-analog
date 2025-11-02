@@ -4,13 +4,14 @@ import { BloggerService } from '../../services/blogger.service';
 import { DarkmodeService } from '../../services/darkmode.service';
 import { ContentService } from '../../services/content.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
+import { NetlifyImagePipe } from '../../pipes/netlify-image.pipe';
 import { IContent } from '../../models/IContent';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { LoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.component';
 
 @Component({
   selector: 'app-ancal-blog',
-  imports: [RouterLink, SafeHtmlPipe, DatePipe, LoadingSkeletonComponent, AsyncPipe],
+  imports: [RouterLink, SafeHtmlPipe, NetlifyImagePipe, DatePipe, LoadingSkeletonComponent],
   templateUrl: './ancal-blog.component.html'
 })
 export class AncalBlogComponent {

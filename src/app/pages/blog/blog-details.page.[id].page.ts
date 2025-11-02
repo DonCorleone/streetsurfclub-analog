@@ -7,6 +7,7 @@ import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
 import { MetaService } from '../../services/meta.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
+import { NetlifyImagePipe } from '../../pipes/netlify-image.pipe';
 import { IContent } from '../../models/IContent';
 import { Page } from '../../models/pages';
 import { Post } from '../../models/posts';
@@ -20,6 +21,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
   imports: [
     RouterLink,
     SafeHtmlPipe,
+    NetlifyImagePipe,
     DatePipe,
     AncalNavbarComponent,
     AncalFooterComponent,
@@ -48,9 +50,10 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
         <!-- Header Image -->
         @if (content()?.headerImg) {
         <div class="mb-[30px] md:mb-[40px]">
-          <img [src]="content()!.headerImg"
+          <img [src]="content()!.headerImg | netlifyImage:1200"
                class="w-full h-auto rounded-lg shadow-lg"
-               [alt]="content()!.title">
+               [alt]="content()!.title"
+               loading="eager">
         </div>
         }
 

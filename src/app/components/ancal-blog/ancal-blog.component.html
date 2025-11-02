@@ -22,9 +22,10 @@
         @if (item.content.headerImg) {
         <div class="overflow-hidden">
           <a [routerLink]="['/blog/blog-details/post', item.post.id]">
-            <img [src]="item.content.headerImg"
+            <img [src]="item.content.headerImg | netlifyImage:800"
                  class="w-full transition-all group-hover:scale-110"
-                 [alt]="item.content.title">
+                 [alt]="item.content.title"
+                 loading="lazy">
           </a>
         </div>
         }

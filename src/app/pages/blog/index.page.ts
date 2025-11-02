@@ -1,9 +1,10 @@
-import { Component, inject, computed, effect, signal } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
 import { MetaService } from '../../services/meta.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
+import { NetlifyImagePipe } from '../../pipes/netlify-image.pipe';
 import { IContent } from '../../models/IContent';
 import { DatePipe } from '@angular/common';
 import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar.component';
@@ -16,6 +17,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
   imports: [
     RouterLink,
     SafeHtmlPipe,
+    NetlifyImagePipe,
     DatePipe,
     AncalNavbarComponent,
     AncalFooterComponent,
@@ -49,9 +51,10 @@ import { MasonryDirective } from '../../directives/masonry.directive';
             @if (item.content.headerImg) {
             <div class="overflow-hidden">
               <a [routerLink]="['/blog/blog-details/post', item.post.id]">
-                <img [src]="item.content.headerImg"
+                <img [src]="item.content.headerImg | netlifyImage:800"
                      class="w-full h-auto transition-all group-hover:scale-110"
-                     [alt]="item.content.title">
+                     [alt]="item.content.title"
+                     loading="lazy">
               </a>
             </div>
             }

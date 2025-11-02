@@ -1,0 +1,5 @@
+# robots.txt for Street Surf Club
+User-agent: *
+Allow: /
+
+Sitemap: https://streetsurfclub.com/sitemap.xml

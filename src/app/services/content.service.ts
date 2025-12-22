@@ -19,6 +19,7 @@ export class ContentService {
       title: '',
       content: '',
       lead: '',
+      preview: '',
       headerImg: null,
       amountReplies: '0',
     };
@@ -108,6 +109,38 @@ export class ContentService {
     parsedContent.id = page.id;
     parsedContent.date = new Date(page.published);
     parsedContent.author = page.author?.displayName;
+
+    // Extract preview text from content
+    if (parsedContent.content) {
+      // Strip HTML tags and decode entities
+      const tempDiv = typeof document !== 'undefined' ? document.createElement('div') : null;
+      if (tempDiv) {
+        tempDiv.innerHTML = parsedContent.content;
+        const plainText = tempDiv.textContent || tempDiv.innerText || '';
+
+        // Truncate to ~150 characters, but don't cut words
+        const maxLength = 150;
+        if (plainText.length > maxLength) {
+          const truncated = plainText.substring(0, maxLength);
+          const lastSpace = truncated.lastIndexOf(' ');
+          parsedContent.preview = lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated;
+        } else {
+          parsedContent.preview = plainText;
+        }
+      } else {
+        // SSR fallback: simple regex to strip tags
+        const textOnly = parsedContent.content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        const maxLength = 150;
+        if (textOnly.length > maxLength) {
+          const truncated = textOnly.substring(0, maxLength);
+          const lastSpace = truncated.lastIndexOf(' ');
+          parsedContent.preview = lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated;
+        } else {
+          parsedContent.preview = textOnly;
+        }
+      }
+    }
+
     return parsedContent;
   }
 }

@@ -47,15 +47,14 @@ import { MasonryDirective } from '../../directives/masonry.directive';
         } @else {
         <div appMasonry [columns]="masonryColumns()" [gap]="30">
           @for (item of posts(); track item.post.id) {
-          <article class="group bg-white dark:bg-rose-900 transition-all hover:shadow-lg">
+          <a [routerLink]="['/blog/blog-details/post', item.post.id]"
+             class="group bg-white dark:bg-rose-900 transition-all hover:shadow-lg block cursor-pointer">
             @if (item.content.headerImg) {
             <div class="overflow-hidden">
-              <a [routerLink]="['/blog/blog-details/post', item.post.id]">
-                <img [src]="item.content.headerImg | netlifyImage:800"
-                     class="w-full h-auto transition-all group-hover:scale-110"
-                     [alt]="item.content.title"
-                     loading="lazy">
-              </a>
+              <img [src]="item.content.headerImg | netlifyImage:800"
+                   class="w-full h-auto transition-all group-hover:scale-110"
+                   [alt]="item.content.title"
+                   loading="lazy">
             </div>
             }
             <div class="py-[25px] px-[25px] md:py-[30px] md:px-[30px]">
@@ -69,15 +68,12 @@ import { MasonryDirective } from '../../directives/masonry.directive';
                 </span>
                 }
               </div>
-              <h2 class="text-[20px] md:text-[22px] lg:text-[24px] font-bold leading-[1.3] mb-[15px]">
-                <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-                   class="text-slate-900 dark:text-stone-300 transition-all hover:text-cyan-500 dark:hover:text-stone-900"
-                   [innerHTML]="item.content.title | safeHtml">
-                </a>
+              <h2 class="text-[20px] md:text-[22px] lg:text-[24px] font-bold leading-[1.3] mb-[15px] text-slate-900 dark:text-stone-300 transition-all group-hover:text-cyan-500 dark:group-hover:text-stone-900"
+                  [innerHTML]="item.content.title | safeHtml">
               </h2>
-              @if (item.content.lead) {
+              @if (item.content.preview) {
               <p class="text-[14px] md:text-[15px] text-stone-500 dark:text-yellow-400 mb-[18px] line-clamp-3">
-                {{ item.content.lead }}
+                {{ item.content.preview }}...
               </p>
               }
               @if (item.post.labels && item.post.labels.length > 0) {
@@ -89,12 +85,11 @@ import { MasonryDirective } from '../../directives/masonry.directive';
                 }
               </div>
               }
-              <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-                 class="inline-block text-[14px] md:text-[15px] font-semibold text-slate-900 dark:text-stone-300 transition-all hover:text-cyan-500 dark:hover:text-stone-900">
-                Read More <i class="ri-arrow-right-line"></i>
-              </a>
+              <span class="inline-block text-[14px] md:text-[15px] font-semibold text-slate-900 dark:text-stone-300 transition-all group-hover:text-cyan-500 dark:group-hover:text-stone-900">
+                Weiterlesen <i class="ri-arrow-right-line"></i>
+              </span>
             </div>
-          </article>
+          </a>
           }
         </div>
         }

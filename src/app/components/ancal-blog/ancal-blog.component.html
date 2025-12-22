@@ -22,7 +22,7 @@
          class="group bg-white dark:bg-rose-900 transition-all hover:shadow-lg block cursor-pointer">
         @if (item.content.headerImg) {
         <div class="overflow-hidden">
-          <img [src]="item.content.headerImg | netlifyImage:800"
+          <img [src]="item.content.headerImg | netlifyImage:600"
                class="w-full transition-all group-hover:scale-110"
                [alt]="item.content.title"
                title="{{ item.content.title }}"

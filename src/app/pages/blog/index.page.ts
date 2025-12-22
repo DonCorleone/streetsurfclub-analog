@@ -51,7 +51,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
             @if (item.content.headerImg) {
             <div class="overflow-hidden">
               <a [routerLink]="['/blog/blog-details/post', item.post.id]">
-                <img [src]="item.content.headerImg | netlifyImage:800"
+                <img [src]="item.content.headerImg | netlifyImage:600"
                      class="w-full h-auto transition-all group-hover:scale-110"
                      [alt]="item.content.title"
                      loading="lazy">

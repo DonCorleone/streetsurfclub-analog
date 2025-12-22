@@ -113,9 +113,10 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
                class="group bg-white dark:bg-rose-900 transition-all hover:shadow-lg flex flex-col cursor-pointer">
               @if (item.content.headerImg) {
               <div class="overflow-hidden flex-shrink-0">
-                <img [src]="item.content.headerImg"
+                <img [src]="item.content.headerImg | netlifyImage:600"
                      class="w-full h-auto transition-all group-hover:scale-110"
-                     [alt]="item.content.title">
+                     [alt]="item.content.title"
+                     loading="lazy">
               </div>
               }
               <div class="p-[20px] flex-grow flex flex-col">

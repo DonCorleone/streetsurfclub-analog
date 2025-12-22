@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Page } from '../models/pages';
 import { IContent } from '../models/IContent';
 import { Post } from '../models/posts';
+import { ImageService } from './image.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContentService {
+  private imageService = inject(ImageService);
   parseContent(page: Page): IContent | null {
     if (!page) {
       return null;
@@ -94,6 +96,10 @@ export class ContentService {
         </div>`;
       }
       decodedContent = decodedContent.replace(firstImage, replacement);
+
+      // Proxy all images in the content through Netlify Image CDN
+      decodedContent = this.proxyContentImages(decodedContent);
+
       parsedContent.content = decodedContent;
     }
 
@@ -109,5 +115,24 @@ export class ContentService {
     parsedContent.date = new Date(page.published);
     parsedContent.author = page.author?.displayName;
     return parsedContent;
+  }
+
+  /**
+   * Proxies all images in HTML content through Netlify Image CDN
+   * Finds all <img> tags and replaces src attributes with optimized URLs
+   */
+  private proxyContentImages(htmlContent: string): string {
+    if (!htmlContent) return htmlContent;
+
+    // Regular expression to match all <img> tags with src attribute
+    const imgRegex = /<img([^>]*?)src=["']([^"']+)["']([^>]*?)>/gi;
+
+    return htmlContent.replace(imgRegex, (match, before, src, after) => {
+      // Proxy the image through Netlify with a reasonable width (800px for content images)
+      const proxiedSrc = this.imageService.getOptimizedImageUrl(src, 1200);
+
+      // Reconstruct the img tag with proxied src
+      return `<img${before}src="${proxiedSrc}"${after}>`;
+    });
   }
 }

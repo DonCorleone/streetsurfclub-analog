@@ -83,9 +83,7 @@ export class ContentService {
           replacement += `
           <div class="text-center">
           <a href="${srcMatch ? srcMatch[1] : ''}" target="_blank">
-              <img [src]="${
-              srcMatch ? srcMatch[0] : ''
-            }" class="rounded-t-[20px] rounded-bl-[20px] rounded-br-[20px] md:rounded-br-[70px] lg:rounded-br-[90px]" alt="blog-details-image"/>
+              <img src="${srcMatch ? srcMatch[1] : ''}" class="rounded-t-[20px] rounded-bl-[20px] rounded-br-[20px] md:rounded-br-[70px] lg:rounded-br-[90px]" alt="blog-details-image"/>
           </a>
           </div>`;
 
@@ -160,8 +158,8 @@ export class ContentService {
     // Regular expression to match all <img> tags with src attribute
     const imgRegex = /<img([^>]*?)src=["']([^"']+)["']([^>]*?)>/gi;
 
-    return htmlContent.replace(imgRegex, (match, before, src, after) => {
-      // Proxy the image through Netlify with a reasonable width (800px for content images)
+    return htmlContent.replace(imgRegex, (_match, before, src, after) => {
+      // Proxy the image through Netlify with a reasonable width (1200px for content images)
       const proxiedSrc = this.imageService.getOptimizedImageUrl(src, 1200);
 
       // Reconstruct the img tag with proxied src

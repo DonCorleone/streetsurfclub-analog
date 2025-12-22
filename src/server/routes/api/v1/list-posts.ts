@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
   return getBloggerApiData('/posts', apiKey!, blogId!, {
     fetchImages: 'true',
-    fetchBodies: 'false',
+    fetchBodies: 'true',
     maxResults: maxResults.toString(),
   });
 });

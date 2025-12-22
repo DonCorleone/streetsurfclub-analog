@@ -105,7 +105,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
         @if (relatedPosts().length > 0) {
         <div class="mt-[60px] md:mt-[80px]">
           <h2 class="text-[24px] md:text-[28px] font-bold text-slate-900 dark:text-slate-300 mb-[30px]">
-            Related Posts
+            Ähnliche Beiträge
           </h2>
           <div class="grid gap-[25px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-rows-[1fr]">
             @for (item of relatedPosts(); track item.post.id) {
@@ -123,13 +123,13 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
                 <h3 class="text-[16px] md:text-[18px] font-bold leading-[1.3] mb-[10px] text-slate-900 dark:text-stone-300 transition-all group-hover:text-cyan-500 dark:group-hover:text-yellow-600"
                     [innerHTML]="item.content.title | safeHtml">
                 </h3>
-                @if (item.content.lead) {
+                @if (item.content.preview) {
                 <p class="text-[13px] md:text-[14px] text-stone-500 dark:text-yellow-400 mb-[12px] line-clamp-2 flex-grow">
-                  {{ item.content.lead }}
+                  {{ item.content.preview }}...
                 </p>
                 }
                 <span class="inline-block text-[13px] md:text-[14px] font-semibold text-slate-900 dark:text-stone-300 transition-all group-hover:text-cyan-500 dark:group-hover:text-yellow-600 mt-auto">
-                  Read More <i class="ri-arrow-right-line"></i>
+                  Weiterlesen <i class="ri-arrow-right-line"></i>
                 </span>
               </div>
             </a>

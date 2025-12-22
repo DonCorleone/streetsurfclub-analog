@@ -6,5 +6,6 @@ export interface IContent {
   title: string;
   lead: string;
   content: string;
+  preview: string;
   headerImg: string | null;
 }

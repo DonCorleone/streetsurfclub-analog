@@ -65,6 +65,9 @@ export class ContentService {
         decodedContent = decodedContent.replace(match[0], '');
       }
 
+      // Process gallery markers before proxying images
+      decodedContent = this.processGalleries(decodedContent);
+
       // Proxy all images in the content through Netlify Image CDN
       decodedContent = this.proxyContentImages(decodedContent);
 
@@ -115,6 +118,67 @@ export class ContentService {
     }
 
     return parsedContent;
+  }
+
+  /**
+   * Processes gallery markers in content
+   * Detects <!-- gallery-start -->...<!-- gallery-end --> blocks and extracts images
+   * Handles Blogger's <a><img></a> structure for full-size image links
+   */
+  private processGalleries(htmlContent: string): string {
+    if (!htmlContent) return htmlContent;
+
+    // Regular expression to match gallery blocks
+    const galleryRegex = /<!--\s*gallery-start\s*-->([\s\S]*?)<!--\s*gallery-end\s*-->/gi;
+
+    return htmlContent.replace(galleryRegex, (_match, galleryContent) => {
+      // First, try to extract images wrapped in <a> tags (Blogger format)
+      // Pattern: <a href="full-size.jpg"><img src="thumbnail.jpg" /></a>
+      const linkedImageRegex = /<a[^>]+href=["']([^"']+)["'][^>]*>\s*<img[^>]+src=["']([^"']+)["'][^>]*>\s*<\/a>/gi;
+      const imageData: Array<{ thumbnail: string; fullSize: string }> = [];
+      let linkedMatch;
+
+      while ((linkedMatch = linkedImageRegex.exec(galleryContent)) !== null) {
+        imageData.push({
+          fullSize: linkedMatch[1],  // URL from <a href>
+          thumbnail: linkedMatch[2]  // URL from <img src>
+        });
+      }
+
+      // If no linked images found, try standalone <img> tags
+      if (imageData.length === 0) {
+        const imgSrcRegex = /<img[^>]+src=["']([^"']+)["']/gi;
+        let imgMatch;
+
+        while ((imgMatch = imgSrcRegex.exec(galleryContent)) !== null) {
+          // Use same URL for both thumbnail and full-size
+          imageData.push({
+            thumbnail: imgMatch[1],
+            fullSize: imgMatch[1]
+          });
+        }
+      }
+
+      // If we found images, create a gallery placeholder
+      if (imageData.length > 0) {
+        // Proxy images through CDN
+        const proxiedData = imageData.map(img => ({
+          thumbnail: this.imageService.getOptimizedImageUrl(img.thumbnail, 1200),
+          fullSize: this.imageService.getOptimizedImageUrl(img.fullSize, 2400) // Higher res for zoom
+        }));
+
+        // Create data attributes with both thumbnail and full-size URLs
+        // Format: "thumbnail1::fullsize1|thumbnail2::fullsize2"
+        const galleryString = proxiedData
+          .map(img => `${img.thumbnail}::${img.fullSize}`)
+          .join('|');
+
+        return `<div data-gallery-images="${galleryString}"></div>`;
+      }
+
+      // If no images found, return empty string
+      return '';
+    });
   }
 
   /**

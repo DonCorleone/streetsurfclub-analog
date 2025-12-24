@@ -14,6 +14,7 @@ import { DatePipe } from '@angular/common';
 import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar.component';
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
+import { ContentRendererComponent } from '../../components/content-renderer/content-renderer.component';
 
 @Component({
   selector: 'app-blog-details',
@@ -24,7 +25,8 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
     DatePipe,
     AncalNavbarComponent,
     AncalFooterComponent,
-    LoadingSkeletonComponent
+    LoadingSkeletonComponent,
+    ContentRendererComponent
   ],
   template: `
     <app-ancal-navbar />
@@ -83,9 +85,7 @@ import { LoadingSkeletonComponent } from '../../components/loading-skeleton/load
         </h1>
 
         <!-- Content -->
-        <div [innerHTML]="content()!.content | safeHtml"
-             class="prose prose-slate dark:prose-invert max-w-none text-[15px] md:text-[16px] leading-[1.8] text-slate-900 dark:text-slate-300">
-        </div>
+        <app-content-renderer [htmlContent]="content()!.content" />
 
         <!-- Labels/Tags -->
         @if (post()?.labels && (post()?.labels?.length ?? 0) > 0) {

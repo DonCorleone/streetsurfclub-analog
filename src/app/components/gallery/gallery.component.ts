@@ -201,7 +201,7 @@ export class GalleryComponent implements AfterViewInit {
         },
         spaceBetween: 20,
         slidesPerView: 1,
-        loop: false,
+        loop: true,
         zoom: {
           maxRatio: 3,
           minRatio: 1,

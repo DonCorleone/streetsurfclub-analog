@@ -65,37 +65,6 @@ export class ContentService {
         decodedContent = decodedContent.replace(match[0], '');
       }
 
-      let regexTwoImages = /<a[^>]*>(<img[^>]*>)<\/a>/gm;
-      let matchTwoImages = decodedContent.match(regexTwoImages);
-      let replacement = ``;
-      let firstImage = '';
-      if (matchTwoImages && matchTwoImages.length > 1) {
-        replacement += `<div class="grid grid-cols-1 md:grid-cols-2 self-center gap-[25px] my-[20px] md:my-[25px] xl:my-[35px]">`;
-
-        // pair of images found
-        for (let i = 0; i < matchTwoImages.length; i++) {
-          let imgBlock = matchTwoImages[i];
-          if (firstImage === '') {
-            firstImage = imgBlock;
-          }
-          let srcRegex = /<img[^>]+src="([^">]+)"/;
-          let srcMatch = imgBlock.match(srcRegex);
-          replacement += `
-          <div class="text-center">
-          <a href="${srcMatch ? srcMatch[1] : ''}" target="_blank">
-              <img src="${srcMatch ? srcMatch[1] : ''}" class="rounded-t-[20px] rounded-bl-[20px] rounded-br-[20px] md:rounded-br-[70px] lg:rounded-br-[90px]" alt="blog-details-image"/>
-          </a>
-          </div>`;
-
-          if (imgBlock !== firstImage) {
-            decodedContent = decodedContent.replace(imgBlock, '');
-          }
-        }
-        replacement += `
-        </div>`;
-      }
-      decodedContent = decodedContent.replace(firstImage, replacement);
-
       // Proxy all images in the content through Netlify Image CDN
       decodedContent = this.proxyContentImages(decodedContent);
 

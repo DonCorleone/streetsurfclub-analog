@@ -49,7 +49,7 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
 
         <!-- Header Image -->
         @if (content()?.headerImg) {
-        <div class="mb-[30px] md:mb-[40px]">
+        <div class="mb-[30px] md:mb-[40px] max-w-[800px] mx-auto">
           <img [src]="content()!.headerImg | netlifyImage:1200"
                class="w-full h-auto rounded-lg shadow-lg"
                [alt]="content()!.title"

@@ -81,7 +81,13 @@ export class ContentService {
       parsedContent.lead = matchLead[1];
     }
 
-    parsedContent.title = page.title;
+    // Strip anchor tags from title to prevent nested links
+    let title = page.title;
+    if (title) {
+      // Remove <a> tags but keep the text content
+      title = title.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1');
+    }
+    parsedContent.title = title;
     parsedContent.id = page.id;
     parsedContent.date = new Date(page.published);
     parsedContent.author = page.author?.displayName;

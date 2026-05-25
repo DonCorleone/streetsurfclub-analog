@@ -39,3 +39,61 @@ body {
   height: 100%;
   font-family: 'Lexend', sans-serif;
 }
+
+/* Constrain images in blog content on desktop */
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .prose img {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Fix image alignment issues in blog content */
+.prose div[style*="text-align"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.prose div[style*="float"] {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* Ensure images with links maintain proper alignment */
+.prose a img {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Ensure text readability in blog content */
+.dark .prose p,
+.dark .prose li,
+.dark .prose span,
+.dark .prose div {
+  color: rgb(250 204 21) !important; /* yellow-400 */
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: rgb(214 211 209) !important; /* stone-300 */
+}
+
+.dark .prose a {
+  color: rgb(6 182 212) !important; /* cyan-500 */
+}
+
+.dark .prose a:hover {
+  color: rgb(8 145 178) !important; /* cyan-600 */
+}

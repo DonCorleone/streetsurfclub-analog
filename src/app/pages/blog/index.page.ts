@@ -51,12 +51,10 @@ import { MasonryDirective } from '../../directives/masonry.directive';
              class="group bg-white dark:bg-rose-900 transition-all hover:shadow-lg block cursor-pointer">
             @if (item.content.headerImg) {
             <div class="overflow-hidden">
-              <a [routerLink]="['/blog/blog-details/post', item.post.id]">
-                <img [src]="item.content.headerImg | netlifyImage:600"
-                     class="w-full h-auto transition-all group-hover:scale-110"
-                     [alt]="item.content.title"
-                     loading="lazy">
-              </a>
+              <img [src]="item.content.headerImg | netlifyImage:600"
+                   class="w-full h-auto transition-all group-hover:scale-110"
+                   [alt]="item.content.title"
+                   loading="lazy">
             </div>
             }
             <div class="py-[25px] px-[25px] md:py-[30px] md:px-[30px]">

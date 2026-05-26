@@ -1,26 +1,22 @@
-import { ChangeDetectionStrategy, Component, HostListener, inject, ChangeDetectorRef, PLATFORM_ID } from '@angular/core';
-import { NgClass, AsyncPipe, isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, HostListener, inject, PLATFORM_ID } from '@angular/core';
+import { NgClass, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from "@angular/router";
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import { BloggerService } from "../../services/blogger.service";
-import { DarkmodeService } from "../../services/darkmode.service";
 
 @Component({
   selector: 'app-ancal-navbar',
   styleUrls: ['./ancal-navbar.component.css'],
   templateUrl: './ancal-navbar.component.html',
-  imports: [NgClass, AsyncPipe, RouterLink, SafeHtmlPipe],
+  imports: [NgClass, RouterLink, SafeHtmlPipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AncalNavbarComponent {
   private bloggerService = inject(BloggerService);
-  private darkmodeService = inject(DarkmodeService);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
 
-  // Use resource directly - provides automatic loading state
   pagesResource = this.bloggerService.pagesResource;
-  isDarkMode$ = this.darkmodeService.isDarkMode$;
 
   menuOpen = false;
 

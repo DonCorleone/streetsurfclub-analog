@@ -15,6 +15,35 @@
   --breakpoint-xl: 1200px;
   --breakpoint-2xl: 1400px;
   --breakpoint-3xl: 1700px;
+
+  /* === Design tokens: light-dark() resolves at runtime based on color-scheme === */
+
+  /* Surfaces */
+  --color-surface: light-dark(white, var(--color-neutral-900));
+  --color-surface-card: light-dark(white, var(--color-rose-900));
+  --color-surface-nav: light-dark(var(--color-stone-100), var(--color-stone-800));
+  --color-surface-gallery: light-dark(var(--color-gray-100), var(--color-gray-800));
+
+  /* Accent (badges, tags) and CTA (buttons) */
+  --color-accent: light-dark(var(--color-amber-200), var(--color-indigo-300));
+  --color-cta: light-dark(var(--color-cyan-300), var(--color-yellow-600));
+
+  /* Text */
+  --color-body: light-dark(var(--color-slate-900), var(--color-slate-300));
+  --color-muted: light-dark(var(--color-stone-500), var(--color-yellow-400));
+  --color-link: light-dark(var(--color-amber-200), var(--color-indigo-300));
+  --color-hover-highlight: light-dark(var(--color-cyan-500), var(--color-slate-400));
+
+  /* Borders */
+  --color-divider: light-dark(var(--color-neutral-300), var(--color-neutral-600));
+
+  /* Auto-contrast text on colored backgrounds (CSS Relative Color Syntax, Baseline 2024) */
+  --color-on-accent: oklch(from var(--color-accent) clamp(0, (0.6 - l) * 1e6, 1) 0 0);
+  --color-on-cta: oklch(from var(--color-cta) clamp(0, (0.6 - l) * 1e6, 1) 0 0);
+}
+
+:root {
+  color-scheme: light dark;
 }
 
 /*
@@ -30,6 +59,16 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
+}
+
+/* Micro-animations */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(100px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.9s ease-out both;
 }
 
 /* Global styles */
@@ -73,27 +112,29 @@ body {
   margin: 0 auto;
 }
 
-/* Ensure text readability in blog content */
-.dark .prose p,
-.dark .prose li,
-.dark .prose span,
-.dark .prose div {
-  color: rgb(250 204 21) !important; /* yellow-400 */
-}
+/* Dark mode prose overrides — replaces prose-invert defaults with brand colors */
+@media (prefers-color-scheme: dark) {
+  .prose p,
+  .prose li,
+  .prose span,
+  .prose div {
+    color: rgb(250 204 21) !important; /* yellow-400 */
+  }
 
-.dark .prose h1,
-.dark .prose h2,
-.dark .prose h3,
-.dark .prose h4,
-.dark .prose h5,
-.dark .prose h6 {
-  color: rgb(214 211 209) !important; /* stone-300 */
-}
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    color: rgb(214 211 209) !important; /* stone-300 */
+  }
 
-.dark .prose a {
-  color: rgb(6 182 212) !important; /* cyan-500 */
-}
+  .prose a {
+    color: rgb(6 182 212) !important; /* cyan-500 */
+  }
 
-.dark .prose a:hover {
-  color: rgb(8 145 178) !important; /* cyan-600 */
+  .prose a:hover {
+    color: rgb(8 145 178) !important; /* cyan-600 */
+  }
 }

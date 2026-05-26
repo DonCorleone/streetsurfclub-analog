@@ -1,10 +1,12 @@
-@let isDarkMode = (isDarkMode$ | async);
 @let pages = pagesResource.value();
 
 <!-- Desktop logo (not fixed) -->
 <a [routerLink]="'/'">
-  <div class="hidden lg:flex flex-row items-center justify-center gap-6 bg-stone-100 dark:bg-stone-800 md:gap-8 lg:gap-10 xl:gap-14 2xl:gap-18 pt-[15px]">
-    <img id="img-logo" [src]="isDarkMode ? 'assets/images/white-logo.png' : 'assets/images/logo.png'" class="z-1" alt="logo">
+  <div class="hidden lg:flex flex-row items-center justify-center gap-6 bg-surface-nav md:gap-8 lg:gap-10 xl:gap-14 2xl:gap-18 pt-[15px]">
+    <picture class="z-1">
+      <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
+      <img id="img-logo" src="assets/images/logo.png" alt="logo">
+    </picture>
     <img id="img-logo-icon" src="assets/images/logo-icon.png" class="z-1" alt="logo">
   </div>
 </a>
@@ -14,7 +16,7 @@
 
 <!-- Fixed navbar on mobile, sticky on desktop -->
 <div
-  class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-stone-100 dark:bg-stone-800 xl:h-28 left-0 right-0 z-[991]"
+  class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-surface-nav xl:h-28 left-0 right-0 z-[991]"
   [ngClass]="{
     'isSticky': isSticky,
     'fixed top-0': true,
@@ -29,14 +31,17 @@
       [class.stickymode]="isSticky">
       <div class="flex items-center justify-between w-full lg:hidden">
         <a [routerLink]="'/'" class="text-center px-4">
-          <img [src]="isDarkMode ? 'assets/images/white-logo.png' : 'assets/images/logo.png'" alt="logo">
+          <picture>
+            <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
+            <img src="assets/images/logo.png" alt="logo">
+          </picture>
         </a>
         <button title="menu"
           class="navbar-toggler-sticky lg:hidden z-[1000]"
           (click)="toggleMenu()"
           type="button">
           <span class="burger-menu cursor-pointer">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-black dark:text-slate-300">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-body">
               <path d="M3 4H21M3 12H21M3 20H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
@@ -50,7 +55,7 @@
               class="nav-item text-center text-[14px] md:text-[15px] xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 lg:ml-[7px] lg:mr-[7px] xl:ml-[15px] xl:mr-[15px] 2xl:ml-[19px] 2xl:mr-[19px] first:ml-0 last:mr-0"
               [routerLink]="'/blog'"
               (click)="menuOpen = false">
-              <span class="nav-link text-slate-900 dark:text-slate-300 relative z-1 cursor-pointer">
+              <span class="nav-link text-body relative z-1 cursor-pointer">
                 Neues
               </span>
             </li>
@@ -60,7 +65,7 @@
                 [routerLink]="'/blog/blog-details/page/' + page.id"
                 (click)="menuOpen = false">
                 <span [innerHTML]="page.title | safeHtml"
-                  class="nav-link text-slate-900 dark:text-slate-300 relative z-1 cursor-pointer">
+                  class="nav-link text-body relative z-1 cursor-pointer">
                 </span>
               </li>
             }

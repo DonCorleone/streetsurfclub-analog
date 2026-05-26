@@ -43,7 +43,7 @@ export interface GalleryImage {
         >
           @for (image of images(); track $index) {
             <swiper-slide>
-              <div class="swiper-zoom-container aspect-video bg-gray-100 dark:bg-gray-800 flex items-center justify-center cursor-zoom-in">
+              <div class="swiper-zoom-container aspect-video bg-surface-gallery flex items-center justify-center cursor-zoom-in">
                 <a
                   [href]="isMobile() ? undefined : image.fullSize"
                   [target]="isMobile() ? undefined : '_blank'"
@@ -63,7 +63,7 @@ export interface GalleryImage {
             </swiper-slide>
           }
         </swiper-container>
-        <p class="text-center text-xs text-gray-500 dark:text-gray-400 mt-2">
+        <p class="text-center text-xs text-muted mt-2">
           @if (isMobile()) {
             Tap on images to view full size • Swipe or use arrows to navigate
           } @else {
@@ -74,7 +74,7 @@ export interface GalleryImage {
         <!-- SSR fallback: Simple grid -->
         <div class="grid grid-cols-1 gap-4">
           @for (image of images(); track $index) {
-            <div class="aspect-video bg-gray-100 dark:bg-gray-800 flex items-center justify-center rounded-lg overflow-hidden">
+            <div class="aspect-video bg-surface-gallery flex items-center justify-center rounded-lg overflow-hidden">
               <a [href]="image.fullSize" target="_blank" rel="noopener noreferrer">
                 <img
                   [src]="image.thumbnail"

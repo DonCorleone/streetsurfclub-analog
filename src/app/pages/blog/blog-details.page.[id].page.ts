@@ -41,8 +41,8 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
       <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
         <!-- Back to Blog -->
         <div class="mb-[30px]">
-          <a routerLink="/blog" 
-             class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-slate-900 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-stone-900 transition-all">
+          <a routerLink="/blog"
+             class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-body hover:text-hover-highlight transition-all">
             <i class="ri-arrow-left-line"></i> Back to Blog
           </a>
         </div>
@@ -60,12 +60,12 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
         <!-- Post Meta -->
         <div class="mb-[20px] md:mb-[25px]">
           @if (content()?.lead) {
-          <span class="text-[14px] md:text-[16px] text-slate-900 bg-amber-200 dark:bg-indigo-300 py-[1px] px-[10px] mb-[12px] inline-block">
+          <span class="text-[14px] md:text-[16px] text-on-accent bg-accent py-[1px] px-[10px] mb-[12px] inline-block">
             {{ content()!.lead }}
           </span>
           }
           @if (page()) {
-          <div class="flex flex-wrap items-center gap-[15px] mt-[15px] text-[14px] md:text-[15px] text-stone-500 dark:text-yellow-400">
+          <div class="flex flex-wrap items-center gap-[15px] mt-[15px] text-[14px] md:text-[15px] text-muted">
             <span>
               <i class="ri-calendar-line"></i> {{ page()!.published | date:'MMMM d, yyyy' }}
             </span>
@@ -80,7 +80,7 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
 
         <!-- Title -->
         <h1 [innerHTML]="content()!.title | safeHtml"
-            class="text-slate-900 dark:text-slate-300 font-bold text-[28px] md:text-[38px] lg:text-[48px] leading-[1.22] mb-[25px] md:mb-[35px]">
+            class="text-body font-bold text-[28px] md:text-[38px] lg:text-[48px] leading-[1.22] mb-[25px] md:mb-[35px]">
         </h1>
 
         <!-- Content -->
@@ -90,16 +90,16 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
     } @else {
     <div class="min-h-screen flex items-center justify-center">
       <div class="text-center">
-        <h1 class="text-[32px] font-bold text-slate-900 dark:text-slate-300 mb-[20px]">Post Not Found</h1>
-        <p class="text-[16px] text-stone-500 dark:text-yellow-400 mb-[30px]">The post you're looking for doesn't exist.</p>
+        <h1 class="text-[32px] font-bold text-body mb-[20px]">Post Not Found</h1>
+        <p class="text-[16px] text-muted mb-[30px]">The post you're looking for doesn't exist.</p>
         <a routerLink="/blog"
-           class="inline-block text-[15px] font-semibold text-slate-900 bg-cyan-300 dark:bg-yellow-600 px-[30px] py-[14px] rounded hover:bg-amber-200 dark:hover:bg-indigo-300 transition-all">
+           class="inline-block text-[15px] font-semibold text-on-cta bg-cta px-[30px] py-[14px] rounded hover:bg-accent hover:text-on-accent transition-all">
           Back to Blog
         </a>
       </div>
     </div>
     }
-    
+
     <app-ancal-footer />
   `
 })

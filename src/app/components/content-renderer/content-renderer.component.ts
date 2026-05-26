@@ -17,7 +17,7 @@ interface ContentSegment {
     @for (segment of segments(); track $index) {
       @if (segment.type === 'html') {
         <div [innerHTML]="segment.content | safeHtml"
-             class="prose prose-slate dark:prose-invert max-w-none text-[15px] md:text-[16px] leading-[1.8] text-slate-900 dark:text-slate-300">
+             class="prose prose-slate dark:prose-invert max-w-none text-[15px] md:text-[16px] leading-[1.8] text-body">
         </div>
       } @else if (segment.type === 'gallery' && segment.images) {
         <app-gallery [images]="segment.images" />

@@ -1,7 +1,6 @@
 import { Component, inject, computed, resource } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BloggerService } from '../../services/blogger.service';
-import { DarkmodeService } from '../../services/darkmode.service';
 import { ContentService } from '../../services/content.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { NetlifyImagePipe } from '../../pipes/netlify-image.pipe';
@@ -17,9 +16,6 @@ import { LoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.c
 export class AncalBlogComponent {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
-  private darkmodeService = inject(DarkmodeService);
-
-  isDarkMode$ = this.darkmodeService.isDarkMode$;
 
   // Resource for loading limited posts (load 6 to ensure 3 after filtering **Main**)
   postsResource = resource({

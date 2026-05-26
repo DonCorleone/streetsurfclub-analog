@@ -43,14 +43,14 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
         <!-- Back to Blog -->
         <div class="mb-[30px]">
           <a routerLink="/blog"
-             class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-slate-900 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-stone-900 transition-all">
+             class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-body hover:text-hover-highlight transition-all">
             <i class="ri-arrow-left-line"></i> Back to Blog
           </a>
         </div>
 
         <!-- Header Image -->
         @if (content()?.headerImg) {
-        <div class="mb-[30px] md:mb-[40px]">
+        <div class="mb-[30px] md:mb-[40px] max-w-[800px] mx-auto">
           <img [src]="content()!.headerImg | netlifyImage:1200"
                class="w-full h-auto rounded-lg shadow-lg"
                [alt]="content()!.title"
@@ -61,12 +61,12 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
         <!-- Post Meta -->
         <div class="mb-[20px] md:mb-[25px]">
           @if (content()?.lead) {
-          <span class="text-[14px] md:text-[16px] text-slate-900 bg-amber-200 dark:bg-indigo-300 py-[1px] px-[10px] mb-[12px] inline-block">
+          <span class="text-[14px] md:text-[16px] text-on-accent bg-accent py-[1px] px-[10px] mb-[12px] inline-block">
             {{ content()!.lead }}
           </span>
           }
           @if (post()) {
-          <div class="flex flex-wrap items-center gap-[15px] mt-[15px] text-[14px] md:text-[15px] text-stone-500 dark:text-yellow-400">
+          <div class="flex flex-wrap items-center gap-[15px] mt-[15px] text-[14px] md:text-[15px] text-muted">
             <span>
               <i class="ri-calendar-line"></i> {{ post()!.published | date:'MMMM d, yyyy' }}
             </span>
@@ -81,7 +81,7 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
 
         <!-- Title -->
         <h1 [innerHTML]="content()!.title | safeHtml"
-            class="text-slate-900 dark:text-slate-300 font-bold text-[28px] md:text-[38px] lg:text-[48px] leading-[1.22] mb-[25px] md:mb-[35px]">
+            class="text-body font-bold text-[28px] md:text-[38px] lg:text-[48px] leading-[1.22] mb-[25px] md:mb-[35px]">
         </h1>
 
         <!-- Content -->
@@ -89,11 +89,11 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
 
         <!-- Labels/Tags -->
         @if (post()?.labels && (post()?.labels?.length ?? 0) > 0) {
-        <div class="mt-[40px] pt-[30px] border-t border-gray-200 dark:border-neutral-600">
-          <h3 class="text-[18px] font-bold text-slate-900 dark:text-slate-300 mb-[15px]">Tags:</h3>
+        <div class="mt-[40px] pt-[30px] border-t border-divider">
+          <h3 class="text-[18px] font-bold text-body mb-[15px]">Tags:</h3>
           <div class="flex flex-wrap gap-[10px]">
             @for (label of post()!.labels; track label) {
-            <span class="text-[13px] md:text-[14px] bg-amber-100 dark:bg-indigo-300 text-slate-900 px-[15px] py-[5px] rounded">
+            <span class="text-[13px] md:text-[14px] bg-accent text-on-accent px-[15px] py-[5px] rounded">
               {{ label }}
             </span>
             }
@@ -104,13 +104,13 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
         <!-- Related Posts Section -->
         @if (relatedPosts().length > 0) {
         <div class="mt-[60px] md:mt-[80px]">
-          <h2 class="text-[24px] md:text-[28px] font-bold text-slate-900 dark:text-slate-300 mb-[30px]">
+          <h2 class="text-[24px] md:text-[28px] font-bold text-body mb-[30px]">
             Ähnliche Beiträge
           </h2>
           <div class="grid gap-[25px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-rows-[1fr]">
             @for (item of relatedPosts(); track item.post.id) {
             <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-               class="group bg-white dark:bg-rose-900 transition-all hover:shadow-lg flex flex-col cursor-pointer">
+               class="group bg-surface-card transition-all hover:shadow-lg flex flex-col cursor-pointer">
               @if (item.content.headerImg) {
               <div class="overflow-hidden flex-shrink-0">
                 <img [src]="item.content.headerImg | netlifyImage:600"
@@ -120,15 +120,15 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
               </div>
               }
               <div class="p-[20px] flex-grow flex flex-col">
-                <h3 class="text-[16px] md:text-[18px] font-bold leading-[1.3] mb-[10px] text-slate-900 dark:text-stone-300 transition-all group-hover:text-cyan-500 dark:group-hover:text-yellow-600"
+                <h3 class="text-[16px] md:text-[18px] font-bold leading-[1.3] mb-[10px] text-body transition-all group-hover:text-hover-highlight"
                     [innerHTML]="item.content.title | safeHtml">
                 </h3>
                 @if (item.content.preview) {
-                <p class="text-[13px] md:text-[14px] text-stone-500 dark:text-yellow-400 mb-[12px] line-clamp-2 flex-grow">
+                <p class="text-[13px] md:text-[14px] text-muted mb-[12px] line-clamp-2 flex-grow">
                   {{ item.content.preview }}...
                 </p>
                 }
-                <span class="inline-block text-[13px] md:text-[14px] font-semibold text-slate-900 dark:text-stone-300 transition-all group-hover:text-cyan-500 dark:group-hover:text-yellow-600 mt-auto">
+                <span class="inline-block text-[13px] md:text-[14px] font-semibold text-body transition-all group-hover:text-hover-highlight mt-auto">
                   Weiterlesen <i class="ri-arrow-right-line"></i>
                 </span>
               </div>
@@ -142,16 +142,16 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
     } @else {
     <div class="min-h-screen flex items-center justify-center">
       <div class="text-center">
-        <h1 class="text-[32px] font-bold text-slate-900 dark:text-slate-300 mb-[20px]">Post Not Found</h1>
-        <p class="text-[16px] text-stone-500 dark:text-yellow-400 mb-[30px]">The post you're looking for doesn't exist.</p>
+        <h1 class="text-[32px] font-bold text-body mb-[20px]">Post Not Found</h1>
+        <p class="text-[16px] text-muted mb-[30px]">The post you're looking for doesn't exist.</p>
         <a routerLink="/blog"
-           class="inline-block text-[15px] font-semibold text-slate-900 bg-cyan-300 dark:bg-yellow-600 px-[30px] py-[14px] rounded hover:bg-amber-200 dark:hover:bg-indigo-300 transition-all">
+           class="inline-block text-[15px] font-semibold text-on-cta bg-cta px-[30px] py-[14px] rounded hover:bg-accent hover:text-on-accent transition-all">
           Back to Blog
         </a>
       </div>
     </div>
     }
-    
+
     <app-ancal-footer />
   `
 })

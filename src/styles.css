@@ -103,18 +103,11 @@ body {
   font-family: 'Lexend', sans-serif;
 }
 
-/* Constrain images in blog content on desktop */
+/* Constrain images in blog content */
 .prose img {
-  max-width: 100%;
+  max-width: min(100%, 800px);
   height: auto;
-}
-
-@media (min-width: 768px) {
-  .prose img {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  margin-inline: auto;
 }
 
 /* Fix image alignment issues in blog content */
@@ -138,27 +131,33 @@ body {
 
 /* Dark mode prose overrides — replaces prose-invert defaults with brand colors */
 @media (prefers-color-scheme: dark) {
-  .prose p,
-  .prose li,
-  .prose span,
-  .prose div {
-    color: rgb(250 204 21) !important; /* yellow-400 */
+  .prose :is(p, li, span, div) {
+    color: var(--color-yellow-400) !important;
   }
 
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4,
-  .prose h5,
-  .prose h6 {
-    color: rgb(214 211 209) !important; /* stone-300 */
+  .prose :is(h1, h2, h3, h4, h5, h6) {
+    color: var(--color-stone-300) !important;
   }
 
   .prose a {
-    color: rgb(6 182 212) !important; /* cyan-500 */
+    color: var(--color-cyan-500) !important;
   }
 
   .prose a:hover {
-    color: rgb(8 145 178) !important; /* cyan-600 */
+    color: var(--color-cyan-600) !important;
+  }
+}
+
+/* Scrollbar fallback for WebKit browsers that predate standard scrollbar-color */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-cta);
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
   }
 }

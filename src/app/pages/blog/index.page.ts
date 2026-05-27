@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
@@ -14,6 +14,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
 
 @Component({
   selector: 'app-blog',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     RouterLink,
     SafeHtmlPipe,

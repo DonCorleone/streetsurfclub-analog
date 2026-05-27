@@ -1,4 +1,4 @@
-import { Component, inject, effect, ErrorHandler } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, effect, ErrorHandler } from '@angular/core';
 import { BloggerService } from '../services/blogger.service';
 import { MetaService } from '../services/meta.service';
 import { Blog, mapBlogResponseToBlog } from '../interfaces/blog.interface';
@@ -9,6 +9,7 @@ import { AncalFooterComponent } from '../components/ancal-footer/ancal-footer.co
 
 @Component({
   selector: 'app-home',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AncalNavbarComponent,
     AncalBannerComponent,

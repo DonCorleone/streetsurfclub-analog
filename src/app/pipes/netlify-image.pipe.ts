@@ -3,7 +3,6 @@ import { ImageService } from '../services/image.service';
 
 @Pipe({
   name: 'netlifyImage',
-  standalone: true
 })
 export class NetlifyImagePipe implements PipeTransform {
   private imageService = inject(ImageService);

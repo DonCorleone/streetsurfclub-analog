@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, HostListener, inject, PLATFORM_ID } from '@angular/core';
-import { NgClass, isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from "@angular/router";
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import { BloggerService } from "../../services/blogger.service";
@@ -8,8 +8,11 @@ import { BloggerService } from "../../services/blogger.service";
   selector: 'app-ancal-navbar',
   styleUrls: ['./ancal-navbar.component.css'],
   templateUrl: './ancal-navbar.component.html',
-  imports: [NgClass, RouterLink, SafeHtmlPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [RouterLink, SafeHtmlPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(window:scroll)': 'checkScroll()',
+  },
 })
 export class AncalNavbarComponent {
   private bloggerService = inject(BloggerService);
@@ -19,36 +22,34 @@ export class AncalNavbarComponent {
   pagesResource = this.bloggerService.pagesResource;
 
   menuOpen = false;
+  isSticky = signal(false);
+
+  navbarClasses = computed(() =>
+    this.isSticky()
+      ? 'isSticky lg:fixed lg:top-0'
+      : 'lg:relative lg:top-auto'
+  );
+
+  spacerClasses = computed(() =>
+    this.isSticky() ? 'lg:h-28' : 'lg:h-0'
+  );
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 
   onStickyLogoClick(event: Event) {
-    // Only run in browser, not during SSR/SSG
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-
-    // If we're on the home page, scroll to top instead of navigating
     if (this.router.url === '/') {
       event.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    // Otherwise, let the routerLink handle navigation
   }
 
-  // Navbar Sticky
-  isSticky: boolean = false;
-
-  @HostListener('window:scroll')
   checkScroll() {
     const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    if (scrollPosition >= 200) {
-      this.isSticky = true;
-    } else {
-      this.isSticky = false;
-    }
-
+    this.isSticky.set(scrollPosition >= 200);
   }
 }

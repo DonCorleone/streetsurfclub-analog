@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import { RouterLink } from "@angular/router";
 import { BloggerService } from "../../services/blogger.service";
 
 @Component({
   selector: 'app-ancal-footer',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './ancal-footer.component.html',
   imports: [
     SafeHtmlPipe,

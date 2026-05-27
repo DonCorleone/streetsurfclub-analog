@@ -12,23 +12,18 @@
 </a>
 
 <!-- Spacer for fixed navbar -->
-<div class="h-[80px]" [ngClass]="{'lg:h-0': !isSticky, 'lg:h-28': isSticky}"></div>
+<div class="h-[80px]" [class]="spacerClasses()"></div>
 
 <!-- Fixed navbar on mobile, sticky on desktop -->
 <div
-  class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-surface-nav xl:h-28 left-0 right-0 z-[991]"
-  [ngClass]="{
-    'isSticky': isSticky,
-    'fixed top-0': true,
-    'lg:fixed lg:top-0': isSticky,
-    'lg:relative lg:top-auto': !isSticky
-  }"
+  class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-surface-nav xl:h-28 left-0 right-0 z-[991] fixed top-0"
+  [class]="navbarClasses()"
   data-aos-disable="true">
   <div
     class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[80px] 3xl:px-[120px]">
     <nav class="navbar relative lg:flex flex-wrap"
       [class.active]="menuOpen"
-      [class.stickymode]="isSticky">
+      [class.stickymode]="isSticky()">
       <div class="flex items-center justify-between w-full lg:hidden">
         <a [routerLink]="'/'" class="text-center px-4">
           <picture>
@@ -71,7 +66,7 @@
             }
             <li>
               <a [routerLink]="'/'" (click)="onStickyLogoClick($event)" class="w-30 -mt-12 py-2 block">
-                <img id="img-logo-sticky" src="assets/images/logo-icon.png" [ngClass]="isSticky ? 'hidden lg:block' : 'hidden'" alt="logo">
+                <img id="img-logo-sticky" src="assets/images/logo-icon.png" [class]="isSticky() ? 'hidden lg:block' : 'hidden'" alt="logo">
               </a>
             </li>
           </ul>

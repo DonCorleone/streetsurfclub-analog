@@ -1,5 +1,4 @@
-import { Component, input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input, computed } from '@angular/core';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { GalleryComponent, GalleryImage } from '../gallery/gallery.component';
 
@@ -11,8 +10,8 @@ interface ContentSegment {
 
 @Component({
   selector: 'app-content-renderer',
-  standalone: true,
-  imports: [CommonModule, SafeHtmlPipe, GalleryComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SafeHtmlPipe, GalleryComponent],
   template: `
     @for (segment of segments(); track $index) {
       @if (segment.type === 'html') {

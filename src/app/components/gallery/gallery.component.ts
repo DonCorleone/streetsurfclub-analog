@@ -158,7 +158,7 @@ export interface GalleryImage {
       position: relative;
     }
 
-    /* Swiper navigation buttons - light mode */
+    /* Swiper navigation buttons */
     swiper-container::part(button-prev),
     swiper-container::part(button-next) {
       background-color: rgba(255, 255, 255, 0.9);
@@ -175,19 +175,20 @@ export interface GalleryImage {
       transform: scale(1.1);
     }
 
-    /* Swiper navigation buttons - dark mode */
-    :host-context(.dark) swiper-container::part(button-prev),
-    :host-context(.dark) swiper-container::part(button-next) {
-      background-color: rgba(31, 41, 55, 0.9);
-      color: #f9fafb;
+    @media (prefers-color-scheme: dark) {
+      swiper-container::part(button-prev),
+      swiper-container::part(button-next) {
+        background-color: rgba(31, 41, 55, 0.9);
+        color: #f9fafb;
+      }
+
+      swiper-container::part(button-prev):hover,
+      swiper-container::part(button-next):hover {
+        background-color: rgba(31, 41, 55, 1);
+      }
     }
 
-    :host-context(.dark) swiper-container::part(button-prev):hover,
-    :host-context(.dark) swiper-container::part(button-next):hover {
-      background-color: rgba(31, 41, 55, 1);
-    }
-
-    /* Pagination bullets - light mode */
+    /* Pagination bullets */
     swiper-container::part(bullet) {
       background-color: rgba(31, 41, 55, 0.4);
       opacity: 1;
@@ -199,13 +200,14 @@ export interface GalleryImage {
       transform: scale(1.2);
     }
 
-    /* Pagination bullets - dark mode */
-    :host-context(.dark) swiper-container::part(bullet) {
-      background-color: rgba(249, 250, 251, 0.4);
-    }
+    @media (prefers-color-scheme: dark) {
+      swiper-container::part(bullet) {
+        background-color: rgba(249, 250, 251, 0.4);
+      }
 
-    :host-context(.dark) swiper-container::part(bullet-active) {
-      background-color: #f9fafb;
+      swiper-container::part(bullet-active) {
+        background-color: #f9fafb;
+      }
     }
 
     /* Ensure proper spacing */

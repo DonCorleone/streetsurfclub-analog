@@ -24,7 +24,7 @@
       }
       @if (parsedContent()?.headerImg) {
       <div class="self-center" [class.animate-fade-up]="parsedContent()">
-        <img [src]="parsedContent()!.headerImg" class="inline" alt="banner-image">
+        <img [src]="parsedContent()!.headerImg" class="inline" alt="banner-image" fetchpriority="high" loading="eager">
       </div>
       }
     </div>

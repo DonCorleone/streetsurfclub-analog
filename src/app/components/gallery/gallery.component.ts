@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   input,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -7,9 +8,8 @@ import {
   ElementRef,
   effect,
   signal,
-  HostListener,
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, inject } from '@angular/core';
 
 // Import Swiper styles
@@ -25,9 +25,12 @@ export interface GalleryImage {
 
 @Component({
   selector: 'app-gallery',
-  standalone: true,
-  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  host: {
+    '(window:resize)': 'onResize()',
+    '(window:keydown)': 'onKeyDown($event)',
+  },
   template: `
     <div class="gallery-container my-6">
       @if (isBrowser()) {
@@ -417,12 +420,10 @@ export class GalleryComponent implements AfterViewInit {
     }
   }
 
-  @HostListener('window:resize')
   onResize() {
     this.checkIfMobile();
   }
 
-  @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     if (!this.isFullscreen()) return;
 

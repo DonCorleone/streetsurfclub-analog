@@ -2,7 +2,6 @@ import { Directive, ElementRef, AfterViewInit, OnDestroy, inject, effect, input 
 
 @Directive({
   selector: '[appMasonry]',
-  standalone: true
 })
 export class MasonryDirective implements AfterViewInit, OnDestroy {
   private elementRef = inject(ElementRef);

@@ -1,4 +1,4 @@
-import { Component, inject, computed, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { toSignal, rxResource } from '@angular/core/rxjs-interop';
 import { injectActivatedRoute } from '@analogjs/router';
@@ -17,6 +17,7 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
 
 @Component({
   selector: 'app-blog-details',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     RouterLink,
     SafeHtmlPipe,

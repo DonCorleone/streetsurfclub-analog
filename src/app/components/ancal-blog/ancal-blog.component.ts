@@ -1,4 +1,4 @@
-import { Component, inject, computed, resource } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, resource } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
@@ -10,6 +10,7 @@ import { LoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.c
 
 @Component({
   selector: 'app-ancal-blog',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, SafeHtmlPipe, NetlifyImagePipe, DatePipe, LoadingSkeletonComponent],
   templateUrl: './ancal-blog.component.html'
 })

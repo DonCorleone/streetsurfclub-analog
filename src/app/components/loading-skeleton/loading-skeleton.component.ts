@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-loading-skeleton',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    @if (type === 'post-card') {
+    @if (type() === 'post-card') {
     <div class="animate-pulse">
       <div class="bg-divider h-[240px] w-full mb-4"></div>
       <div class="p-6">
@@ -15,7 +15,7 @@ import { Component, Input } from '@angular/core';
       </div>
     </div>
     }
-    @if (type === 'banner') {
+    @if (type() === 'banner') {
     <div class="animate-pulse">
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-[25px]">
         <div class="self-center space-y-4">
@@ -30,7 +30,7 @@ import { Component, Input } from '@angular/core';
       </div>
     </div>
     }
-    @if (type === 'post-detail') {
+    @if (type() === 'post-detail') {
     <div class="animate-pulse">
       <div class="bg-divider h-[400px] w-full mb-8 rounded-lg"></div>
       <div class="h-8 bg-divider rounded w-1/4 mb-6"></div>
@@ -45,5 +45,5 @@ import { Component, Input } from '@angular/core';
   `
 })
 export class LoadingSkeletonComponent {
-  @Input() type: 'post-card' | 'banner' | 'post-detail' = 'post-card';
+  type = input<'post-card' | 'banner' | 'post-detail'>('post-card');
 }

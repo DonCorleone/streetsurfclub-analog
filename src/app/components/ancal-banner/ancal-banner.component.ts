@@ -1,4 +1,4 @@
-import { Component, inject, computed, resource } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, resource } from '@angular/core';
 import { BloggerService } from '../../services/blogger.service';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { ContentService } from '../../services/content.service';
@@ -6,6 +6,7 @@ import { LoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.c
 
 @Component({
   selector: 'app-ancal-banner',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SafeHtmlPipe, LoadingSkeletonComponent],
   templateUrl: './ancal-banner.component.html'
 })

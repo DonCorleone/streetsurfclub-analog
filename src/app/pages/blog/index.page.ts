@@ -52,7 +52,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
           </button>
           @for (item of visibleLabels(); track item.label) {
           <button
-            (click)="selectedLabel.set(item.label)"
+            (click)="selectedLabel.set(item.label); showAllLabels.set(false)"
             [class]="selectedLabel() === item.label
               ? 'text-[13px] font-semibold px-[16px] py-[6px] rounded-full bg-accent text-on-accent transition-all'
               : 'text-[13px] font-semibold px-[16px] py-[6px] rounded-full bg-surface-card text-muted hover:text-body transition-all'">
@@ -189,7 +189,13 @@ export default class BlogComponent {
   visibleLabels = computed(() => {
     const all = this.topLabels();
     const selected = this.selectedLabel();
-    if (this.showAllLabels()) return all;
+
+    if (this.showAllLabels()) {
+      if (!selected) return all;
+      const selectedItem = all.find(l => l.label === selected);
+      if (!selectedItem) return all;
+      return [selectedItem, ...all.filter(l => l.label !== selected)];
+    }
 
     const limit = this.labelLimit();
     const selectedItem = selected ? all.find(l => l.label === selected) : null;

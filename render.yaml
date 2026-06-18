@@ -2,7 +2,7 @@
 version: "1"
 services:
 - type: web
-  name: streetsurfclub-analog
+  name: streetsurfclub-analog-brutalist
   runtime: node
   repo: https://github.com/DonCorleone/streetsurfclub-analog
   plan: starter
@@ -25,6 +25,5 @@ services:
   buildCommand: npm install && node scripts/prerender-routes.mjs && npm run build:prerender
   startCommand: node dist/analog/server/index.mjs
   domains:
-  - www.streetsurfclub.ch
-  - streetsurfclub.ch
+  - brutalist.streetsurfclub.ch
   autoDeployTrigger: commit

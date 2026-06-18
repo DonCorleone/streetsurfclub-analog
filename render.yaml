@@ -1,3 +1,30 @@
-git add render.yaml
-git commit -m "Add render.yaml"
-git push
+# Exported from Render on 2026-06-18T21:01:52Z
+version: "1"
+services:
+- type: web
+  name: streetsurfclub-analog
+  runtime: node
+  repo: https://github.com/DonCorleone/streetsurfclub-analog
+  plan: starter
+  envVars:
+  - key: BUILD_PRESET
+    sync: false
+  - key: PRERENDER
+    sync: false
+  - key: SITE_URL
+    sync: false
+  - key: BLOG_MAX_RESULTS_MOBILE
+    sync: false
+  - key: BLOG_MAX_RESULTS
+    sync: false
+  - key: GOOGLE_BLOGGER_ID
+    sync: false
+  - key: GOOGLE_BLOGGER_API_KEY
+    sync: false
+  region: frankfurt
+  buildCommand: npm install && node scripts/prerender-routes.mjs && npm run build:prerender
+  startCommand: node dist/analog/server/index.mjs
+  domains:
+  - www.streetsurfclub.ch
+  - streetsurfclub.ch
+  autoDeployTrigger: commit

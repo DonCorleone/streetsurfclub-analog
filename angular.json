@@ -15,7 +15,10 @@
             "configFile": "vite.config.ts",
             "main": "src/main.ts",
             "outputPath": "dist/client",
-            "tsConfig": "tsconfig.app.json"
+            "tsConfig": "tsconfig.app.json",
+            "styles": [
+              "src/styles.css"
+            ]
           },
           "defaultConfiguration": "production",
           "configurations": {

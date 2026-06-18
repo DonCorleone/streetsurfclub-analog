@@ -1,12 +1,13 @@
-/* Tailwind CSS */
-@import 'tailwindcss';
+@import "tailwindcss";
+@import '@ng-brutalism/ui/styles.css';
+
 @import 'aos/dist/aos.css';
 
 @plugin '@tailwindcss/typography';
 
 @theme {
   --font-*: initial;
-  --font-sans: Lexend, sans-serif;
+  --font-sans: "Space Grotesk", "Coming Soon", ui-sans-serif, system-ui, sans-serif;
 
   --breakpoint-*: initial;
   --breakpoint-sm: 576px;
@@ -15,52 +16,57 @@
   --breakpoint-xl: 1200px;
   --breakpoint-2xl: 1400px;
   --breakpoint-3xl: 1700px;
-
-  /* === Design tokens: light-dark() resolves at runtime based on color-scheme === */
-
-  /* Surfaces */
-  --color-surface: light-dark(white, var(--color-neutral-900));
-  --color-surface-card: light-dark(white, var(--color-rose-900));
-  --color-surface-nav: light-dark(var(--color-stone-100), var(--color-stone-800));
-  --color-surface-gallery: light-dark(var(--color-gray-100), var(--color-gray-800));
-
-  /* Accent (badges, tags) and CTA (buttons) */
-  --color-accent: light-dark(var(--color-amber-200), var(--color-indigo-300));
-  --color-cta: light-dark(var(--color-cyan-300), var(--color-yellow-600));
-
-  /* Text */
-  --color-body: light-dark(var(--color-slate-900), var(--color-slate-300));
-  --color-muted: light-dark(var(--color-stone-500), var(--color-yellow-400));
-  --color-link: light-dark(var(--color-amber-200), var(--color-indigo-300));
-  --color-hover-highlight: light-dark(var(--color-cyan-500), var(--color-slate-400));
-
-  /* Borders */
-  --color-divider: light-dark(var(--color-neutral-300), var(--color-neutral-600));
-
-  /* Auto-contrast text on colored backgrounds (CSS Relative Color Syntax, Baseline 2024) */
-  --color-on-accent: oklch(from var(--color-accent) clamp(0, (0.6 - l) * 1e6, 1) 0 0);
-  --color-on-cta: oklch(from var(--color-cta) clamp(0, (0.6 - l) * 1e6, 1) 0 0);
 }
 
 :root {
   color-scheme: light dark;
-  accent-color: var(--color-cta);
-  scrollbar-color: var(--color-cta) transparent;
+  scrollbar-color: #ffd400 transparent;
   scrollbar-width: thin;
+
+  /* Pure brutalist palette: black / white / yellow */
+  --nb-yellow: #ffd400;
+  --nb-blue: #80b3ff;
+  --nb-main: #ffd400;
+  --nb-main-foreground: #000000;
+  --nb-primary: #ffd400;
+  --nb-primary-foreground: #000000;
+  --nb-font-sans: "Space Grotesk", "Coming Soon", ui-sans-serif, system-ui, sans-serif;
+  --nb-shadow-offset-x: 4px;
+  --nb-shadow-offset-y: 4px;
+  --nb-border-width: 3px;
+  --nb-border: #000000;
+  --nb-shadow: #000000;
+  --nb-background: #ffffff;
+  --nb-foreground: #000000;
+  --nb-secondary-background: #f5f5f5;
+  --nb-surface: #f5f5f5;
+  --nb-surface-foreground: #000000;
 }
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-*/
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nb-background: #0a0a0a;
+    --nb-foreground: #f0f0f0;
+    --nb-border: #f0f0f0;
+    --nb-shadow: #f0f0f0;
+    --nb-surface: #111111;
+    --nb-surface-foreground: #f0f0f0;
+    --nb-secondary-background: #141414;
+    --nb-field-bg: #111111;
+    --nb-yellow: #ffd400;
+    --nb-main: #ffd400;
+    --nb-primary: #ffd400;
+    --nb-primary-foreground: #000000;
+  }
+}
+
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--nb-border);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -73,11 +79,10 @@
 }
 
 ::selection {
-  background-color: var(--color-accent);
-  color: var(--color-on-accent);
+  background-color: #ffd400;
+  color: #000000;
 }
 
-/* Micro-animations */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(100px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -95,12 +100,11 @@
   }
 }
 
-/* Global styles */
 html,
 body {
   display: block;
   height: 100%;
-  font-family: 'Lexend', sans-serif;
+  font-family: "Space Grotesk", "Coming Soon", ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Constrain images in blog content */
@@ -110,7 +114,6 @@ body {
   margin-inline: auto;
 }
 
-/* Fix image alignment issues in blog content */
 .prose div[style*="text-align"] {
   display: flex;
   flex-direction: column;
@@ -123,39 +126,34 @@ body {
   margin-bottom: 1rem;
 }
 
-/* Ensure images with links maintain proper alignment */
 .prose a img {
   display: block;
   margin: 0 auto;
 }
 
-/* Dark mode prose overrides — replaces prose-invert defaults with brand colors */
+/* Dark mode prose — simple inversion using nb-foreground */
 @media (prefers-color-scheme: dark) {
+  .prose,
   .prose :is(p, li, span, div) {
-    color: var(--color-yellow-400) !important;
+    color: var(--nb-foreground);
   }
 
   .prose :is(h1, h2, h3, h4, h5, h6) {
-    color: var(--color-stone-300) !important;
+    color: var(--nb-foreground);
   }
 
   .prose a {
-    color: var(--color-cyan-500) !important;
-  }
-
-  .prose a:hover {
-    color: var(--color-cyan-600) !important;
+    color: var(--nb-yellow);
   }
 }
 
-/* Scrollbar fallback for WebKit browsers that predate standard scrollbar-color */
 @supports not (scrollbar-color: auto) {
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-cta);
+    background: #ffd400;
   }
   ::-webkit-scrollbar-track {
     background: transparent;

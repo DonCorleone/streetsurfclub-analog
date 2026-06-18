@@ -7,11 +7,13 @@ import { NetlifyImagePipe } from '../../pipes/netlify-image.pipe';
 import { IContent } from '../../models/IContent';
 import { DatePipe } from '@angular/common';
 import { LoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.component';
+import { NbButton, NbCard, NbCardActions, NbCardContent, NbCardHeader, NbChip, NbChipGroup } from '@ng-brutalism/ui';
 
 @Component({
   selector: 'app-ancal-blog',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, SafeHtmlPipe, NetlifyImagePipe, DatePipe, LoadingSkeletonComponent],
+  imports: [RouterLink, SafeHtmlPipe, NetlifyImagePipe, DatePipe, LoadingSkeletonComponent,
+    NbButton, NbCard, NbCardActions, NbCardContent, NbCardHeader, NbChip, NbChipGroup],
   templateUrl: './ancal-blog.component.html'
 })
 export class AncalBlogComponent {

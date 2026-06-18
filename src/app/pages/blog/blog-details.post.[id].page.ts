@@ -15,6 +15,7 @@ import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
 import { ContentRendererComponent } from '../../components/content-renderer/content-renderer.component';
+import { NbButton, NbCard, NbCardContent, NbCardHeader, NbChip, NbChipGroup } from '@ng-brutalism/ui';
 
 @Component({
   selector: 'app-blog-details',
@@ -27,127 +28,127 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
     AncalNavbarComponent,
     AncalFooterComponent,
     LoadingSkeletonComponent,
-    ContentRendererComponent
+    ContentRendererComponent,
+    NbButton,
+    NbCard,
+    NbCardContent,
+    NbCardHeader,
+    NbChip,
+    NbChipGroup,
   ],
   template: `
     <app-ancal-navbar />
 
     @if (isLoading()) {
-    <article class="py-[50px] md:py-[60px] lg:py-[80px]">
-      <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
+    <article class="py-12 md:py-16 lg:py-20">
+      <div class="max-w-[860px] mx-auto px-4 sm:px-6">
         <app-loading-skeleton type="post-detail" />
       </div>
     </article>
     } @else if (post() && content()) {
-    <article class="py-[50px] md:py-[60px] lg:py-[80px]">
-      <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
-        <!-- Back to Blog -->
-        <div class="mb-[30px]">
-          <a routerLink="/blog"
-             class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-body hover:text-hover-highlight transition-all">
-            <i class="ri-arrow-left-line"></i> Back to Blog
+    <article class="py-12 md:py-16 lg:py-20 bg-[var(--nb-background)]">
+      <div class="max-w-[860px] mx-auto px-4 sm:px-6">
+
+        <!-- Back -->
+        <div class="mb-8">
+          <a routerLink="/blog" nbButton tone="default" border="default"
+             class="font-black! uppercase tracking-widest! text-xs!">
+            ← Zurück zum Blog
           </a>
         </div>
 
-        <!-- Header Image -->
+        <!-- Header image -->
         @if (content()?.headerImg) {
-        <div class="mb-[30px] md:mb-[40px] max-w-[800px] mx-auto">
+        <div class="mb-8 md:mb-12">
           <img [src]="content()!.headerImg | netlifyImage:1200"
-               class="w-full h-auto rounded-lg shadow-lg"
+               class="w-full h-auto border-[length:var(--nb-border-width)] border-[color:var(--nb-border)] shadow-[5px_5px_0px_var(--nb-shadow)]"
                [alt]="content()!.title"
                loading="eager">
         </div>
         }
 
-        <!-- Post Meta -->
-        <div class="mb-[20px] md:mb-[25px]">
+        <!-- Meta + lead -->
+        <div class="mb-6 flex flex-wrap items-center gap-4">
           @if (content()?.lead) {
-          <span class="text-[14px] md:text-[16px] text-on-accent bg-accent py-[1px] px-[10px] mb-[12px] inline-block">
+          <span nbChip tone="yellow" shadow="default" border="default" class="uppercase font-black! tracking-widest! text-xs!">
             {{ content()!.lead }}
           </span>
           }
-          @if (post()) {
-          <div class="flex flex-wrap items-center gap-[15px] mt-[15px] text-[14px] md:text-[15px] text-muted">
-            <span>
-              <i class="ri-calendar-line"></i> {{ post()!.published | date:'MMMM d, yyyy' }}
-            </span>
-            @if (post()!.author && post()!.author.displayName) {
-            <span>
-              <i class="ri-user-line"></i> {{ post()!.author.displayName }}
-            </span>
-            }
-          </div>
+          <span class="text-xs font-bold uppercase tracking-widest opacity-60">
+            {{ post()!.published | date:'MMMM d, yyyy' }}
+          </span>
+          @if (post()!.author?.displayName) {
+          <span class="text-xs font-bold uppercase tracking-widest opacity-60">
+            {{ post()!.author.displayName }}
+          </span>
           }
         </div>
 
         <!-- Title -->
         <h1 [innerHTML]="content()!.title | safeHtml"
-            class="text-body font-bold text-[28px] md:text-[38px] lg:text-[48px] leading-[1.22] mb-[25px] md:mb-[35px]">
+            class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase leading-[1.05] mb-8 md:mb-12">
         </h1>
 
         <!-- Content -->
         <app-content-renderer [htmlContent]="content()!.content" />
 
-        <!-- Labels/Tags -->
+        <!-- Tags -->
         @if (post()?.labels && (post()?.labels?.length ?? 0) > 0) {
-        <div class="mt-[40px] pt-[30px] border-t border-divider">
-          <h3 class="text-[18px] font-bold text-body mb-[15px]">Tags:</h3>
-          <div class="flex flex-wrap gap-[10px]">
+        <div class="mt-10 pt-8 border-t-[length:var(--nb-border-width)] border-[color:var(--nb-border)]">
+          <p class="text-xs font-black uppercase tracking-widest mb-4 opacity-60">Tags</p>
+          <div nbChipGroup gap="sm" class="flex-wrap">
             @for (label of post()!.labels; track label) {
-            <span class="text-[13px] md:text-[14px] bg-accent text-on-accent px-[15px] py-[5px] rounded">
-              {{ label }}
-            </span>
+              <span nbChip tone="blue" border="default" class="text-xs! font-black! uppercase!">{{ label }}</span>
             }
           </div>
         </div>
         }
 
-        <!-- Related Posts Section -->
+        <!-- Related posts -->
         @if (relatedPosts().length > 0) {
-        <div class="mt-[60px] md:mt-[80px]">
-          <h2 class="text-[24px] md:text-[28px] font-bold text-body mb-[30px]">
+        <div class="mt-16 md:mt-20">
+          <h2 class="text-2xl md:text-3xl font-black uppercase mb-8">
             Ähnliche Beiträge
           </h2>
-          <div class="grid gap-[25px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-rows-[1fr]">
+          <div class="grid gap-6 grid-cols-1 md:grid-cols-3">
             @for (item of relatedPosts(); track item.post.id) {
-            <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-               class="group bg-surface-card transition-all hover:shadow-lg flex flex-col cursor-pointer">
-              @if (item.content.headerImg) {
-              <div class="overflow-hidden flex-shrink-0">
-                <img [src]="item.content.headerImg | netlifyImage:600"
-                     class="w-full h-auto transition-all group-hover:scale-110"
-                     [alt]="item.content.title"
-                     loading="lazy">
-              </div>
-              }
-              <div class="p-[20px] flex-grow flex flex-col">
-                <h3 class="text-[16px] md:text-[18px] font-bold leading-[1.3] mb-[10px] text-body transition-all group-hover:text-hover-highlight"
-                    [innerHTML]="item.content.title | safeHtml">
-                </h3>
-                @if (item.content.preview) {
-                <p class="text-[13px] md:text-[14px] text-muted mb-[12px] line-clamp-2 flex-grow">
-                  {{ item.content.preview }}...
-                </p>
+            <a [routerLink]="['/blog/blog-details/post', item.post.id]" class="block group">
+              <nb-card tone="default" shadow="default" border="default" class="h-full! transition-transform hover:-translate-y-1">
+                @if (item.content.headerImg) {
+                <nb-card-header class="p-0! overflow-hidden">
+                  <img [src]="item.content.headerImg | netlifyImage:600"
+                       class="w-full h-36 object-cover transition-transform duration-300 group-hover:scale-105"
+                       [alt]="item.content.title"
+                       loading="lazy">
+                </nb-card-header>
                 }
-                <span class="inline-block text-[13px] md:text-[14px] font-semibold text-body transition-all group-hover:text-hover-highlight mt-auto">
-                  Weiterlesen <i class="ri-arrow-right-line"></i>
-                </span>
-              </div>
+                <nb-card-content>
+                  <h3 class="text-sm font-black uppercase leading-tight"
+                      [innerHTML]="item.content.title | safeHtml">
+                  </h3>
+                  @if (item.content.preview) {
+                  <p class="text-xs opacity-60 line-clamp-2 mt-2">{{ item.content.preview }}...</p>
+                  }
+                </nb-card-content>
+              </nb-card>
             </a>
             }
           </div>
         </div>
         }
+
       </div>
     </article>
     } @else {
-    <div class="min-h-screen flex items-center justify-center">
-      <div class="text-center">
-        <h1 class="text-[32px] font-bold text-body mb-[20px]">Post Not Found</h1>
-        <p class="text-[16px] text-muted mb-[30px]">The post you're looking for doesn't exist.</p>
-        <a routerLink="/blog"
-           class="inline-block text-[15px] font-semibold text-on-cta bg-cta px-[30px] py-[14px] rounded hover:bg-accent hover:text-on-accent transition-all">
-          Back to Blog
+    <div class="min-h-[60vh] flex items-center justify-center px-4">
+      <div class="text-center max-w-md">
+        <h1 class="text-4xl font-black uppercase mb-4">Post nicht gefunden</h1>
+        <p class="text-sm uppercase font-bold tracking-widest opacity-60 mb-8">
+          Der gesuchte Beitrag existiert nicht.
+        </p>
+        <a routerLink="/blog" nbButton tone="yellow" shadow="default" border="default"
+           class="font-black! uppercase tracking-widest! text-sm!">
+          Zurück zum Blog →
         </a>
       </div>
     </div>

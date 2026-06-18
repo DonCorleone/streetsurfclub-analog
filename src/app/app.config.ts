@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideFileRouter, requestContextInterceptor } from '@analogjs/router';
+import { provideNgBrutalism } from '@ng-brutalism/ui';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,5 +22,12 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([requestContextInterceptor])
     ),
     provideClientHydration(withEventReplay()),
+    provideNgBrutalism({
+      theme: {
+        primary: '#ffd400',
+        borderWidth: '3px',
+        radius: '0px',
+      },
+    }),
   ],
 };

@@ -11,6 +11,7 @@ import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
 import { MasonryDirective } from '../../directives/masonry.directive';
+import { NbButton, NbCard, NbCardActions, NbCardContent, NbCardHeader, NbChip, NbChipGroup } from '@ng-brutalism/ui';
 
 @Component({
   selector: 'app-blog',
@@ -23,73 +24,82 @@ import { MasonryDirective } from '../../directives/masonry.directive';
     AncalNavbarComponent,
     AncalFooterComponent,
     LoadingSkeletonComponent,
-    MasonryDirective
+    MasonryDirective,
+    NbButton,
+    NbCard,
+    NbCardActions,
+    NbCardContent,
+    NbCardHeader,
+    NbChip,
+    NbChipGroup,
   ],
   template: `
     <app-ancal-navbar />
 
-    <div class="py-[50px] md:py-[60px] lg:py-[80px] xl:py-[100px]">
-      <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[30px] 3xl:px-[120px]">
-        <div class="max-w-[1320px] mx-auto mb-[35px] md:mb-[45px] lg:mb-[55px] text-center">
-          <h1 class="text-body font-bold text-[28px] md:text-[38px] lg:text-[50px] 2xl:text-[56px] leading-[1.22] mb-[15px]">
+    <div class="py-12 md:py-16 lg:py-20 bg-[var(--nb-background)]">
+      <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+
+        <div class="mb-10 md:mb-14">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-tight mb-3">
             Blog Posts
           </h1>
-          <p class="text-[15px] md:text-[16px] text-muted">
-            Latest news, articles, and insights
+          <p class="text-sm font-bold uppercase tracking-widest opacity-60">
+            News, Artikel und Einblicke
           </p>
         </div>
 
         @if (isLoading()) {
-        <div class="grid gap-[30px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           @for (i of [1,2,3,4,5,6]; track i) {
           <app-loading-skeleton type="post-card" />
           }
         </div>
         } @else {
-        <div appMasonry [columns]="masonryColumns()" [gap]="30">
+        <div appMasonry [columns]="masonryColumns()" [gap]="24">
           @for (item of posts(); track item.post.id) {
-          <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-             class="group bg-surface-card transition-all hover:shadow-lg block cursor-pointer">
-            @if (item.content.headerImg) {
-            <div class="overflow-hidden">
-              <img [src]="item.content.headerImg | netlifyImage:600"
-                   class="w-full h-auto transition-all group-hover:scale-110"
-                   [alt]="item.content.title"
-                   loading="lazy">
-            </div>
-            }
-            <div class="py-[25px] px-[25px] md:py-[30px] md:px-[30px]">
-              <div class="flex items-center gap-[15px] mb-[15px]">
-                <span class="text-[13px] md:text-[14px] text-muted">
-                  <i class="ri-calendar-line"></i> {{ item.post.published | date:'MMM d, yyyy' }}
-                </span>
-                @if (item.post.author && item.post.author.displayName) {
-                <span class="text-[13px] md:text-[14px] text-muted">
-                  <i class="ri-user-line"></i> {{ item.post.author.displayName }}
-                </span>
-                }
-              </div>
-              <h2 class="text-[20px] md:text-[22px] lg:text-[24px] font-bold leading-[1.3] mb-[15px] text-body transition-all group-hover:text-hover-highlight"
-                  [innerHTML]="item.content.title | safeHtml">
-              </h2>
-              @if (item.content.preview) {
-              <p class="text-[14px] md:text-[15px] text-muted mb-[18px] line-clamp-3">
-                {{ item.content.preview }}...
-              </p>
+          <a [routerLink]="['/blog/blog-details/post', item.post.id]" class="block group mb-6">
+            <nb-card tone="default" shadow="default" border="default" class="h-full! transition-transform hover:-translate-y-1">
+              @if (item.content.headerImg) {
+              <nb-card-header class="p-0! overflow-hidden">
+                <img [src]="item.content.headerImg | netlifyImage:600"
+                     class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
+                     [alt]="item.content.title"
+                     loading="lazy">
+              </nb-card-header>
               }
-              @if (item.post.labels && item.post.labels.length > 0) {
-              <div class="flex flex-wrap gap-[8px] mb-[18px]">
-                @for (label of item.post.labels.slice(0, 3); track label) {
-                <span class="text-[12px] bg-accent text-on-accent px-[10px] py-[3px] rounded">
-                  {{ label }}
-                </span>
+              <nb-card-content class="flex flex-col gap-3">
+                <div class="flex items-center gap-4">
+                  <p class="text-xs font-bold uppercase tracking-widest opacity-60">
+                    {{ item.post.published | date:'MMM d, yyyy' }}
+                  </p>
+                  @if (item.post.author?.displayName) {
+                  <p class="text-xs font-bold uppercase tracking-widest opacity-60">
+                    {{ item.post.author.displayName }}
+                  </p>
+                  }
+                </div>
+                <h2 class="text-xl md:text-2xl font-black uppercase leading-tight"
+                    [innerHTML]="item.content.title | safeHtml">
+                </h2>
+                @if (item.content.preview) {
+                <p class="text-sm opacity-70 line-clamp-3">
+                  {{ item.content.preview }}...
+                </p>
                 }
-              </div>
-              }
-              <span class="inline-block text-[14px] md:text-[15px] font-semibold text-body transition-all group-hover:text-hover-highlight">
-                Weiterlesen <i class="ri-arrow-right-line"></i>
-              </span>
-            </div>
+                @if (item.post.labels && item.post.labels.length > 0) {
+                <div nbChipGroup gap="sm" class="flex-wrap">
+                  @for (label of item.post.labels.slice(0, 3); track label) {
+                    <span nbChip tone="blue" class="text-[10px]! font-black! uppercase!">{{ label }}</span>
+                  }
+                </div>
+                }
+              </nb-card-content>
+              <nb-card-actions>
+                <button nbButton tone="yellow" shadow="default" class="w-full! font-black! uppercase tracking-widest! text-xs!">
+                  Weiterlesen →
+                </button>
+              </nb-card-actions>
+            </nb-card>
           </a>
           }
         </div>

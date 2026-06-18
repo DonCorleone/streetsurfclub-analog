@@ -3,12 +3,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from "@angular/router";
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import { BloggerService } from "../../services/blogger.service";
+import { NbButton } from '@ng-brutalism/ui';
 
 @Component({
   selector: 'app-ancal-navbar',
   styleUrls: ['./ancal-navbar.component.css'],
   templateUrl: './ancal-navbar.component.html',
-  imports: [RouterLink, SafeHtmlPipe],
+  imports: [RouterLink, SafeHtmlPipe, NbButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(window:scroll)': 'checkScroll()',

@@ -1,77 +1,104 @@
 @let pages = pagesResource.value();
 
-<!-- Desktop logo (not fixed) -->
-<a [routerLink]="'/'">
-  <div class="hidden lg:flex flex-row items-center justify-center gap-6 bg-surface-nav md:gap-8 lg:gap-10 xl:gap-14 2xl:gap-18 pt-[15px]">
-    <picture class="z-1">
-      <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
-      <img id="img-logo" src="assets/images/logo.png" alt="logo">
-    </picture>
-    <img id="img-logo-icon" src="assets/images/logo-icon.png" class="z-1" alt="logo">
-  </div>
-</a>
+<!-- Desktop top logo bar (not fixed, above sticky nav) -->
+<div class="hidden lg:block border-b-[length:var(--nb-border-width)] border-[color:var(--nb-border)] bg-[var(--nb-background)]">
+  <a [routerLink]="'/'">
+    <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center gap-8">
+      <picture>
+        <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
+        <img id="img-logo" src="assets/images/logo.png" alt="Street Surf Club">
+      </picture>
+      <img id="img-logo-icon" src="assets/images/logo-icon.png" alt="" class="z-1">
+    </div>
+  </a>
+</div>
 
-<!-- Spacer for fixed navbar -->
+<!-- Spacer for when desktop navbar becomes fixed -->
 <div class="h-[80px]" [class]="spacerClasses()"></div>
 
-<!-- Fixed navbar on mobile, sticky on desktop -->
-<div
-  class="navbar-area py-[10px] md:py-[20px] 2xl:py-[30px] bg-surface-nav xl:h-28 left-0 right-0 z-[991] fixed top-0"
-  [class]="navbarClasses()"
-  data-aos-disable="true">
-  <div
-    class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[80px] 3xl:px-[120px]">
-    <nav class="navbar relative lg:flex flex-wrap"
-      [class.active]="menuOpen"
-      [class.stickymode]="isSticky()">
-      <div class="flex items-center justify-between w-full lg:hidden">
-        <a [routerLink]="'/'" class="text-center px-4">
-          <picture>
-            <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
-            <img src="assets/images/logo.png" alt="logo">
-          </picture>
-        </a>
-        <button title="menu"
-          class="navbar-toggler-sticky lg:hidden z-[1000]"
-          (click)="toggleMenu()"
-          type="button">
-          <span class="burger-menu cursor-pointer">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-body">
-              <path d="M3 4H21M3 12H21M3 20H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-        </button>
-      </div>
+<!-- Navbar: always fixed on mobile, relative→fixed on desktop -->
+<header
+  class="left-0 right-0 z-[991] fixed top-0 bg-[var(--nb-background)] border-b-[length:var(--nb-border-width)] border-[color:var(--nb-border)]"
+  [class]="navbarClasses()">
 
-      <div class="navbar-collapse flex self-center grow basis-auto">
-        @if(pages && pages.length > 0) {
-          <ul class="navbar-nav self-center flex-row lg:my-[20px] lg:mt-[10px] xl:mt-[15px] 2xl:mt-[20px] lg:flex">
-            <li
-              class="nav-item text-center text-[14px] md:text-[15px] xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 lg:ml-[7px] lg:mr-[7px] xl:ml-[15px] xl:mr-[15px] 2xl:ml-[19px] 2xl:mr-[19px] first:ml-0 last:mr-0"
-              [routerLink]="'/blog'"
-              (click)="menuOpen = false">
-              <span class="nav-link text-body relative z-1 cursor-pointer">
-                Neues
-              </span>
-            </li>
-            @for (page of pages; track page.id) {
-              <li
-                class="nav-item text-center text-[14px] md:text-[15px] xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 first:mt-0 lg:ml-[7px] lg:mr-[7px] xl:ml-[15px] xl:mr-[15px] 2xl:ml-[19px] 2xl:mr-[19px] first:ml-0 last:mr-0"
-                [routerLink]="'/blog/blog-details/page/' + page.id"
-                (click)="menuOpen = false">
-                <span [innerHTML]="page.title | safeHtml"
-                  class="nav-link text-body relative z-1 cursor-pointer">
-                </span>
-              </li>
-            }
-            <li>
-              <a [routerLink]="'/'" (click)="onStickyLogoClick($event)" class="w-30 -mt-12 py-2 block">
-                <img id="img-logo-sticky" src="assets/images/logo-icon.png" [class]="isSticky() ? 'hidden lg:block' : 'hidden'" alt="logo">
-              </a>
-            </li>
-          </ul>
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+    <div class="h-20 flex items-center justify-between">
+
+      <!-- Mobile logo / desktop sticky logo -->
+      <a [routerLink]="'/'" (click)="onStickyLogoClick($event)">
+        <picture class="lg:hidden">
+          <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
+          <img src="assets/images/logo.png" alt="Street Surf Club" class="h-10 w-auto">
+        </picture>
+        <img
+          src="assets/images/logo-icon.png"
+          alt="Street Surf Club"
+          class="h-10 w-auto"
+          [class.hidden]="!isSticky()"
+          [class.lg:block]="isSticky()">
+      </a>
+
+      <!-- Desktop nav links -->
+      @if (pages && pages.length > 0) {
+      <nav class="hidden lg:flex items-center gap-1">
+        <a [routerLink]="'/blog'"
+           nbButton
+           tone="default"
+           class="font-black! uppercase tracking-widest! text-xs!">
+          Neues
+        </a>
+        @for (page of pages; track page.id) {
+          <a [routerLink]="'/blog/blog-details/page/' + page.id"
+             nbButton
+             tone="default"
+             class="font-black! uppercase tracking-widest! text-xs!"
+             (click)="menuOpen = false">
+            <span [innerHTML]="page.title | safeHtml"></span>
+          </a>
         }
-      </div>
-    </nav>
+      </nav>
+      }
+
+      <!-- Mobile hamburger -->
+      <button
+        type="button"
+        title="Menu"
+        class="lg:hidden border-[3px] border-current p-2 cursor-pointer"
+        (click)="toggleMenu()">
+        @if (menuOpen) {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square">
+            <path d="M6 6L18 18M6 18L18 6"/>
+          </svg>
+        } @else {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square">
+            <path d="M3 4H21M3 12H21M3 20H21"/>
+          </svg>
+        }
+      </button>
+    </div>
+
+    <!-- Mobile dropdown menu -->
+    @if (menuOpen) {
+    <div class="lg:hidden border-t-[length:var(--nb-border-width)] border-[color:var(--nb-border)] bg-[var(--nb-background)] pb-6">
+      <nav class="flex flex-col gap-2 pt-4">
+        <a [routerLink]="'/blog'"
+           nbButton
+           tone="default"
+           class="font-black! uppercase tracking-widest! text-xs! w-full! justify-start!"
+           (click)="menuOpen = false">
+          Neues
+        </a>
+        @for (page of pages; track page.id) {
+          <a [routerLink]="'/blog/blog-details/page/' + page.id"
+             nbButton
+             tone="default"
+             class="font-black! uppercase tracking-widest! text-xs! w-full! justify-start!"
+             (click)="menuOpen = false">
+            <span [innerHTML]="page.title | safeHtml"></span>
+          </a>
+        }
+      </nav>
+    </div>
+    }
   </div>
-</div>
+</header>

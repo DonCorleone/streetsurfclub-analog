@@ -1,62 +1,72 @@
-<div class="py-[50px] md:py-[60px] lg:py-[80px] xl:py-[100px] 2xl:py-[120px]">
-  <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[30px] 3xl:px-[120px]">
-    <div class="max-w-[1320px] mx-auto mb-[25px] md:mb-[35px] lg:mb-[45px] text-center" data-aos="fade-up">
-      <span class="text-[14px] md:text-[16px] lg:text-[18px] 2xl:text-[20px] text-on-accent bg-accent py-[1px] px-[10px] mb-[12px] inline-block">
+<section class="py-16 md:py-20 lg:py-24 bg-[var(--nb-secondary-background)]">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+
+    <!-- Section header -->
+    <div class="mb-10 md:mb-14">
+      <span nbChip tone="yellow" shadow="default" border="default" class="uppercase font-black! tracking-widest! text-xs! mb-4">
         AKTUELLE BEITRÄGE
       </span>
-      <h2 class="text-body font-bold text-[22px] md:text-[32px] lg:text-[40px] 2xl:text-[48px] leading-[1.22] mb-[10px] md:mb-[12px] lg:mb-[15px]">
-        Neueste News & Artikel
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-tight mt-4">
+        Neueste News &amp; Artikel
       </h2>
     </div>
 
     @if (isLoading()) {
-    <div class="grid gap-[25px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up">
+    <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       @for (i of [1,2,3]; track i) {
-      <app-loading-skeleton type="post-card" />
+        <app-loading-skeleton type="post-card" />
       }
     </div>
     } @else {
-    <div class="grid gap-[25px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up">
+    <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-start">
       @for (item of posts(); track item.post.id) {
-      <a [routerLink]="['/blog/blog-details/post', item.post.id]"
-         class="group bg-surface-card transition-all hover:shadow-lg block cursor-pointer">
-        @if (item.content.headerImg) {
-        <div class="overflow-hidden">
-          <img [src]="item.content.headerImg | netlifyImage:600"
-               class="w-full transition-all group-hover:scale-110"
-               [alt]="item.content.title"
-               title="{{ item.content.title }}"
-               loading="lazy">
-        </div>
-        }
-        <div class="py-[22px] px-[20px] md:py-[25px] md:px-[25px] lg:py-[30px] lg:px-[30px]">
-          <div class="flex items-center gap-[15px] mb-[12px] md:mb-[15px]">
-            <span class="text-[13px] md:text-[14px] lg:text-[15px] text-muted">
-              <i class="ri-calendar-line"></i> {{ item.post.published | date:'MMM d, yyyy' }}
-            </span>
-          </div>
-          <h3 class="text-[18px] md:text-[20px] lg:text-[22px] font-bold leading-[1.3] mb-[12px] md:mb-[15px] text-body transition-all group-hover:text-hover-highlight"
-              [innerHTML]="item.content.title | safeHtml">
-          </h3>
-          @if (item.content.preview) {
-          <p class="text-[13px] md:text-[14px] lg:text-[15px] text-muted mb-[15px] md:mb-[18px] line-clamp-3">
-            {{ item.content.preview }}...
-          </p>
+      <a [routerLink]="['/blog/blog-details/post', item.post.id]" class="block group">
+        <nb-card tone="default" shadow="default" border="default" class="h-full! transition-transform hover:-translate-y-1">
+          @if (item.content.headerImg) {
+          <nb-card-header class="p-0! overflow-hidden">
+            <img [src]="item.content.headerImg | netlifyImage:600"
+                 class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                 [alt]="item.content.title"
+                 loading="lazy">
+          </nb-card-header>
           }
-          <span class="inline-block text-[13px] md:text-[14px] lg:text-[15px] font-semibold text-body transition-all group-hover:text-hover-highlight">
-            Weiterlesen <i class="ri-arrow-right-line"></i>
-          </span>
-        </div>
+          <nb-card-content class="flex flex-col gap-3 flex-1">
+            <p class="text-xs font-bold uppercase tracking-widest opacity-60">
+              {{ item.post.published | date:'MMM d, yyyy' }}
+            </p>
+            <h3 class="text-lg md:text-xl font-black uppercase leading-tight"
+                [innerHTML]="item.content.title | safeHtml">
+            </h3>
+            @if (item.content.preview) {
+            <p class="text-sm opacity-70 line-clamp-3 flex-1">
+              {{ item.content.preview }}...
+            </p>
+            }
+            @if (item.post.labels && item.post.labels.length > 0) {
+            <div nbChipGroup gap="sm" class="flex-wrap">
+              @for (label of item.post.labels.slice(0, 3); track label) {
+                <span nbChip tone="blue" class="text-[10px]! font-black! uppercase!">{{ label }}</span>
+              }
+            </div>
+            }
+          </nb-card-content>
+          <nb-card-actions>
+            <button nbButton tone="yellow" shadow="default" class="w-full! font-black! uppercase tracking-widest! text-xs!">
+              Weiterlesen →
+            </button>
+          </nb-card-actions>
+        </nb-card>
       </a>
       }
     </div>
 
-    <div class="text-center mt-[30px] md:mt-[40px]" data-aos="fade-up">
-      <a routerLink="/blog"
-         class="inline-block text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] text-on-cta font-semibold rounded-[4px] bg-cta py-[14px] md:py-[15px] lg:py-[16px] px-[30px] md:px-[35px] lg:px-[40px] transition-all hover:bg-accent hover:text-on-accent">
-        Alle Beiträge
+    <div class="text-center mt-10 md:mt-14">
+      <a routerLink="/blog" nbButton tone="default" shadow="default" border="default"
+         class="font-black! uppercase tracking-widest! text-sm!">
+        Alle Beiträge anzeigen →
       </a>
     </div>
     }
+
   </div>
-</div>
+</section>

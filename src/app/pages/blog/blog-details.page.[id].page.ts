@@ -14,6 +14,7 @@ import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
 import { ContentRendererComponent } from '../../components/content-renderer/content-renderer.component';
+import { NbButton, NbChip } from '@ng-brutalism/ui';
 
 @Component({
   selector: 'app-blog-details',
@@ -26,76 +27,78 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
     AncalNavbarComponent,
     AncalFooterComponent,
     LoadingSkeletonComponent,
-    ContentRendererComponent
+    ContentRendererComponent,
+    NbButton,
+    NbChip,
   ],
   template: `
     <app-ancal-navbar />
 
     @if (isLoading()) {
-    <article class="py-[50px] md:py-[60px] lg:py-[80px]">
-      <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
+    <article class="py-12 md:py-16 lg:py-20">
+      <div class="max-w-[860px] mx-auto px-4 sm:px-6">
         <app-loading-skeleton type="post-detail" />
       </div>
     </article>
     } @else if (page() && content()) {
-    <article class="py-[50px] md:py-[60px] lg:py-[80px]">
-      <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
-        <!-- Back to Blog -->
-        <div class="mb-[30px]">
-          <a routerLink="/blog"
-             class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-body hover:text-hover-highlight transition-all">
-            <i class="ri-arrow-left-line"></i> Back to Blog
+    <article class="py-12 md:py-16 lg:py-20 bg-[var(--nb-background)]">
+      <div class="max-w-[860px] mx-auto px-4 sm:px-6">
+
+        <!-- Back -->
+        <div class="mb-8">
+          <a routerLink="/blog" nbButton tone="default" border="default"
+             class="font-black! uppercase tracking-widest! text-xs!">
+            ← Zurück zum Blog
           </a>
         </div>
 
-        <!-- Header Image -->
+        <!-- Header image -->
         @if (content()?.headerImg) {
-        <div class="mb-[30px] md:mb-[40px] max-w-[800px] mx-auto">
+        <div class="mb-8 md:mb-12">
           <img [src]="content()!.headerImg | netlifyImage:1200"
-               class="w-full h-auto rounded-lg shadow-lg"
+               class="w-full h-auto border-[length:var(--nb-border-width)] border-[color:var(--nb-border)] shadow-[5px_5px_0px_var(--nb-shadow)]"
                [alt]="content()!.title"
                loading="eager">
         </div>
         }
 
-        <!-- Post Meta -->
-        <div class="mb-[20px] md:mb-[25px]">
+        <!-- Meta + lead -->
+        <div class="mb-6 flex flex-wrap items-center gap-4">
           @if (content()?.lead) {
-          <span class="text-[14px] md:text-[16px] text-on-accent bg-accent py-[1px] px-[10px] mb-[12px] inline-block">
+          <span nbChip tone="yellow" shadow="default" border="default" class="uppercase font-black! tracking-widest! text-xs!">
             {{ content()!.lead }}
           </span>
           }
-          @if (page()) {
-          <div class="flex flex-wrap items-center gap-[15px] mt-[15px] text-[14px] md:text-[15px] text-muted">
-            <span>
-              <i class="ri-calendar-line"></i> {{ page()!.published | date:'MMMM d, yyyy' }}
-            </span>
-            @if (page()!.author && page()!.author.displayName) {
-            <span>
-              <i class="ri-user-line"></i> {{ page()!.author.displayName }}
-            </span>
-            }
-          </div>
+          <span class="text-xs font-bold uppercase tracking-widest opacity-60">
+            {{ page()!.published | date:'MMMM d, yyyy' }}
+          </span>
+          @if (page()!.author?.displayName) {
+          <span class="text-xs font-bold uppercase tracking-widest opacity-60">
+            {{ page()!.author.displayName }}
+          </span>
           }
         </div>
 
         <!-- Title -->
         <h1 [innerHTML]="content()!.title | safeHtml"
-            class="text-body font-bold text-[28px] md:text-[38px] lg:text-[48px] leading-[1.22] mb-[25px] md:mb-[35px]">
+            class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase leading-[1.05] mb-8 md:mb-12">
         </h1>
 
         <!-- Content -->
         <app-content-renderer [htmlContent]="content()!.content" />
+
       </div>
     </article>
     } @else {
-    <div class="min-h-screen flex items-center justify-center">
-      <div class="text-center">
-        <h1 class="text-[32px] font-bold text-body mb-[20px]">Post Not Found</h1>
-        <p class="text-[16px] text-muted mb-[30px]">The post you're looking for doesn't exist.</p>
-        <a routerLink="/blog"
-           class="inline-block text-[15px] font-semibold text-on-cta bg-cta px-[30px] py-[14px] rounded hover:bg-accent hover:text-on-accent transition-all">
-          Back to Blog
+    <div class="min-h-[60vh] flex items-center justify-center px-4">
+      <div class="text-center max-w-md">
+        <h1 class="text-4xl font-black uppercase mb-4">Seite nicht gefunden</h1>
+        <p class="text-sm uppercase font-bold tracking-widest opacity-60 mb-8">
+          Die gesuchte Seite existiert nicht.
+        </p>
+        <a routerLink="/blog" nbButton tone="yellow" shadow="default" border="default"
+           class="font-black! uppercase tracking-widest! text-sm!">
+          Zurück zum Blog →
         </a>
       </div>
     </div>

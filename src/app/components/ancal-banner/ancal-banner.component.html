@@ -1,33 +1,64 @@
-<div
-  class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[30px] 3xl:px-[120px]">
-  <div
-    class="bg-surface py-[60px] px-[15px] sm:px-[25px] md:py-[80px] md:px-[40px] lg:py-[100px] lg:px-[50px] xl:py-[45px] xl:px-[40px] 2xl:px-[50px] 3xl:pl-[100px] 3xl:pr-[95px]">
+<!-- Brutalist hero section -->
+<section class="border-b-[length:var(--nb-border-width)] border-[color:var(--nb-border)] bg-[var(--nb-background)]">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 md:py-16 lg:py-20">
+
     @if (isLoading()) {
-    <app-loading-skeleton type="banner" />
-    } @else {
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-[25px]">
-      @if (parsedContent()) {
-      <div class="self-center" [class.animate-fade-up]="parsedContent()">
+      <app-loading-skeleton type="banner" />
+    } @else if (parsedContent()) {
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center"
+         [class.animate-fade-up]="parsedContent()">
+
+      <!-- Left: text content -->
+      <div class="flex flex-col gap-6">
         @if (parsedContent()?.lead) {
-        <span
-          class="text-[14px] md:text-[16px] lg:text-[18px] 2xl:text-[20px] text-on-accent bg-accent py-[1px] px-[10px] mb-[12px] inline-block">
-          {{ parsedContent()!.lead }}
-        </span>
+        <div>
+          <span nbChip tone="yellow" shadow="default" border="default" class="uppercase font-black! tracking-widest! text-xs!">
+            {{ parsedContent()!.lead }}
+          </span>
+        </div>
         }
-        <h1 [innerHTML]="parsedContent()!.title | safeHtml"
-          class="text-body font-bold text-[28px] md:text-[38px] lg:text-[50px] 2xl:text-[56px] leading-[1.22] mb-[10px] md:mb-[12px] lg:mb-[15px] xl:mb-[18px]">
+
+        <h1 class="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.02] uppercase"
+            [innerHTML]="parsedContent()!.title | safeHtml">
         </h1>
-        <div [innerHTML]="parsedContent()!.content | safeHtml"
-          class="text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] text-body leading-[1.8]">
+
+        <div class="text-base md:text-lg leading-relaxed text-[var(--nb-foreground)] opacity-80 [&_*]:text-inherit"
+             [innerHTML]="parsedContent()!.content | safeHtml">
+        </div>
+
+        <div>
+          <a [routerLink]="'/blog'" nbButton tone="yellow" shadow="default" class="font-black! uppercase tracking-widest! text-sm!">
+            Alle Beiträge →
+          </a>
         </div>
       </div>
-      }
+
+      <!-- Right: hero image -->
       @if (parsedContent()?.headerImg) {
-      <div class="self-center" [class.animate-fade-up]="parsedContent()">
-        <img [src]="parsedContent()!.headerImg" class="inline" alt="banner-image" fetchpriority="high" loading="eager">
+      <div>
+        <img
+          [src]="parsedContent()!.headerImg"
+          alt="Street Surf Club"
+          class="w-full h-auto border-[length:var(--nb-border-width)] border-[color:var(--nb-border)] shadow-[5px_5px_0px_var(--nb-shadow)]"
+          fetchpriority="high"
+          loading="eager">
       </div>
       }
+
     </div>
+
     }
   </div>
-</div>
+</section>
+
+<!-- Brutalist marquee strip -->
+<nb-marquee
+  duration="12s"
+  class="border-b-[length:var(--nb-border-width)] border-[color:var(--nb-border)] bg-[var(--nb-yellow)] text-black!">
+  @for (item of marqueeItems; track $index) {
+    <nb-marquee-item class="font-black! uppercase tracking-widest! text-sm!">
+      {{ item }}
+    </nb-marquee-item>
+  }
+</nb-marquee>

@@ -133,6 +133,19 @@ export class BloggerService {
     }
   }
 
+  async searchPosts(q: string): Promise<Post[]> {
+    try {
+      const encodedQ = encodeURIComponent(q);
+      const response = await firstValueFrom(
+        this.httpClient.get<PostResponse>(`${this.apiBaseUrl}/find-post?encodedQ=${encodedQ}`)
+      );
+      return response.items ?? [];
+    } catch (err) {
+      console.error('Error searching posts:', err);
+      return [];
+    }
+  }
+
   // Method for loading posts with custom maxResults (used in resources)
   async loadPostsWithLimit(maxResults?: number): Promise<Post[]> {
     try {

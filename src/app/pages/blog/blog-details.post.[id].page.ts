@@ -47,7 +47,7 @@ const RELATED_COUNT = 3;
         <div class="mb-[30px]">
           <a routerLink="/blog"
              class="inline-flex items-center gap-[8px] text-[14px] md:text-[15px] text-body hover:text-hover-highlight transition-all">
-            <i class="ri-arrow-left-line"></i> Back to Blog
+            <i class="ri-arrow-left-line"></i> Zurück zum Blog
           </a>
         </div>
 
@@ -146,11 +146,11 @@ const RELATED_COUNT = 3;
     } @else {
     <div class="min-h-screen flex items-center justify-center">
       <div class="text-center">
-        <h1 class="text-[32px] font-bold text-body mb-[20px]">Post Not Found</h1>
-        <p class="text-[16px] text-muted mb-[30px]">The post you're looking for doesn't exist.</p>
+        <h1 class="text-[32px] font-bold text-body mb-[20px]">Beitrag nicht gefunden</h1>
+        <p class="text-[16px] text-muted mb-[30px]">Der gesuchte Beitrag existiert nicht.</p>
         <a routerLink="/blog"
            class="inline-block text-[15px] font-semibold text-on-cta bg-cta px-[30px] py-[14px] rounded hover:bg-accent hover:text-on-accent transition-all">
-          Back to Blog
+          Zurück zum Blog
         </a>
       </div>
     </div>

@@ -36,20 +36,51 @@ import { MasonryDirective } from '../../directives/masonry.directive';
       <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[30px] 3xl:px-[120px]">
         <div class="max-w-[1320px] mx-auto mb-[35px] md:mb-[45px] lg:mb-[55px] text-center">
           <h1 class="text-body font-bold text-[28px] md:text-[38px] lg:text-[50px] 2xl:text-[56px] leading-[1.22] mb-[15px]">
-            Blog Posts
+            Blog Beiträge
           </h1>
           <p class="text-[15px] md:text-[16px] text-muted">
-            Latest news, articles, and insights
+            Aktuelle News, Artikel & Einblicke
           </p>
         </div>
 
-        @if (!isLoading() && topLabels().length > 0) {
+        <!-- Search -->
+        <div class="max-w-[560px] mx-auto mb-[30px] md:mb-[40px] relative">
+          <div class="relative">
+            <i class="ri-search-line absolute left-[14px] top-1/2 -translate-y-1/2 text-muted text-[18px] pointer-events-none"></i>
+            <input
+              #searchInput
+              type="search"
+              [value]="searchQuery()"
+              (input)="onSearchInput(searchInput.value)"
+              (focus)="showSuggestions.set(searchQuery().length > 0)"
+              (keydown.enter)="showSuggestions.set(false)"
+              (keydown.escape)="clearSearch()"
+              placeholder="Suchen…"
+              class="w-full bg-surface-card text-body text-[15px] pl-[42px] pr-[42px] py-[12px] rounded border border-divider focus:outline-none focus:border-accent transition-all placeholder:text-muted">
+            @if (searchQuery()) {
+            <button
+              (mousedown)="clearSearch()"
+              class="absolute right-[12px] top-1/2 -translate-y-1/2 text-muted hover:text-body transition-all">
+              <i class="ri-close-line text-[18px]"></i>
+            </button>
+            }
+          </div>
+          @if (showSuggestions() && labelSuggestions().length > 0) {
+          <div class="absolute top-full left-0 right-0 mt-[4px] bg-surface-card border border-divider rounded shadow-lg z-50 overflow-hidden">
+            @for (s of labelSuggestions(); track s.label) {
+            <button
+              (mousedown)="selectLabelSuggestion(s.label)"
+              class="w-full text-left px-[16px] py-[10px] text-[14px] text-body hover:bg-accent hover:text-on-accent transition-all flex items-center justify-between gap-[8px]">
+              <span><i class="ri-price-tag-3-line mr-[8px] opacity-40"></i>{{ s.label }}</span>
+              <span class="text-[12px] opacity-40 shrink-0">{{ s.count }}</span>
+            </button>
+            }
+          </div>
+          }
+        </div>
+
+        @if (!isLoading() && topLabels().length > 0 && !searchQuery()) {
         <div class="max-w-[1320px] mx-auto mb-[30px] md:mb-[40px] flex flex-wrap gap-[10px] justify-center items-center">
-          <button
-            (click)="selectedLabel.set(null); showAllLabels.set(false)"
-            class="self-center text-[13px] text-muted underline underline-offset-2 hover:text-body transition-all">
-            Show all
-          </button>
           @for (item of visibleLabels(); track item.label) {
           <button
             (click)="selectedLabel.set(item.label); showAllLabels.set(false)"
@@ -66,14 +97,14 @@ import { MasonryDirective } from '../../directives/masonry.directive';
           <button
             (click)="showAllLabels.set(true)"
             class="self-center text-[13px] text-muted underline underline-offset-2 hover:text-body transition-all">
-            Show more <i class="ri-arrow-down-s-line"></i>
+            Mehr anzeigen <i class="ri-arrow-down-s-line"></i>
           </button>
           }
           @if (showAllLabels()) {
           <button
             (click)="showAllLabels.set(false)"
             class="self-center text-[13px] text-muted underline underline-offset-2 hover:text-body transition-all">
-            Show less <i class="ri-arrow-up-s-line"></i>
+            Weniger anzeigen <i class="ri-arrow-up-s-line"></i>
           </button>
           }
         </div>
@@ -85,9 +116,17 @@ import { MasonryDirective } from '../../directives/masonry.directive';
           <app-loading-skeleton type="post-card" />
           }
         </div>
+        } @else if (displayedPosts().length === 0 && (searchQuery() || selectedLabel())) {
+        <div class="text-center py-[60px] text-muted text-[16px]">
+          @if (searchQuery()) {
+            Keine Beiträge für „{{ searchQuery() }}" gefunden.
+          } @else {
+            Keine Beiträge mit dem Label „{{ selectedLabel() }}" gefunden.
+          }
+        </div>
         } @else {
         <div appMasonry [columns]="masonryColumns()" [gap]="30">
-          @for (item of filteredPosts(); track item.post.id) {
+          @for (item of displayedPosts(); track item.post.id) {
           <a [routerLink]="['/blog/blog-details/post', item.post.id]"
              class="group bg-surface-card transition-all hover:shadow-lg block cursor-pointer">
             @if (item.content.headerImg) {
@@ -156,6 +195,8 @@ export default class BlogComponent {
   masonryColumns = signal(3);
   selectedLabel = signal<string | null>(null);
   showAllLabels = signal(false);
+  searchQuery = signal('');
+  showSuggestions = signal(false);
 
   private labelLimit = computed(() => this.masonryColumns() === 1 ? 8 : 18);
 
@@ -186,17 +227,24 @@ export default class BlogComponent {
       .map(([label, count]) => ({ label, count }))
   );
 
+  private allLabelsAlpha = computed(() =>
+    [...this.labelCounts().entries()]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([label, count]) => ({ label, count }))
+  );
+
   visibleLabels = computed(() => {
-    const all = this.topLabels();
     const selected = this.selectedLabel();
 
     if (this.showAllLabels()) {
+      const all = this.allLabelsAlpha();
       if (!selected) return all;
       const selectedItem = all.find(l => l.label === selected);
       if (!selectedItem) return all;
       return [selectedItem, ...all.filter(l => l.label !== selected)];
     }
 
+    const all = this.topLabels();
     const limit = this.labelLimit();
     const selectedItem = selected ? all.find(l => l.label === selected) : null;
     const rest = selectedItem ? all.filter(l => l.label !== selected) : all;
@@ -208,7 +256,22 @@ export default class BlogComponent {
     !this.showAllLabels() && this.topLabels().length > this.visibleLabels().length
   );
 
-  filteredPosts = computed(() => {
+  labelSuggestions = computed(() => {
+    const q = this.searchQuery().toLowerCase().trim();
+    if (!q) return [];
+    return this.allLabelsAlpha().filter(l => l.label.toLowerCase().includes(q)).slice(0, 8);
+  });
+
+  displayedPosts = computed(() => {
+    const q = this.searchQuery().trim().toLowerCase();
+    if (q) {
+      return this.posts().filter(({ post, content }) =>
+        content.title?.toLowerCase().includes(q) ||
+        content.preview?.toLowerCase().includes(q) ||
+        post.author?.displayName?.toLowerCase().includes(q) ||
+        (post.labels ?? []).some((l: string) => l.toLowerCase().includes(q))
+      );
+    }
     const label = this.selectedLabel();
     if (!label) return this.posts();
     return this.posts().filter(({ post }) => post.labels?.includes(label));
@@ -225,7 +288,7 @@ export default class BlogComponent {
     // Update meta tags on initialization
     this.metaService.updateMetaTags({
       title: 'Blog - Street Surf Club',
-      description: 'Latest news, articles, and insights from Street Surf Club',
+      description: 'Aktuelle News, Artikel und Einblicke vom Street Surf Club',
       image: ''
     });
 
@@ -246,4 +309,22 @@ export default class BlogComponent {
       this.masonryColumns.set(3);
     }
   }
+
+  onSearchInput(value: string): void {
+    this.searchQuery.set(value);
+    this.showSuggestions.set(value.length > 0);
+    this.selectedLabel.set(null);
+  }
+
+  clearSearch(): void {
+    this.searchQuery.set('');
+    this.showSuggestions.set(false);
+  }
+
+  selectLabelSuggestion(label: string): void {
+    this.selectedLabel.set(label);
+    this.clearSearch();
+    this.showAllLabels.set(false);
+  }
+
 }

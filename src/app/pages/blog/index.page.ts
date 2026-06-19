@@ -119,7 +119,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
               }
               @if (item.post.labels && item.post.labels.length > 0) {
               <div class="flex flex-wrap gap-[8px] mb-[18px]">
-                @for (label of item.post.labels; track label) {
+                @for (label of item.post.labels.slice().sort(); track label) {
                 <button
                   (click)="$event.preventDefault(); $event.stopPropagation(); selectedLabel.set(label)"
                   [class]="selectedLabel() === label

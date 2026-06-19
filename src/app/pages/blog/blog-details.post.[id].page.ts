@@ -93,7 +93,7 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
         <div class="mt-[40px] pt-[30px] border-t border-divider">
           <h3 class="text-[18px] font-bold text-body mb-[15px]">Tags:</h3>
           <div class="flex flex-wrap gap-[10px]">
-            @for (label of post()!.labels; track label) {
+            @for (label of post()!.labels!.slice().sort(); track label) {
             <span class="text-[13px] md:text-[14px] bg-accent text-on-accent px-[15px] py-[5px] rounded">
               {{ label }}
             </span>

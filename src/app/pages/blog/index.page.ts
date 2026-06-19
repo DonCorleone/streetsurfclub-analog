@@ -79,7 +79,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
               }
               @if (item.post.labels && item.post.labels.length > 0) {
               <div class="flex flex-wrap gap-[8px] mb-[18px]">
-                @for (label of item.post.labels.slice(0, 3); track label) {
+                @for (label of item.post.labels.slice().sort().slice(0, 3); track label) {
                 <span class="text-[12px] bg-accent text-on-accent px-[10px] py-[3px] rounded">
                   {{ label }}
                 </span>

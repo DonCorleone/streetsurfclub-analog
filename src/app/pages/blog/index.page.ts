@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, signal, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { injectActivatedRoute } from '@analogjs/router';
+import { map } from 'rxjs';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
 import { MetaService } from '../../services/meta.service';
@@ -11,6 +14,7 @@ import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
 import { MasonryDirective } from '../../directives/masonry.directive';
+
 
 @Component({
   selector: 'app-blog',
@@ -39,6 +43,42 @@ import { MasonryDirective } from '../../directives/masonry.directive';
           </p>
         </div>
 
+        @if (!isLoading() && topLabels().length > 0) {
+        <div class="max-w-[1320px] mx-auto mb-[30px] md:mb-[40px] flex flex-wrap gap-[10px] justify-center items-center">
+          <button
+            (click)="selectedLabel.set(null); showAllLabels.set(false)"
+            class="self-center text-[13px] text-muted underline underline-offset-2 hover:text-body transition-all">
+            Show all
+          </button>
+          @for (item of visibleLabels(); track item.label) {
+          <button
+            (click)="selectedLabel.set(item.label); showAllLabels.set(false)"
+            [class]="selectedLabel() === item.label
+              ? 'text-[13px] font-semibold px-[16px] py-[6px] rounded-full bg-accent text-on-accent transition-all'
+              : 'text-[13px] font-semibold px-[16px] py-[6px] rounded-full bg-surface-card text-muted hover:text-body transition-all'">
+            {{ item.label }}
+            <span [class]="selectedLabel() === item.label
+              ? 'ml-[5px] text-[11px] opacity-75'
+              : 'ml-[5px] text-[11px] opacity-50'">{{ item.count }}</span>
+          </button>
+          }
+          @if (!showAllLabels() && hasMoreLabels()) {
+          <button
+            (click)="showAllLabels.set(true)"
+            class="self-center text-[13px] text-muted underline underline-offset-2 hover:text-body transition-all">
+            Show more <i class="ri-arrow-down-s-line"></i>
+          </button>
+          }
+          @if (showAllLabels()) {
+          <button
+            (click)="showAllLabels.set(false)"
+            class="self-center text-[13px] text-muted underline underline-offset-2 hover:text-body transition-all">
+            Show less <i class="ri-arrow-up-s-line"></i>
+          </button>
+          }
+        </div>
+        }
+
         @if (isLoading()) {
         <div class="grid gap-[30px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           @for (i of [1,2,3,4,5,6]; track i) {
@@ -47,7 +87,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
         </div>
         } @else {
         <div appMasonry [columns]="masonryColumns()" [gap]="30">
-          @for (item of posts(); track item.post.id) {
+          @for (item of filteredPosts(); track item.post.id) {
           <a [routerLink]="['/blog/blog-details/post', item.post.id]"
              class="group bg-surface-card transition-all hover:shadow-lg block cursor-pointer">
             @if (item.content.headerImg) {
@@ -79,10 +119,14 @@ import { MasonryDirective } from '../../directives/masonry.directive';
               }
               @if (item.post.labels && item.post.labels.length > 0) {
               <div class="flex flex-wrap gap-[8px] mb-[18px]">
-                @for (label of item.post.labels.slice().sort().slice(0, 3); track label) {
-                <span class="text-[12px] bg-accent text-on-accent px-[10px] py-[3px] rounded">
-                  {{ label }}
-                </span>
+                @for (label of item.post.labels; track label) {
+                <button
+                  (click)="$event.preventDefault(); $event.stopPropagation(); selectedLabel.set(label)"
+                  [class]="selectedLabel() === label
+                    ? 'text-[12px] bg-accent text-on-accent px-[10px] py-[3px] rounded cursor-pointer'
+                    : 'text-[12px] bg-surface-card text-muted px-[10px] py-[3px] rounded cursor-pointer hover:bg-accent hover:text-on-accent transition-all'">
+                  {{ label }} <span class="opacity-60">({{ labelCounts().get(label) ?? 0 }})</span>
+                </button>
                 }
               </div>
               }
@@ -104,18 +148,20 @@ export default class BlogComponent {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
   private metaService = inject(MetaService);
+  private route = injectActivatedRoute();
+  private queryLabel = toSignal(this.route.queryParams.pipe(map(p => (p['label'] as string) ?? null)));
 
-  // Use the posts resource from the service
   postsResource = this.bloggerService.postsResource;
 
-  // Signal for responsive masonry columns
   masonryColumns = signal(3);
+  selectedLabel = signal<string | null>(null);
+  showAllLabels = signal(false);
 
-  // Computed signal that parses posts into content
+  private labelLimit = computed(() => this.masonryColumns() === 1 ? 8 : 18);
+
   posts = computed(() => {
     const rawPosts = this.postsResource.value();
     if (!rawPosts) return [];
-
     return rawPosts
       .map(post => {
         const content = this.contentService.parseContent(post);
@@ -124,10 +170,58 @@ export default class BlogComponent {
       .filter((item): item is { post: any; content: IContent } => item !== null);
   });
 
-  // Computed loading state
+  labelCounts = computed(() => {
+    const counts = new Map<string, number>();
+    for (const { post } of this.posts()) {
+      for (const label of post.labels ?? []) {
+        counts.set(label, (counts.get(label) ?? 0) + 1);
+      }
+    }
+    return counts;
+  });
+
+  topLabels = computed(() =>
+    [...this.labelCounts().entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([label, count]) => ({ label, count }))
+  );
+
+  visibleLabels = computed(() => {
+    const all = this.topLabels();
+    const selected = this.selectedLabel();
+
+    if (this.showAllLabels()) {
+      if (!selected) return all;
+      const selectedItem = all.find(l => l.label === selected);
+      if (!selectedItem) return all;
+      return [selectedItem, ...all.filter(l => l.label !== selected)];
+    }
+
+    const limit = this.labelLimit();
+    const selectedItem = selected ? all.find(l => l.label === selected) : null;
+    const rest = selectedItem ? all.filter(l => l.label !== selected) : all;
+    const sliced = rest.slice(0, selectedItem ? limit - 1 : limit);
+    return selectedItem ? [selectedItem, ...sliced] : sliced;
+  });
+
+  hasMoreLabels = computed(() =>
+    !this.showAllLabels() && this.topLabels().length > this.visibleLabels().length
+  );
+
+  filteredPosts = computed(() => {
+    const label = this.selectedLabel();
+    if (!label) return this.posts();
+    return this.posts().filter(({ post }) => post.labels?.includes(label));
+  });
+
   isLoading = computed(() => this.postsResource.isLoading());
 
   constructor() {
+    effect(() => {
+      const label = this.queryLabel();
+      if (label) this.selectedLabel.set(label);
+    });
+
     // Update meta tags on initialization
     this.metaService.updateMetaTags({
       title: 'Blog - Street Surf Club',

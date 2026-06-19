@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, computed, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { toSignal, rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { injectActivatedRoute } from '@analogjs/router';
-import { map, from, Observable, of } from 'rxjs';
+import { from, map, Observable, of } from 'rxjs';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
 import { MetaService } from '../../services/meta.service';
@@ -15,6 +15,8 @@ import { AncalNavbarComponent } from '../../components/ancal-navbar/ancal-navbar
 import { AncalFooterComponent } from '../../components/ancal-footer/ancal-footer.component';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
 import { ContentRendererComponent } from '../../components/content-renderer/content-renderer.component';
+
+const RELATED_COUNT = 3;
 
 @Component({
   selector: 'app-blog-details',
@@ -93,10 +95,11 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
         <div class="mt-[40px] pt-[30px] border-t border-divider">
           <h3 class="text-[18px] font-bold text-body mb-[15px]">Tags:</h3>
           <div class="flex flex-wrap gap-[10px]">
-            @for (label of post()!.labels!.slice().sort(); track label) {
-            <span class="text-[13px] md:text-[14px] bg-accent text-on-accent px-[15px] py-[5px] rounded">
-              {{ label }}
-            </span>
+            @for (label of post()!.labels; track label) {
+            <a [routerLink]="['/blog']" [queryParams]="{label: label}"
+               class="text-[13px] md:text-[14px] bg-accent text-on-accent px-[15px] py-[5px] rounded hover:opacity-80 transition-all">
+              {{ label }} <span class="opacity-60">({{ labelCounts().get(label) ?? 0 }})</span>
+            </a>
             }
           </div>
         </div>
@@ -187,29 +190,41 @@ export default class BlogDetailsComponent {
     return post ? this.contentService.parseContent(post) : null;
   });
 
-  // Resource for related posts
-  relatedPostsResource = rxResource<Post[], string | undefined>({
-    params: () => this.postId(),
-    stream: (): Observable<Post[]> => from(this.bloggerService.loadPostsWithLimit(4))
+  labelCounts = computed(() => {
+    const counts = new Map<string, number>();
+    for (const post of this.bloggerService.postsResource.value() ?? []) {
+      for (const label of post.labels ?? []) {
+        counts.set(label, (counts.get(label) ?? 0) + 1);
+      }
+    }
+    return counts;
   });
 
-  // Computed related posts (filtered and parsed)
+  // IDF-weighted similarity: rare shared labels count more than common ones
   relatedPosts = computed(() => {
-    const posts = this.relatedPostsResource.value();
-    const currentId = this.postId();
-    if (!posts) return [];
+    const allPosts = this.bloggerService.postsResource.value();
+    const currentPost = this.post();
+    const counts = this.labelCounts();
+    if (!allPosts || !currentPost) return [];
 
-    // Filter out current post and get first 3
-    const filtered = posts
-      .filter(p => p.id !== currentId)
-      .slice(0, 3);
+    const currentLabels = new Set(currentPost.labels ?? []);
 
-    return filtered
+    return allPosts
+      .filter(p => p.id !== currentPost.id)
       .map(post => {
-        const content = this.contentService.parseContent(post);
-        return content ? { post, content } : null;
+        // Only labels that exist on both posts and have count > 1 (count=1 means no other post can match)
+        const sharedLabels = (post.labels ?? []).filter(l => currentLabels.has(l) && (counts.get(l) ?? 0) > 1);
+        const score = sharedLabels.reduce((sum, l) => sum + 1 / (counts.get(l) ?? 1), 0);
+        return { post, sharedLabels, score };
       })
-      .filter((item): item is { post: any; content: IContent } => item !== null);
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, RELATED_COUNT)
+      .map(({ post, sharedLabels, score }) => {
+        const content = this.contentService.parseContent(post);
+        return content ? { post, content, sharedLabels, score } : null;
+      })
+      .filter((item): item is { post: Post; content: IContent; sharedLabels: string[]; score: number } => item !== null);
   });
 
   // Computed loading state

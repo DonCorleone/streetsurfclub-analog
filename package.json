@@ -13,7 +13,9 @@
     "build:prerender": "PRERENDER=true vite build",
     "watch": "vite build --watch",
     "test": "vitest",
-    "preview": "node dist/analog/server/index.mjs"
+    "preview": "node dist/analog/server/index.mjs",
+    "label-posts": "node --env-file=.env scripts/label-posts.mjs",
+    "label-posts:write": "node --env-file=.env scripts/label-posts.mjs --write"
   },
   "private": true,
   "dependencies": {
@@ -45,7 +47,9 @@
     "@angular/build": "^21.0.4",
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.6",
+    "@anthropic-ai/sdk": "^0.99.0",
     "@types/node": "^24.7.1",
+    "google-auth-library": "^10.6.2",
     "jsdom": "^22.0.0",
     "typescript": "~5.9.3",
     "vite": "^7.0.0",

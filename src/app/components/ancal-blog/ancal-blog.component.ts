@@ -18,10 +18,10 @@ export class AncalBlogComponent {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
 
-  // Resource for loading limited posts (load 6 to ensure 3 after filtering **Main**)
+  // Resource for loading limited posts (load 20 to ensure 3 after filtering **Main**)
   postsResource = resource({
     loader: async () => {
-      return await this.bloggerService.loadPostsWithLimit(6);
+      return await this.bloggerService.loadPostsWithLimit(20);
     }
   });
 

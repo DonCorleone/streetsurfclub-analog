@@ -49,14 +49,14 @@ import { MasonryDirective } from '../../directives/masonry.directive';
             <i class="ri-search-line absolute left-[14px] top-1/2 -translate-y-1/2 text-muted text-[18px] pointer-events-none"></i>
             <input
               #searchInput
-              type="search"
+              type="text"
               [value]="searchQuery()"
               (input)="onSearchInput(searchInput.value)"
               (focus)="showSuggestions.set(searchQuery().length > 0)"
-              (keydown.enter)="showSuggestions.set(false)"
+              (keydown.enter)="showSuggestions.set(false); searchInput.blur()"
               (keydown.escape)="clearSearch()"
               placeholder="Suchen…"
-              class="w-full bg-surface-card text-body text-[15px] pl-[42px] pr-[42px] py-[12px] rounded border border-divider focus:outline-none focus:border-accent transition-all placeholder:text-muted">
+              class="w-full bg-surface-card text-body text-[16px] pl-[42px] pr-[42px] py-[12px] rounded border border-divider focus:outline-none focus:border-accent transition-all placeholder:text-muted">
             @if (searchQuery()) {
             <button
               (mousedown)="clearSearch()"
@@ -189,6 +189,7 @@ export default class BlogComponent {
   private metaService = inject(MetaService);
   private route = injectActivatedRoute();
   private queryLabel = toSignal(this.route.queryParams.pipe(map(p => (p['label'] as string) ?? null)));
+  private querySearch = toSignal(this.route.queryParams.pipe(map(p => (p['q'] as string) ?? '')));
 
   postsResource = this.bloggerService.postsResource;
 
@@ -283,6 +284,14 @@ export default class BlogComponent {
     effect(() => {
       const label = this.queryLabel();
       if (label) this.selectedLabel.set(label);
+    });
+
+    effect(() => {
+      const q = this.querySearch();
+      if (q) {
+        this.searchQuery.set(q);
+        this.showSuggestions.set(false);
+      }
     });
 
     // Update meta tags on initialization

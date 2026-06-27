@@ -14,23 +14,19 @@ export class AncalBannerComponent {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
 
-  // Resource for loading the main banner post
   mainPostResource = resource({
     loader: async () => {
       return await this.bloggerService.findPost('**Main**');
     }
   });
 
-  // Computed parsed content
   parsedContent = computed(() => {
     const post = this.mainPostResource.value();
     return post ? this.contentService.parseContent(post) : null;
   });
 
-  // Computed loading state
   isLoading = computed(() => this.mainPostResource.isLoading());
 
-  // Video Popup
   isOpen = false;
 
   openPopup(): void {

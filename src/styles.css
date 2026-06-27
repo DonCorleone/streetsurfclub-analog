@@ -101,6 +101,7 @@ body {
   display: block;
   height: 100%;
   font-family: 'Lexend', sans-serif;
+  overflow-x: hidden;
 }
 
 /* Constrain images in blog content */

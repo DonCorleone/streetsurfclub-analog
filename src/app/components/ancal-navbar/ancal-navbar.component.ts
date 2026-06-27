@@ -31,7 +31,7 @@ export class AncalNavbarComponent {
   );
 
   spacerClasses = computed(() =>
-    this.isSticky() ? 'lg:h-28' : 'lg:h-0'
+    this.isSticky() ? 'lg:h-16' : 'lg:h-0'
   );
 
   toggleMenu() {
@@ -51,5 +51,13 @@ export class AncalNavbarComponent {
   checkScroll() {
     const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     this.isSticky.set(scrollPosition >= 200);
+  }
+
+  submitNavSearch(value: string, input: HTMLInputElement): void {
+    const q = value.trim();
+    if (!q) return;
+    input.value = '';
+    input.blur();
+    this.router.navigate(['/blog'], { queryParams: { q } });
   }
 }

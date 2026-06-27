@@ -1,6 +1,6 @@
 <div class="py-[50px] md:py-[60px] lg:py-[80px] xl:py-[100px] 2xl:py-[120px]">
   <div class="mx-auto px-[12px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1920px] 2xl:px-[30px] 3xl:px-[120px]">
-    <div class="max-w-[1320px] mx-auto mb-[25px] md:mb-[35px] lg:mb-[45px] text-center" data-aos="fade-up">
+    <div class="max-w-[1320px] mx-auto mb-[25px] md:mb-[35px] lg:mb-[45px] text-center" [class.animate-fade-up]="!isLoading()">
       <span class="text-[14px] md:text-[16px] lg:text-[18px] 2xl:text-[20px] text-on-accent bg-accent py-[1px] px-[10px] mb-[12px] inline-block">
         AKTUELLE BEITRÄGE
       </span>
@@ -10,13 +10,13 @@
     </div>
 
     @if (isLoading()) {
-    <div class="grid gap-[25px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up">
+    <div class="grid gap-[25px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       @for (i of [1,2,3]; track i) {
       <app-loading-skeleton type="post-card" />
       }
     </div>
     } @else {
-    <div class="grid gap-[25px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up">
+    <div class="grid gap-[25px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" [class.animate-fade-up]="posts().length > 0">
       @for (item of posts(); track item.post.id) {
       <a [routerLink]="['/blog/blog-details/post', item.post.id]"
          class="group bg-surface-card transition-all hover:shadow-lg block cursor-pointer">
@@ -51,7 +51,7 @@
       }
     </div>
 
-    <div class="text-center mt-[30px] md:mt-[40px]" data-aos="fade-up">
+    <div class="text-center mt-[30px] md:mt-[40px]" [class.animate-fade-up]="posts().length > 0">
       <a routerLink="/blog"
          class="inline-block text-[13px] md:text-[14px] lg:text-[15px] xl:text-[16px] text-on-cta font-semibold rounded-[4px] bg-cta py-[14px] md:py-[15px] lg:py-[16px] px-[30px] md:px-[35px] lg:px-[40px] transition-all hover:bg-accent hover:text-on-accent">
         Alle Beiträge

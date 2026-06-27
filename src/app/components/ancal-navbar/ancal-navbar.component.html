@@ -58,9 +58,9 @@
       <!-- Desktop: nav items -->
       <div class="navbar-collapse flex self-center grow basis-auto items-center w-full">
         @if(pages && pages.length > 0) {
-          <ul class="navbar-nav self-center flex-row lg:my-[6px] lg:mt-[4px] xl:mt-[6px] 2xl:mt-[8px] lg:flex w-full justify-between">
+          <ul class="navbar-nav self-center flex-row lg:my-[6px] lg:mt-[4px] xl:mt-[6px] 2xl:mt-[8px] lg:flex w-full justify-between gap-[10px] xl:gap-[20px] 2xl:gap-[28px]">
             <li
-              class="nav-item text-center text-[12px] xl:text-[14px] 2xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 px-[5px] xl:px-[10px] 2xl:px-[14px]"
+              class="nav-item text-center text-[14px] xl:text-[16px] 2xl:text-[18px] font-semibold leading-none mt-[32px] lg:mt-0"
               [routerLink]="'/blog'"
               (click)="menuOpen = false">
               <span class="nav-link text-body relative z-1 cursor-pointer whitespace-nowrap">
@@ -69,7 +69,7 @@
             </li>
             @for (page of pages; track page.id) {
               <li
-                class="nav-item text-center text-[12px] xl:text-[14px] 2xl:text-[16px] font-semibold leading-none mt-[32px] lg:mt-0 first:mt-0 px-[5px] xl:px-[10px] 2xl:px-[14px]"
+                class="nav-item text-center text-[14px] xl:text-[16px] 2xl:text-[18px] font-semibold leading-none mt-[32px] lg:mt-0 first:mt-0"
                 [routerLink]="'/blog/blog-details/page/' + page.id"
                 (click)="menuOpen = false">
                 <span [innerHTML]="page.title | safeHtml"

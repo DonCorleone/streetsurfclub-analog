@@ -54,14 +54,14 @@ import { MasonryDirective } from '../../directives/masonry.directive';
               (input)="onSearchInput(searchInput.value)"
               (focus)="showSuggestions.set(searchQuery().length > 0)"
               (keydown.enter)="showSuggestions.set(false); searchInput.blur()"
-              (keydown.escape)="clearSearch()"
+              (keydown.escape)="clearAllFilters()"
               placeholder="Suchen…"
               class="w-full bg-surface-card text-body text-[16px] pl-[42px] pr-[42px] py-[12px] rounded border border-divider focus:outline-none focus:border-accent transition-all placeholder:text-muted">
-            @if (searchQuery()) {
+            @if (searchQuery() || selectedLabel()) {
             <button
-              (mousedown)="clearSearch()"
-              class="absolute right-[12px] top-1/2 -translate-y-1/2 text-muted hover:text-body transition-all">
-              <i class="ri-close-line text-[18px]"></i>
+              (mousedown)="clearAllFilters()"
+              class="absolute right-[12px] top-1/2 -translate-y-1/2 text-body hover:text-accent transition-all">
+              <i class="ri-close-line text-[20px]"></i>
             </button>
             }
           </div>
@@ -330,9 +330,16 @@ export default class BlogComponent {
     this.showSuggestions.set(false);
   }
 
+  clearAllFilters(): void {
+    this.searchQuery.set('');
+    this.selectedLabel.set(null);
+    this.showSuggestions.set(false);
+  }
+
   selectLabelSuggestion(label: string): void {
     this.selectedLabel.set(label);
-    this.clearSearch();
+    this.searchQuery.set('');
+    this.showSuggestions.set(false);
     this.showAllLabels.set(false);
   }
 

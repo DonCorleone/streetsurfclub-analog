@@ -57,6 +57,18 @@
 
       <!-- Desktop: nav items -->
       <div class="navbar-collapse flex self-center grow basis-auto items-center w-full">
+        <!-- Mobile search (inside collapsed menu) -->
+        <div class="lg:hidden mb-[20px] mt-[8px]">
+          <div class="nav-search-bar nav-search-bar--mobile">
+            <i class="ri-search-line"></i>
+            <input
+              #navSearchMobile
+              type="text"
+              (keydown.enter)="submitNavSearch(navSearchMobile.value, navSearchMobile); menuOpen = false"
+              (keydown.escape)="navSearchMobile.value = ''; navSearchMobile.blur(); menuOpen = false"
+              placeholder="Suchen…">
+          </div>
+        </div>
         @if(pages && pages.length > 0) {
           <ul class="navbar-nav self-center flex-row lg:my-[6px] lg:mt-[4px] xl:mt-[6px] 2xl:mt-[8px] lg:flex w-full justify-between gap-[10px] xl:gap-[20px] 2xl:gap-[28px]">
             <li

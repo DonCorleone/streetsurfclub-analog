@@ -74,6 +74,16 @@ nav.navbar {
   cursor: text;
 }
 
+.nav-search-bar--mobile {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.nav-search-bar--mobile:hover,
+.nav-search-bar--mobile:focus-within {
+  width: 100%;
+}
+
 
 /* Mobile - Max width 767px */
 @media only screen and (max-width: 767px) {

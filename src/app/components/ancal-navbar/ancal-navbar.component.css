@@ -84,6 +84,13 @@ nav.navbar {
   width: 100%;
 }
 
+/* Prevent iOS Safari auto-zoom (triggers when font-size < 16px) */
+@media only screen and (max-width: 991px) {
+  .nav-search-bar input {
+    font-size: 16px;
+  }
+}
+
 
 /* Mobile - Max width 767px */
 @media only screen and (max-width: 767px) {

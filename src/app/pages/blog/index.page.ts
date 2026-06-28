@@ -270,7 +270,8 @@ export default class BlogComponent {
         content.title?.toLowerCase().includes(q) ||
         content.preview?.toLowerCase().includes(q) ||
         post.author?.displayName?.toLowerCase().includes(q) ||
-        (post.labels ?? []).some((l: string) => l.toLowerCase().includes(q))
+        (post.labels ?? []).some((l: string) => l.toLowerCase().includes(q)) ||
+        post.content?.toLowerCase().includes(q)
       );
     }
     const label = this.selectedLabel();

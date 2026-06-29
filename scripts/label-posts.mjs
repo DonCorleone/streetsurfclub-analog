@@ -39,9 +39,66 @@ const ENV_PATH = resolve(__dirname, '../.env');
 const BLOGGER_API = 'https://www.googleapis.com/blogger/v3';
 const OAUTH_REDIRECT = 'http://localhost:4242/oauth2callback';
 const BATCH_SIZE = 10;       // posts per Claude call
-const MAX_WORDS = 400;        // words sent to Claude per post
-const MAX_LABELS = 6;         // labels per post
+const MAX_WORDS = 4700;        // words sent to Claude per post
+const MAX_LABELS = 8;         // labels per post
 const HAIKU = 'claude-haiku-4-5-20251001';
+
+// ─── Label cleanup rules (applied to existing AND suggested labels) ───────────
+
+const LABEL_RENAME = {
+  // Casing / spelling
+  'FireStarter':              'Firestarter',
+  'Openroad':                 'Open Road',
+  'WM':                       'Weltmeisterschaft',
+  'Skater Of The Month':      'Skater of the Month',
+  'Skater des Monats':        'Skater of the Month',
+  'Gravity Plate':            'Gravityplate',
+  // Synonyms → canonical
+  'Equipment':                'Ausrüstung',
+  'Vereinstreffen':           'Verein',
+  'Versammlung':              'Verein',
+  'Club':                     'Verein',
+  'Generalversammlung':       'GV',
+  'Medienbericht':            'Medien',
+  'Medienberichterstattung':  'Medien',
+  'Cruise':                   'Cruising',
+  'Webseite':                 'Website',
+};
+
+const LABEL_DELETE = new Set([
+  // Location noise
+  'Luzern',
+  // Generic/meta
+  'Update', 'Advanced', 'Ankuendigung',
+  // SSC-prefixed clutter
+  'SSC Event', 'SSC Movie', 'SSC Frühlings GV 08', 'SSC Herbst GV 07',
+  // Year-specific event variants
+  'FireStarter 06', 'FireStarter 07', 'FireStarter 08', 'FireStarter 10',
+  'Gioasteka 07',
+  'NOTB 06',
+  // Photo album labels
+  'Neue Bilder', 'Daumenkinobilder',
+  // Unrelated single-occurrence labels (user-reviewed)
+  '2006', 'Ankündigung', 'Anmeldung', 'Asphalt', 'Augusto',
+  'Bearbeitung', 'Behörden', 'Dokument', 'Ehrung', 'Energie',
+  'Entwicklung', 'Erlebnis', 'Etablierung', 'Familie', 'Family',
+  'Feier', 'Feuer', 'Flow', 'Frau', 'Geschichten', 'Governance',
+  'Handwerk', 'Herausforderung', 'Herbst', 'Infrastruktur', 'Jahreskreis',
+  'Kontrovers', 'Kooperation', 'Kreativ', 'Künstler', 'Kurven',
+  'Leadership', 'Legacy', 'Magaz', 'Material', 'Media', 'Meilenstein',
+  'Mentoring', 'Natur', 'Portrait', 'Porträt', 'Präsentation', 'Projekt',
+  'Regelmäßig', 'Sonntag', 'Sozial', 'Spiel', 'Spiele', 'Stimmung',
+  'Strasse', 'Straße', 'Sunset', 'Tempo', 'Ticket', 'Tipp',
+  'Visual', 'Wachstum', 'Wahrnehmung', 'Werbung', 'Wetter', 'Zusammenhalt',
+]);
+
+function cleanLabels(labels) {
+  return [...new Set(
+    labels
+      .map(l => LABEL_RENAME[l] ?? l)   // rename first
+      .filter(l => !LABEL_DELETE.has(l)) // then delete
+  )];
+}
 
 // ─── Env loading ─────────────────────────────────────────────────────────────
 
@@ -215,7 +272,22 @@ async function extractLabelsForBatch(anthropic, posts) {
 
 For each post below, suggest ${MAX_LABELS} concise, relevant labels. Rules:
 - Match the language of the post (German or English)
-- Use short, reusable terms (e.g. "Event", "Training", "Luzern", "Longboard", "Surfskate", "Wettkampf", "Video", "Reise", "Anfänger")
+- Use short, reusable terms (e.g. "Event", "Surfskate", "Wettkampf", "Video", "Reise", "Anfänger")
+- Do not use these labels: "Blog", "News", "Post", "Update", "StreetSurfClub", "SSC", "Lucerne", "Luzern", "Switzerland", "Schweiz", "Anfänger"
+- Check if one of the sitations is given, then add the label:
+  - "Downhill" - if the post is about downhill longboarding or racing, done open road or closed track
+  - "Pumptrack" - if the post is about pumptrack or skateparks
+  - "Cruising" - if the post is about cruising, carving, in big groups
+  - "Surfskate-Montag" - if the post is about the weekly surfskate meetup in Emmmen or elsewhere next to a punptrack
+  - "Dienstags-Cruise" - if the post is about the weekly tuesday cruise in Obernau / Kriens
+  - "Verein" - if the post is about the club itself, its members, or internal matters like "GV" or "Jahresversammlung"
+  - "Pass" - if the post is about a mountain pass, e.g. "Gotthardpass", "Furkapass", "Sustenpass"
+  - "Freeride" - if the post is about freeride longboarding, downhill on a closed track, or a freeride event
+  - "Open Road" - if the post is about downhill longboarding on open roads, e.g. in the mountains
+  - "Firestarter" - if the post is primarily about the Firestarter event in Switzerland, written Firestarter, no Year, no PascalCase
+  - "Gioasteka" - if the post is primarily about the Gioasteka freeride event in Switzerland (not just a passing mention), written Gioasteka, no Year, no PascalCase
+  - "Weltmeisterschaft" - if the post is about the World Championship, written Weltmeisterschaft or WM, no Year, no PascalCase
+
 - Prefer specific over generic (e.g. "Downhill" over "Sport")
 - No punctuation, no hashtags, capitalize first letter only
 - Return ONLY valid JSON, no explanation
@@ -240,7 +312,14 @@ Return JSON in this exact shape:
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) throw new Error(`Claude returned no JSON:\n${text}`);
 
-  return JSON.parse(jsonMatch[0]);
+  const raw = JSON.parse(jsonMatch[0]);
+
+  // Normalize Claude's suggested labels using shared cleanup rules
+  for (const id of Object.keys(raw)) {
+    raw[id] = cleanLabels(raw[id]);
+  }
+
+  return raw;
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────
@@ -302,24 +381,41 @@ async function main() {
   }
   console.log('');
 
+  // Post-processing: remove event labels unless the post title contains the event name
+  const TITLE_GUARDED_LABELS = ['Gioasteka', 'Firestarter', 'Weltmeisterschaft'];
+  for (const post of posts) {
+    const titleText = htmlToText(post.title).toLowerCase();
+    if (labelMap[post.id]) {
+      labelMap[post.id] = labelMap[post.id].filter(label =>
+        !TITLE_GUARDED_LABELS.includes(label) || titleText.includes(label.toLowerCase())
+      );
+    }
+  }
+
   // Show proposed changes
   console.log('📋 Proposed label changes:');
   console.log('─'.repeat(60));
   for (const post of posts) {
     const newLabels = labelMap[post.id] ?? [];
-    const existingLabels = post.labels ?? [];
-    const merged = [...new Set([...existingLabels, ...newLabels])];
+    const rawExisting = post.labels ?? [];
+    const existingLabels = cleanLabels(rawExisting);
+    const merged = [...new Set([...existingLabels, ...newLabels])].slice(0, 20);
     const added = merged.filter(l => !existingLabels.includes(l));
+    const removed = rawExisting.filter(l => !merged.includes(l));
 
     console.log(`\n📝 ${htmlToText(post.title).trim()}`);
-    if (existingLabels.length) {
-      console.log(`   Existing : ${existingLabels.join(', ')}`);
+    if (rawExisting.length) {
+      console.log(`   Existing : ${rawExisting.join(', ')}`);
+    }
+    if (removed.length) {
+      console.log(`   🗑  Removing: ${removed.join(', ')}`);
     }
     console.log(`   Suggested: ${newLabels.join(', ')}`);
     if (added.length) {
       console.log(`   ➕ Adding : ${added.join(', ')}`);
-    } else {
-      console.log(`   ✓ No new labels`);
+    }
+    if (!removed.length && !added.length) {
+      console.log(`   ✓ No changes`);
     }
     // Store merged labels back for write step
     post._mergedLabels = merged;
@@ -374,6 +470,12 @@ async function main() {
         console.error('   Fix: clear GOOGLE_OAUTH_REFRESH_TOKEN from .env and re-run --write,');
         console.error('   then sign in with the account that owns the Blogger blog.\n');
         process.exit(1);
+      }
+      if (err.message?.includes('400')) {
+        process.stdout.write(' ⚠️  skipped (400)\n');
+        console.error(`   Labels attempted: ${merged.join(', ')}`);
+        skipped++;
+        continue;
       }
       throw err;
     }

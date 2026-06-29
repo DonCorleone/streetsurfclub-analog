@@ -81,9 +81,16 @@ import { MasonryDirective } from '../../directives/masonry.directive';
 
         @if (!isLoading() && topLabels().length > 0 && !searchQuery()) {
         <div class="max-w-[1320px] mx-auto mb-[30px] md:mb-[40px] flex flex-wrap gap-[10px] justify-center items-center">
+          @if (showAllLabels()) {
+          <button
+            (click)="showAllLabels.set(false)"
+            class="self-center text-[13px] text-muted underline underline-offset-2 hover:text-body transition-all">
+            <i class="ri-arrow-up-s-line"></i> Weniger anzeigen
+          </button>
+          }
           @for (item of visibleLabels(); track item.label) {
           <button
-            (click)="selectedLabel.set(item.label); showAllLabels.set(false)"
+            (click)="selectLabel(item.label)"
             [class]="selectedLabel() === item.label
               ? 'text-[13px] font-semibold px-[16px] py-[6px] rounded-full bg-accent text-on-accent transition-all'
               : 'text-[13px] font-semibold px-[16px] py-[6px] rounded-full bg-surface-card text-muted hover:text-body transition-all'">
@@ -160,7 +167,7 @@ import { MasonryDirective } from '../../directives/masonry.directive';
               <div class="flex flex-wrap gap-[8px] mb-[18px]">
                 @for (label of item.post.labels.slice().sort(); track label) {
                 <button
-                  (click)="$event.preventDefault(); $event.stopPropagation(); selectedLabel.set(label)"
+                  (click)="$event.preventDefault(); $event.stopPropagation(); selectLabel(label)"
                   [class]="selectedLabel() === label
                     ? 'text-[12px] bg-accent text-on-accent px-[10px] py-[3px] rounded cursor-pointer'
                     : 'text-[12px] bg-surface-card text-muted px-[10px] py-[3px] rounded cursor-pointer hover:bg-accent hover:text-on-accent transition-all'">
@@ -337,11 +344,18 @@ export default class BlogComponent {
     this.showSuggestions.set(false);
   }
 
+  selectLabel(label: string): void {
+    this.selectedLabel.set(label);
+    this.showAllLabels.set(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   selectLabelSuggestion(label: string): void {
     this.selectedLabel.set(label);
     this.searchQuery.set('');
     this.showSuggestions.set(false);
     this.showAllLabels.set(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 }

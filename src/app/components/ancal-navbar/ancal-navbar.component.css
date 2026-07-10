@@ -1,3 +1,4 @@
+/* ── Logo sizing ── */
 #img-logo {
   height: 84px;
   width: auto;
@@ -10,21 +11,40 @@
   max-width: 100%;
 }
 
-#img-logo-full {
-  width: 80vw;
-  max-width: 100%;
-  height: auto;
+/* ── Sticky layout ──────────────────────────────────────────────────────────
+   On mobile: .navbar-area is fixed at top-0 (Tailwind class already present).
+   On desktop (lg+): the outer wrapper becomes sticky so the logo strip scrolls
+   away first, then the navbar sticks at the top — no scroll listener needed.
+── */
+@media (min-width: 992px) {
+  .navbar-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 991;
+  }
+
+  .navbar-area {
+    /* Remove the mobile fixed positioning on desktop */
+    position: static;
+  }
 }
 
-nav.navbar {
-  justify-content: center;
+/* Mobile: the navbar-area is always fixed (via Tailwind `fixed top-0`) */
+@media (max-width: 991px) {
+  /* Reserve space for the fixed mobile navbar */
+  .navbar-wrapper {
+    padding-top: 60px; /* matches the navbar height */
+  }
 }
 
-.isSticky {
-  box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);
+/* Shadow when scrolling (sticky activates immediately so shadow is always on) */
+@media (min-width: 992px) {
+  .navbar-area {
+    box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);
+  }
 }
 
-/* Expanding search in navbar */
+/* ── Expanding search bar (pure CSS :focus-within) ── */
 .nav-search-bar {
   display: flex;
   align-items: center;
@@ -91,37 +111,90 @@ nav.navbar {
   }
 }
 
+/* ── Mobile nav drawer — Popover API ───────────────────────────────────────
+   The drawer uses the native Popover API. No JS toggle, no class manipulation.
+   :popover-open is the open state; transitions animate entry/exit.
+── */
+.mobile-drawer {
+  /* Reset browser popover defaults */
+  inset: unset;
+  border: none;
+  padding: 0;
+  margin: 0;
 
-/* Mobile - Max width 767px */
-@media only screen and (max-width: 767px) {
-  .navbar-area .navbar .navbar-collapse {
-    display: none;
-    padding: 23px 23px 60px 23px;
-    overflow-x: hidden;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(300px, 80vw);
 
-  .navbar-area .navbar.active .navbar-collapse {
-    display: block;
-  }
+  background-color: var(--color-surface-nav);
+  color: var(--color-body);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Closed state: slid off-screen */
+  opacity: 0;
+  transform: translateX(-100%);
+  transition:
+    transform 0.25s ease-out,
+    opacity   0.25s ease-out,
+    display   0.25s allow-discrete,
+    overlay   0.25s allow-discrete;
 }
-/* Tablet - Min width 768px to Max width 991px */
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-  .navbar-area .navbar .navbar-collapse {
-    display: none;
-    padding: 25px 25px 60px 25px;
-    margin-top: 30px;
-    max-height: 85vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
 
-  .navbar-area .navbar.active .navbar-collapse {
-    display: block;
-  }
+.mobile-drawer:popover-open {
+  opacity: 1;
+  transform: translateX(0);
 }
-/* Large screens - Min width 1980px */
+
+/* Backdrop: blur the page behind the drawer */
+.mobile-drawer::backdrop {
+  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.25);
+  transition:
+    backdrop-filter 0.25s ease-out,
+    background      0.25s ease-out,
+    display         0.25s allow-discrete,
+    overlay         0.25s allow-discrete;
+}
+
+.drawer-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 20px 24px 60px;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.close-btn {
+  border: none;
+  background: none;
+  color: var(--color-body);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+.drawer-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Large screens */
 @media only screen and (min-width: 1980px) {
   #img-logo {
     height: 116px;

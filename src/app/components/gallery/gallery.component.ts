@@ -242,6 +242,9 @@ export interface GalleryImage {
       align-items: center;
       justify-content: center;
       animation: fadeIn 0.2s ease-in-out;
+      /* Prevent page scroll behind the overlay — no JS overflow:hidden needed */
+      overscroll-behavior: contain;
+      touch-action: none;
     }
 
     @keyframes fadeIn {
@@ -445,19 +448,11 @@ export class GalleryComponent implements AfterViewInit {
       event.preventDefault();
       this.fullscreenIndex.set(index);
       this.isFullscreen.set(true);
-      // Prevent body scroll when fullscreen is open
-      if (this.isBrowser()) {
-        document.body.style.overflow = 'hidden';
-      }
     }
   }
 
   closeFullscreen() {
     this.isFullscreen.set(false);
-    // Restore body scroll
-    if (this.isBrowser()) {
-      document.body.style.overflow = '';
-    }
   }
 
   nextImage() {

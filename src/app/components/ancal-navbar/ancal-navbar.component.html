@@ -1,102 +1,135 @@
 @let pages = pagesResource.value();
 
-<!-- Desktop logo strip (not fixed) -->
-<div class="hidden lg:flex items-center bg-surface-nav py-[2px] px-[12px] lg:px-[30px] xl:px-[40px] 2xl:px-[80px] 3xl:px-[120px]">
-  <a [routerLink]="'/'" class="flex-1 flex items-center justify-center gap-6 lg:gap-10 xl:gap-14 2xl:gap-18">
-    <picture class="z-1">
-      <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
-      <img id="img-logo" src="assets/images/logo.png" alt="logo">
-    </picture>
-    <img id="img-logo-icon" src="assets/images/logo-icon.png" class="z-1" alt="logo">
-  </a>
-  <!-- Expanding search -->
-  <div class="nav-search-bar">
-    <i class="ri-search-line"></i>
-    <input
-      #navSearch
-      type="text"
-      (keydown.enter)="submitNavSearch(navSearch.value, navSearch)"
-      (keydown.escape)="navSearch.value = ''; navSearch.blur()"
-      placeholder="Suchen…">
+<!-- Outer wrapper: sticky on desktop so navbar scrolls with the logo strip, then sticks -->
+<div class="navbar-wrapper">
+
+  <!-- Desktop logo strip (visible lg+, not fixed — scrolls away) -->
+  <div class="hidden lg:flex items-center bg-surface-nav py-[2px] px-[12px] lg:px-[30px] xl:px-[40px] 2xl:px-[80px] 3xl:px-[120px]">
+    <a [routerLink]="'/'" class="flex-1 flex items-center justify-center gap-6 lg:gap-10 xl:gap-14 2xl:gap-18">
+      <picture class="z-1">
+        <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
+        <img id="img-logo" src="assets/images/logo.png" alt="logo">
+      </picture>
+      <img id="img-logo-icon" src="assets/images/logo-icon.png" class="z-1" alt="logo">
+    </a>
+    <!-- Expanding search (CSS :focus-within only) -->
+    <div class="nav-search-bar">
+      <i class="ri-search-line"></i>
+      <input
+        #navSearch
+        type="text"
+        (keydown.enter)="submitNavSearch(navSearch.value, navSearch)"
+        (keydown.escape)="navSearch.value = ''; navSearch.blur()"
+        placeholder="Suchen…">
+    </div>
   </div>
-</div>
 
-<!-- Spacer for fixed navbar -->
-<div class="h-[80px]" [class]="spacerClasses()"></div>
+  <!-- Sticky navbar: fixed on mobile, static (sticky via wrapper) on desktop -->
+  <div class="navbar-area py-[10px] md:py-[12px] 2xl:py-[14px] bg-surface-nav fixed top-0 left-0 right-0 z-[991]">
+    <div class="mx-auto px-[24px] 2xl:max-w-[1920px] 2xl:px-[80px] 3xl:px-[120px]">
+      <nav class="navbar relative lg:flex flex-wrap" style="justify-content:center">
 
-<!-- Fixed navbar: always fixed on mobile, sticky on desktop when scrolled -->
-<div
-  class="navbar-area py-[10px] md:py-[12px] 2xl:py-[14px] bg-surface-nav left-0 right-0 z-[991] fixed top-0"
-  [class]="navbarClasses()"
-  data-aos-disable="true">
-  <div
-    class="mx-auto px-[24px] 2xl:max-w-[1920px] 2xl:px-[80px] 3xl:px-[120px]">
-    <nav class="navbar relative lg:flex flex-wrap"
-      [class.active]="menuOpen"
-      [class.stickymode]="isSticky()">
-
-      <!-- Mobile: logo + hamburger -->
-      <div class="flex items-center justify-between w-full lg:hidden">
-        <a [routerLink]="'/'" class="text-center px-4">
-          <picture>
-            <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
-            <img src="assets/images/logo.png" alt="logo">
-          </picture>
-        </a>
-        <button title="menu"
-          class="navbar-toggler-sticky lg:hidden z-[1000]"
-          (click)="toggleMenu()"
-          type="button">
-          <span class="burger-menu cursor-pointer">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-body">
-              <path d="M3 4H21M3 12H21M3 20H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-        </button>
-      </div>
-
-      <!-- Desktop: nav items -->
-      <div class="navbar-collapse flex self-center grow basis-auto items-center w-full">
-        <!-- Mobile search (inside collapsed menu) -->
-        <div class="lg:hidden mb-[20px] mt-[8px]">
-          <div class="nav-search-bar nav-search-bar--mobile">
-            <i class="ri-search-line"></i>
-            <input
-              #navSearchMobile
-              type="text"
-              (keydown.enter)="submitNavSearch(navSearchMobile.value, navSearchMobile); menuOpen = false"
-              (keydown.escape)="navSearchMobile.value = ''; navSearchMobile.blur(); menuOpen = false"
-              placeholder="Suchen…">
-          </div>
+        <!-- Mobile: logo + hamburger -->
+        <div class="flex items-center justify-between w-full lg:hidden">
+          <a [routerLink]="'/'" class="text-center px-4">
+            <picture>
+              <source srcset="assets/images/white-logo.png" media="(prefers-color-scheme: dark)">
+              <img src="assets/images/logo.png" alt="logo">
+            </picture>
+          </a>
+          <!-- Hamburger: opens the popover drawer — zero JS -->
+          <button
+            title="Menü öffnen"
+            class="navbar-toggler-sticky lg:hidden z-[1000] cursor-pointer"
+            popovertarget="mobile-nav-drawer"
+            popovertargetaction="show"
+            type="button">
+            <span class="burger-menu">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-body">
+                <path d="M3 4H21M3 12H21M3 20H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
         </div>
-        @if(pages && pages.length > 0) {
-          <ul class="navbar-nav self-center flex-row lg:my-[6px] lg:mt-[4px] xl:mt-[6px] 2xl:mt-[8px] lg:flex w-full justify-between gap-[10px] xl:gap-[20px] 2xl:gap-[28px]">
-            <li
-              class="nav-item text-center text-[14px] xl:text-[16px] 2xl:text-[18px] font-semibold leading-none mt-[32px] lg:mt-0"
-              [routerLink]="'/blog'"
-              (click)="menuOpen = false">
-              <span class="nav-link text-body relative z-1 cursor-pointer whitespace-nowrap">
-                Neues
-              </span>
-            </li>
-            @for (page of pages; track page.id) {
+
+        <!-- Desktop nav items (always visible lg+) -->
+        <div class="navbar-collapse-desktop hidden lg:flex self-center grow basis-auto items-center w-full">
+          @if(pages && pages.length > 0) {
+            <ul class="navbar-nav self-center flex-row lg:my-[6px] lg:mt-[4px] xl:mt-[6px] 2xl:mt-[8px] lg:flex w-full justify-between gap-[10px] xl:gap-[20px] 2xl:gap-[28px]">
               <li
-                class="nav-item text-center text-[14px] xl:text-[16px] 2xl:text-[18px] font-semibold leading-none mt-[32px] lg:mt-0 first:mt-0"
-                [routerLink]="'/blog/blog-details/page/' + page.id"
-                (click)="menuOpen = false">
-                <span [innerHTML]="page.title | safeHtml"
-                  class="nav-link text-body relative z-1 cursor-pointer whitespace-nowrap">
+                class="nav-item text-center text-[14px] xl:text-[16px] 2xl:text-[18px] font-semibold leading-none"
+                [routerLink]="'/blog'">
+                <span class="nav-link text-body relative z-1 cursor-pointer whitespace-nowrap">
+                  Neues
                 </span>
               </li>
-            }
-            <li class="md:hidden">
-              <a [routerLink]="'/'" (click)="onStickyLogoClick($event)" class="w-30 -mt-12 py-2 block ">
-                <img id="img-logo-sticky" src="assets/images/logo-icon.png" [class]="isSticky() ? 'hidden lg:block' : 'hidden'" alt="logo">
-              </a>
-            </li>
-          </ul>
-        }
-      </div>
-    </nav>
+              @for (page of pages; track page.id) {
+                <li
+                  class="nav-item text-center text-[14px] xl:text-[16px] 2xl:text-[18px] font-semibold leading-none"
+                  [routerLink]="'/blog/blog-details/page/' + page.id">
+                  <span [innerHTML]="page.title | safeHtml"
+                    class="nav-link text-body relative z-1 cursor-pointer whitespace-nowrap">
+                  </span>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+      </nav>
+    </div>
   </div>
+
 </div>
+
+<!-- Mobile nav drawer — native Popover API, no JS toggle needed -->
+<nav id="mobile-nav-drawer" popover class="mobile-drawer">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <!-- Close button: popovertargetaction="hide" closes without JS -->
+      <button
+        class="close-btn"
+        popovertarget="mobile-nav-drawer"
+        popovertargetaction="hide"
+        aria-label="Menü schliessen">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile search -->
+    <div class="mb-[20px] mt-[8px]">
+      <div class="nav-search-bar nav-search-bar--mobile">
+        <i class="ri-search-line"></i>
+        <input
+          #navSearchMobile
+          type="text"
+          (keydown.enter)="submitNavSearch(navSearchMobile.value, navSearchMobile)"
+          (keydown.escape)="navSearchMobile.value = ''; navSearchMobile.blur()"
+          placeholder="Suchen…">
+      </div>
+    </div>
+
+    @if(pages && pages.length > 0) {
+      <ul class="drawer-nav">
+        <li class="nav-item text-[16px] font-semibold">
+          <a [routerLink]="'/blog'" popovertarget="mobile-nav-drawer" popovertargetaction="hide"
+            class="nav-link text-body block py-[14px] border-b border-divider cursor-pointer">
+            Neues
+          </a>
+        </li>
+        @for (page of pages; track page.id) {
+          <li class="nav-item text-[16px] font-semibold">
+            <a [routerLink]="'/blog/blog-details/page/' + page.id"
+              popovertarget="mobile-nav-drawer" popovertargetaction="hide"
+              [innerHTML]="page.title | safeHtml"
+              class="nav-link text-body block py-[14px] border-b border-divider cursor-pointer">
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</nav>

@@ -14,15 +14,7 @@ export class AppComponent {
   private router = inject(Router);
 
   constructor() {
-    // Only initialize AOS in the browser (not during SSR)
     if (isPlatformBrowser(this.platformId)) {
-      import('aos').then((AOS) => {
-        AOS.default.init({
-          duration: 1000,
-          once: true,
-        });
-      });
-
       // Scroll to top on route navigation
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))

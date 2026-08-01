@@ -119,6 +119,19 @@ export class BloggerService {
     }
   }
 
+  // Async method for fetching posts by label using the /posts list API
+  async getPostsByLabel(labels: string): Promise<Post[]> {
+    try {
+      const response = await firstValueFrom(
+        this.httpClient.get<PostResponse>(`${this.apiBaseUrl}/list-posts-by-label?labels=${encodeURIComponent(labels)}`)
+      );
+      return response.items ?? [];
+    } catch (err) {
+      console.error('Error fetching posts by label:', err);
+      return [];
+    }
+  }
+
   // Async method for finding a post by query (used in resources)
   async findPost(q: string): Promise<Post | null> {
     try {

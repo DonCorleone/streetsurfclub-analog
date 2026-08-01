@@ -96,10 +96,12 @@ const RELATED_COUNT = 3;
           <h3 class="text-[18px] font-bold text-body mb-[15px]">Tags:</h3>
           <div class="flex flex-wrap gap-[10px]">
             @for (label of post()!.labels!.slice().sort(); track label) {
-            <a [routerLink]="['/blog']" [queryParams]="{label: label}"
-               class="text-[13px] md:text-[14px] bg-accent text-on-accent px-[15px] py-[5px] rounded hover:opacity-80 transition-all">
-              {{ label }} <span class="opacity-60">({{ labelCounts().get(label) ?? 0 }})</span>
-            </a>
+              @if (!hiddenLabels.has(label.toLowerCase())) {
+              <a [routerLink]="['/blog']" [queryParams]="{label: label}"
+                 class="text-[13px] md:text-[14px] bg-accent text-on-accent px-[15px] py-[5px] rounded hover:opacity-80 transition-all">
+                {{ label }} <span class="opacity-60">({{ labelCounts().get(label) ?? 0 }})</span>
+              </a>
+              }
             }
           </div>
         </div>
@@ -190,11 +192,15 @@ export default class BlogDetailsComponent {
     return post ? this.contentService.parseContent(post) : null;
   });
 
+  readonly hiddenLabels = new Set(['main']);
+
   labelCounts = computed(() => {
     const counts = new Map<string, number>();
     for (const post of this.bloggerService.postsResource.value() ?? []) {
       for (const label of post.labels ?? []) {
-        counts.set(label, (counts.get(label) ?? 0) + 1);
+        if (!this.hiddenLabels.has(label.toLowerCase())) {
+          counts.set(label, (counts.get(label) ?? 0) + 1);
+        }
       }
     }
     return counts;

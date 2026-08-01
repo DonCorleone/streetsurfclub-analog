@@ -16,7 +16,8 @@ export class AncalBannerComponent {
 
   mainPostResource = resource({
     loader: async () => {
-      return await this.bloggerService.findPost('**Main**');
+      const posts = await this.bloggerService.getPostsByLabel('main');
+      return posts.length > 0 ? posts[0] : null;
     }
   });
 

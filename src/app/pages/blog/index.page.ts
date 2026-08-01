@@ -166,13 +166,15 @@ import { MasonryDirective } from '../../directives/masonry.directive';
               @if (item.post.labels && item.post.labels.length > 0) {
               <div class="flex flex-wrap gap-[8px] mb-[18px]">
                 @for (label of item.post.labels.slice().sort(); track label) {
-                <button
-                  (click)="$event.preventDefault(); $event.stopPropagation(); selectLabel(label)"
-                  [class]="selectedLabel() === label
-                    ? 'text-[12px] bg-accent text-on-accent px-[10px] py-[3px] rounded cursor-pointer'
-                    : 'text-[12px] bg-surface-card text-muted px-[10px] py-[3px] rounded cursor-pointer hover:bg-accent hover:text-on-accent transition-all'">
-                  {{ label }} <span class="opacity-60">({{ labelCounts().get(label) ?? 0 }})</span>
-                </button>
+                  @if (!hiddenLabels.has(label.toLowerCase())) {
+                  <button
+                    (click)="$event.preventDefault(); $event.stopPropagation(); selectLabel(label)"
+                    [class]="selectedLabel() === label
+                      ? 'text-[12px] bg-accent text-on-accent px-[10px] py-[3px] rounded cursor-pointer'
+                      : 'text-[12px] bg-surface-card text-muted px-[10px] py-[3px] rounded cursor-pointer hover:bg-accent hover:text-on-accent transition-all'">
+                    {{ label }} <span class="opacity-60">({{ labelCounts().get(label) ?? 0 }})</span>
+                  </button>
+                  }
                 }
               </div>
               }
@@ -219,11 +221,15 @@ export default class BlogComponent {
       .filter((item): item is { post: any; content: IContent } => item !== null);
   });
 
+  readonly hiddenLabels = new Set(['main']);
+
   labelCounts = computed(() => {
     const counts = new Map<string, number>();
     for (const { post } of this.posts()) {
       for (const label of post.labels ?? []) {
-        counts.set(label, (counts.get(label) ?? 0) + 1);
+        if (!this.hiddenLabels.has(label.toLowerCase())) {
+          counts.set(label, (counts.get(label) ?? 0) + 1);
+        }
       }
     }
     return counts;

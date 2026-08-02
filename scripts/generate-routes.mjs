@@ -7,11 +7,11 @@
  * Usage: node scripts/generate-routes.mjs
  */
 
-const GOOGLE_BLOGGER_API_KEY = process.env.GOOGLE_BLOGGER_API_KEY;
-const GOOGLE_BLOGGER_ID = process.env.GOOGLE_BLOGGER_ID;
-const BLOG_MAX_RESULTS = process.env.BLOG_MAX_RESULTS || '300';
-
 async function generateRoutes() {
+  const GOOGLE_BLOGGER_API_KEY = process.env.GOOGLE_BLOGGER_API_KEY;
+  const GOOGLE_BLOGGER_ID = process.env.GOOGLE_BLOGGER_ID;
+  const BLOG_MAX_RESULTS = process.env.BLOG_MAX_RESULTS || '300';
+
   if (!GOOGLE_BLOGGER_API_KEY || !GOOGLE_BLOGGER_ID) {
     console.warn('⚠️  Missing API credentials. Skipping route generation.');
     console.warn('   Set GOOGLE_BLOGGER_API_KEY and GOOGLE_BLOGGER_ID in .env');

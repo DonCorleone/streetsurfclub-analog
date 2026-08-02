@@ -21,11 +21,25 @@
           class="text-[13px] md:text-[15px] lg:text-[15px] xl:text-[16px] text-body leading-[1.8]">
         </div>
 
+        @if (mainPost()?.labels && mainPost()!.labels!.length > 0) {
+        <div class="flex flex-wrap gap-[6px] mt-[15px] md:mt-[18px]">
+          @for (label of mainPost()!.labels!.slice().sort(); track label) {
+          <a [routerLink]="['/blog']" [queryParams]="{label: label}"
+             class="text-[11px] md:text-[12px] bg-accent text-on-accent px-[10px] py-[3px] rounded hover:opacity-80 transition-all">
+            {{ label }}
+          </a>
+          }
+        </div>
+        }
+
       </div>
       }
       @if (parsedContent()?.headerImg) {
       <div class="self-center" [class.animate-fade-up]="parsedContent()">
-        <img [src]="parsedContent()!.headerImg" class="inline" alt="banner-image" fetchpriority="high" loading="eager">
+        <a [href]="parsedContent()!.headerImg" target="_blank" rel="noopener noreferrer">
+          <img [src]="parsedContent()!.headerImg" class="inline" alt="banner-image" fetchpriority="high"
+            loading="eager">
+        </a>
       </div>
       }
     </div>

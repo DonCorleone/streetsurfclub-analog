@@ -329,7 +329,8 @@ async function main() {
   const isDryRun = !args.includes('--write');
   const targetId = args.find(a => a.startsWith('--id='))?.split('=')[1];
 
-  const env = await loadEnvAsync();
+  // Merge: .env file for local dev, process.env for Render/CI — process.env wins
+  const env = { ...await loadEnvAsync(), ...process.env };
   const API_KEY = env.GOOGLE_BLOGGER_API_KEY;
   const BLOG_ID = env.GOOGLE_BLOGGER_ID;
   const ANTHROPIC_KEY = env.ANTHROPIC_API_KEY;

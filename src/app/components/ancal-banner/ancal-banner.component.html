@@ -5,9 +5,10 @@
     @if (isLoading()) {
     <app-loading-skeleton type="banner" />
     } @else {
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-[25px]">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-[25px] lg:gap-[35px] xl:gap-[45px]">
       @if (parsedContent()) {
-      <div class="self-center" [class.animate-fade-up]="parsedContent()">
+      <div class="self-center order-1" [class.order-2]="parsedContent()!.imageFirst"
+        [class.animate-fade-up]="parsedContent()">
         @if (parsedContent()?.lead) {
         <span
           class="text-[13px] md:text-[15px] lg:text-[16px] text-on-accent bg-accent py-[1px] px-[10px] mb-[10px] inline-block">
@@ -35,9 +36,10 @@
       </div>
       }
       @if (parsedContent()?.headerImg) {
-      <div class="self-center" [class.animate-fade-up]="parsedContent()">
-        <a [href]="parsedContent()!.headerImg" target="_blank" rel="noopener noreferrer">
-          <img [src]="parsedContent()!.headerImg" class="inline" alt="banner-image" fetchpriority="high"
+      <div class="self-center order-2" [class.order-1]="parsedContent()!.imageFirst"
+        [class.animate-fade-up]="parsedContent()">
+        <a [href]="parsedContent()!.headerImg" target="_blank" rel="noopener noreferrer" class="block">
+          <img [src]="parsedContent()!.headerImg" class="w-full h-auto" alt="banner-image" fetchpriority="high"
             loading="eager">
         </a>
       </div>

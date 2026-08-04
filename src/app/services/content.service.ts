@@ -23,46 +23,47 @@ export class ContentService {
       lead: '',
       preview: '',
       headerImg: null,
+      imageFirst: false,
       amountReplies: '0',
     };
 
     if (page.kind === 'blogger#post') {
-      const images = (page as Post).images;
-      parsedContent.headerImg =
-        images && images.length > 0 ? images[0].url : null;
       parsedContent.amountReplies = (page as Post).replies?.totalItems;
     }
     if (page.content) {
       let decodedContent = decodeURIComponent(
         page.content.replace(/\\u/g, '%')
       );
-      let regexImage =
-        /(<div>\s*<div style="text-align: center;?"?>\s*<a href="[^"]*">\s*<img[^>]*><\/a>\s*<\/div>\s*<br \/><b><br \/><\/b>\s*<\/div>)/;
-      let match = decodedContent.match(regexImage);
 
-      if (!match) {
-        regexImage = /<img[^>]*>/; // Regular expression to match the first <img> tag
-        match = decodedContent.match(regexImage);
-      }
+      // Find first <img> in content and determine its position relative to text
+      const imgRegexContent = /<img[^>]+src="([^">]+)"[^>]*>/;
+      const imgMatch = decodedContent.match(imgRegexContent);
 
-      if (match) {
-        let indexOfMatch = match.index;
-        let imgBlock = match[0];
-        if (
-          imgBlock &&
-          parsedContent.headerImg === null &&
-          indexOfMatch !== undefined &&
-          indexOfMatch < 10
-        ) {
-          let srcRegex = /<img[^>]+src="([^">]+)"/;
-          let srcMatch = imgBlock.match(srcRegex);
-          parsedContent.headerImg = srcMatch ? srcMatch[1] : null;
+      if (imgMatch && imgMatch.index !== undefined) {
+        const imgSrc = imgMatch[1];
+        // Estimate text before image: strip tags from content before the img position
+        const contentBeforeImg = decodedContent.slice(0, imgMatch.index);
+        const textBeforeImg = contentBeforeImg.replace(/<[^>]*>/g, '').trim();
+        parsedContent.headerImg = imgSrc;
+        parsedContent.imageFirst = textBeforeImg.length === 0;
+        // Remove the image (and its wrapping block if present) from content
+        // Try to remove a wrapping <div class="separator"...>...</div> block first
+        const separatorRegex = /<div[^>]*class="separator"[^>]*>[\s\S]*?<\/div>/;
+        const sepMatch = decodedContent.match(separatorRegex);
+        if (sepMatch && sepMatch[0].includes(imgMatch[1])) {
+          decodedContent = decodedContent.replace(sepMatch[0], '');
+        } else {
+          decodedContent = decodedContent.replace(imgMatch[0], '');
         }
-      }
-
-      // Replace the found image block in the content with an empty string, if headerimage is set and match is found
-      if (parsedContent.headerImg && match) {
-        decodedContent = decodedContent.replace(match[0], '');
+      } else {
+        // No image in content — fall back to Blogger images[] array
+        if (page.kind === 'blogger#post') {
+          const images = (page as Post).images;
+          if (images && images.length > 0) {
+            parsedContent.headerImg = images[0].url;
+            parsedContent.imageFirst = false; // unknown order, default text-left
+          }
+        }
       }
 
       // Process gallery markers before proxying images

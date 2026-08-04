@@ -8,4 +8,5 @@ export interface IContent {
   content: string;
   preview: string;
   headerImg: string | null;
+  imageFirst: boolean;
 }

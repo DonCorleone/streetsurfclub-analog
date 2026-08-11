@@ -6,8 +6,11 @@ export default defineEventHandler(async (event) => {
   const blocked =
     path.endsWith('.php') ||
     path.includes('wp-') ||
+    path.includes('wp-content') ||
+    path.includes('wp-includes') ||
+    path.includes('.well-known') ||  // ohne Slash-Check
     path.includes('xmlrpc') ||
-    path.includes('.env') ||
+    path.includes('/.env') ||
     path.includes('/.git');
 
   if (blocked) {

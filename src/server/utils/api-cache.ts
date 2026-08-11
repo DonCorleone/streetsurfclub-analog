@@ -73,15 +73,18 @@ async function fetchWithCache<T>(
   options: RequestInit = {},
   maxRetries: number = 3
 ): Promise<T> {
+
+  const urlForLogging = url.replace(/key=[^&]+/, 'key=***');
+
   // Check cache first
   const cacheKey = `${url}:${JSON.stringify(options)}`;
   const cached = apiCache.get<T>(cacheKey);
   if (cached) {
-    console.log(`[API Cache] Hit for ${url}`);
+    console.log(`[API Cache] Hit for ${urlForLogging}`);
     return cached;
   }
 
-  console.log(`[API Request] ${url}`);
+console.log(`[API Request] ${urlForLogging}`);
   
   // Use existing retry mechanism
   const response = await fetchWithRetry(url, {
@@ -96,7 +99,7 @@ async function fetchWithCache<T>(
   
   // Cache successful responses
   apiCache.set(cacheKey, data);
-  console.log(`[API Success] ${url}`);
+  console.log(`[API Success] ${urlForLogging}`);
   
   return data;
 }

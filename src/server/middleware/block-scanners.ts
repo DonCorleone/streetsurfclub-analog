@@ -8,10 +8,12 @@ export default defineEventHandler(async (event) => {
     path.includes('wp-') ||
     path.includes('wp-content') ||
     path.includes('wp-includes') ||
-    path.includes('.well-known') ||  // ohne Slash-Check
+    path.includes('.well-known') ||
+    path.includes('.tmb') ||
     path.includes('xmlrpc') ||
     path.includes('/.env') ||
-    path.includes('/.git');
+    path.includes('/.git') ||
+    /^\/\d{4}\/\d{2}/.test(path);
 
   if (blocked) {
     setResponseStatus(event, 404);

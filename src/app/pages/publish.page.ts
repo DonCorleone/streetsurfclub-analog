@@ -117,9 +117,11 @@ export default class PublishPage {
     this.status.set('loading');
     this.errorMessage.set('');
 
+    // NEU
     this.http.post<{ ok: boolean; jobId: string; message: string }>(
-      `/api/v1/publish-post?key=${encodeURIComponent(this.secretKey)}`,
-      { postUrl: this.postUrl }
+      `/api/v1/publish-post`,
+      { postUrl: this.postUrl },
+      { headers: { 'Authorization': `Bearer ${this.secretKey}` } }
     ).subscribe({
       next: (res) => {
         this.jobId.set(res.jobId ?? '');

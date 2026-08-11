@@ -15,7 +15,7 @@
  *   { "postUrl": "https://www.streetsurfclub.ch/..." }   ← ID extracted server-side
  */
 
-import { defineEventHandler, getQuery, readBody, createError } from 'h3';
+import { defineEventHandler, getQuery, readBody, createError, getRequestHeader } from 'h3';
 
 const RENDER_JOBS_API = 'https://api.render.com/v1/services';
 
@@ -42,8 +42,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 500, statusMessage: 'PUBLISH_SECRET not configured' });
   }
 
-  const query = getQuery(event);
-  const providedKey = query['key'] as string | undefined;
+  const providedKey = getRequestHeader(event, 'authorization')?.replace('Bearer ', '');
 
   if (!providedKey || providedKey !== PUBLISH_SECRET) {
     throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });

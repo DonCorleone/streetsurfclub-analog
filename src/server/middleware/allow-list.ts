@@ -2,7 +2,8 @@ import { defineEventHandler, setResponseStatus, getRequestURL, send } from 'h3';
 
 const ALLOWED_PREFIXES = [
   '/api/v1/',
-  '/blog/blog-details/',
+  '/blog/blog-details/post/',
+  '/blog/blog-details/page/',
   '/_analog/',
   '/assets/',
   '/favicon',

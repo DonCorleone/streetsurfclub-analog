@@ -132,6 +132,20 @@ export class BloggerService {
     }
   }
 
+  // Dedicated method for the banner "main" post — uses a query-param-free endpoint
+  // to avoid the Analog SSR interceptor's ofetch URLSearchParams spread bug.
+  async getMainPost(): Promise<Post[]> {
+    try {
+      const response = await firstValueFrom(
+        this.httpClient.get<PostResponse>(`${this.apiBaseUrl}/list-main-post`)
+      );
+      return response.items ?? [];
+    } catch (err) {
+      console.error('Error fetching main post:', err);
+      return [];
+    }
+  }
+
   // Async method for finding a post by query (used in resources)
   async findPost(q: string): Promise<Post | null> {
     try {

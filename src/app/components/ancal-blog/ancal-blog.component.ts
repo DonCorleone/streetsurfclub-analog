@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, computed, resource } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BloggerService } from '../../services/blogger.service';
 import { ContentService } from '../../services/content.service';
@@ -18,12 +18,8 @@ export class AncalBlogComponent {
   private bloggerService = inject(BloggerService);
   private contentService = inject(ContentService);
 
-  // Resource for loading limited posts (load 20 to ensure 3 after filtering **Main**)
-  postsResource = resource({
-    loader: async () => {
-      return await this.bloggerService.loadPostsWithLimit(20);
-    }
-  });
+  // Use shared service resource — no duplicate HTTP call
+  private postsResource = this.bloggerService.postsResource;
 
   // Computed signal that parses posts into content (limit to 3 posts)
   posts = computed(() => {

@@ -48,9 +48,6 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
           </a>
         </div>
 
-        <!-- Header Image -->
-        
-
         <!-- Post Meta -->
         <div class="mb-[20px] md:mb-[25px]">
           @if (content()?.lead) {
@@ -123,10 +120,10 @@ export default class BlogDetailsComponent {
   page = computed<Page | null | undefined>(() => this.pageResource.value());
 
   // Computed content from page
-content = computed(() => {
-      const page = this.pageResource.value();
-      return page ? this.contentService.parseContent(page, 'page') : null;
-    });
+  content = computed(() => {
+    const page = this.pageResource.value();
+    return page ? this.contentService.parseContent(page) : null;
+  });
 
   // Computed loading state
   isLoading = computed(() => this.pageResource.isLoading());

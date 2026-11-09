@@ -51,9 +51,6 @@ const RELATED_COUNT = 3;
           </a>
         </div>
 
-        <!-- Header Image -->
-        
-
         <!-- Post Meta -->
         <div class="mb-[20px] md:mb-[25px]">
           @if (content()?.lead) {
@@ -180,10 +177,10 @@ export default class BlogDetailsComponent {
   post = computed<Post | null | undefined>(() => this.postResource.value() as Post | null | undefined);
 
   // Computed content from post
-content = computed(() => {
-      const post = this.postResource.value();
-      return post ? this.contentService.parseContent(post, 'post') : null;
-    });
+  content = computed(() => {
+    const post = this.postResource.value();
+    return post ? this.contentService.parseContent(post) : null;
+  });
 
   readonly hiddenLabels = new Set(['main']);
 

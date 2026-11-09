@@ -9,10 +9,23 @@ import { ImageService } from './image.service';
 })
 export class ContentService {
   private imageService = inject(ImageService);
-  parseContent(page: Page): IContent | null {
+  /**
+   * Parses a Blogger post/page into the IContent view model.
+   *
+   * The first image of the content is always exposed as `headerImg` (used by
+   * list cards, the banner and SEO meta tags). Set `stripHeaderImage` to true
+   * for callers that render `headerImg` separately next to the body — otherwise
+   * the image would be shown twice.
+   */
+  parseContent(
+    page: Page,
+    options: { stripHeaderImage?: boolean } = {}
+  ): IContent {
     if (!page) {
-      return null;
+      throw new Error('Page is required');
     }
+
+    const { stripHeaderImage = false } = options;
 
     let parsedContent: IContent = {
       author: '',
@@ -30,6 +43,7 @@ export class ContentService {
     if (page.kind === 'blogger#post') {
       parsedContent.amountReplies = (page as Post).replies?.totalItems;
     }
+
     if (page.content) {
       let decodedContent = decodeURIComponent(
         page.content.replace(/\\u/g, '%')
@@ -46,23 +60,24 @@ export class ContentService {
         const textBeforeImg = contentBeforeImg.replace(/<[^>]*>/g, '').trim();
         parsedContent.headerImg = imgSrc;
         parsedContent.imageFirst = textBeforeImg.length === 0;
-        // Remove the image (and its wrapping block if present) from content
-        // Try to remove a wrapping <div class="separator"...>...</div> block first
-        const separatorRegex = /<div[^>]*class="separator"[^>]*>[\s\S]*?<\/div>/;
-        const sepMatch = decodedContent.match(separatorRegex);
-        if (sepMatch && sepMatch[0].includes(imgMatch[1])) {
-          decodedContent = decodedContent.replace(sepMatch[0], '');
-        } else {
-          decodedContent = decodedContent.replace(imgMatch[0], '');
-        }
-      } else {
-        // No image in content — fall back to Blogger images[] array
-        if (page.kind === 'blogger#post') {
-          const images = (page as Post).images;
-          if (images && images.length > 0) {
-            parsedContent.headerImg = images[0].url;
-            parsedContent.imageFirst = false; // unknown order, default text-left
+
+        if (stripHeaderImage) {
+          // Remove the image (and its wrapping block if present) from content
+          // Try to remove a wrapping <div class="separator"...>...</div> block first
+          const separatorRegex = /<div[^>]*class="separator"[^>]*>[\s\S]*?<\/div>/;
+          const sepMatch = decodedContent.match(separatorRegex);
+          if (sepMatch && sepMatch[0].includes(imgSrc)) {
+            decodedContent = decodedContent.replace(sepMatch[0], '');
+          } else {
+            decodedContent = decodedContent.replace(imgMatch[0], '');
           }
+        }
+      } else if (page.kind === 'blogger#post') {
+        // No image in content — fall back to Blogger images[] array
+        const images = (page as Post).images;
+        if (images && images.length > 0) {
+          parsedContent.headerImg = images[0].url;
+          parsedContent.imageFirst = false; // unknown order, default text-left
         }
       }
 

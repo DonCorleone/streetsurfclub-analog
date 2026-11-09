@@ -48,16 +48,6 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
           </a>
         </div>
 
-        <!-- Header Image -->
-        @if (content()?.headerImg) {
-        <div class="mb-[30px] md:mb-[40px] max-w-[800px] mx-auto">
-          <img [src]="content()!.headerImg | netlifyImage:1200"
-               class="w-full h-auto rounded-lg shadow-lg"
-               [alt]="content()!.title"
-               loading="eager">
-        </div>
-        }
-
         <!-- Post Meta -->
         <div class="mb-[20px] md:mb-[25px]">
           @if (content()?.lead) {

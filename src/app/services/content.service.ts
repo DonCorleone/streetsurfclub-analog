@@ -9,7 +9,7 @@ import { ImageService } from './image.service';
 })
 export class ContentService {
   private imageService = inject(ImageService);
-  parseContent(page: Page): IContent | null {
+  parseContent(page: Page, contentType: 'post' | 'page' = 'post'): IContent | null {
     if (!page) {
       return null;
     }
@@ -30,6 +30,9 @@ export class ContentService {
     if (page.kind === 'blogger#post') {
       parsedContent.amountReplies = (page as Post).replies?.totalItems;
     }
+
+    if (contentType === 'post') {
+    // Find first <img> in content and determine its position relative to text
     if (page.content) {
       let decodedContent = decodeURIComponent(
         page.content.replace(/\\u/g, '%')

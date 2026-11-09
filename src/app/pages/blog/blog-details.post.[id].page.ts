@@ -52,14 +52,7 @@ const RELATED_COUNT = 3;
         </div>
 
         <!-- Header Image -->
-        @if (content()?.headerImg) {
-        <div class="mb-[30px] md:mb-[40px] max-w-[800px] mx-auto">
-          <img [src]="content()!.headerImg | netlifyImage:1200"
-               class="w-full h-auto rounded-lg shadow-lg"
-               [alt]="content()!.title"
-               loading="eager">
-        </div>
-        }
+        
 
         <!-- Post Meta -->
         <div class="mb-[20px] md:mb-[25px]">
@@ -187,10 +180,10 @@ export default class BlogDetailsComponent {
   post = computed<Post | null | undefined>(() => this.postResource.value() as Post | null | undefined);
 
   // Computed content from post
-  content = computed(() => {
-    const post = this.postResource.value();
-    return post ? this.contentService.parseContent(post) : null;
-  });
+content = computed(() => {
+      const post = this.postResource.value();
+      return post ? this.contentService.parseContent(post, 'post') : null;
+    });
 
   readonly hiddenLabels = new Set(['main']);
 

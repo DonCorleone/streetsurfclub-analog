@@ -49,14 +49,7 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
         </div>
 
         <!-- Header Image -->
-        @if (content()?.headerImg) {
-        <div class="mb-[30px] md:mb-[40px] max-w-[800px] mx-auto">
-          <img [src]="content()!.headerImg | netlifyImage:1200"
-               class="w-full h-auto rounded-lg shadow-lg"
-               [alt]="content()!.title"
-               loading="eager">
-        </div>
-        }
+        
 
         <!-- Post Meta -->
         <div class="mb-[20px] md:mb-[25px]">
@@ -130,10 +123,10 @@ export default class BlogDetailsComponent {
   page = computed<Page | null | undefined>(() => this.pageResource.value());
 
   // Computed content from page
-  content = computed(() => {
-    const page = this.pageResource.value();
-    return page ? this.contentService.parseContent(page) : null;
-  });
+content = computed(() => {
+      const page = this.pageResource.value();
+      return page ? this.contentService.parseContent(page, 'page') : null;
+    });
 
   // Computed loading state
   isLoading = computed(() => this.pageResource.isLoading());

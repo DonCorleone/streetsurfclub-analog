@@ -9,9 +9,9 @@ import { ImageService } from './image.service';
 })
 export class ContentService {
   private imageService = inject(ImageService);
-  parseContent(page: Page, contentType: 'post' | 'page' = 'post'): IContent | null {
+  parseContent(page: Page, contentType: 'post' | 'page' = 'post'): IContent {
     if (!page) {
-      return null;
+      throw new Error('Page is required');
     }
 
     let parsedContent: IContent = {
@@ -31,40 +31,40 @@ export class ContentService {
       parsedContent.amountReplies = (page as Post).replies?.totalItems;
     }
 
-    if (contentType === 'post') {
-    // Find first <img> in content and determine its position relative to text
     if (page.content) {
       let decodedContent = decodeURIComponent(
         page.content.replace(/\\u/g, '%')
       );
 
-      // Find first <img> in content and determine its position relative to text
-      const imgRegexContent = /<img[^>]+src="([^">]+)"[^>]*>/;
-      const imgMatch = decodedContent.match(imgRegexContent);
+      if (contentType === 'post') {
+        // Find first <img> in content and determine its position relative to text
+        const imgRegexContent = /<img[^>]+src="([^">]+)"[^>]*>/;
+        const imgMatch = decodedContent.match(imgRegexContent);
 
-      if (imgMatch && imgMatch.index !== undefined) {
-        const imgSrc = imgMatch[1];
-        // Estimate text before image: strip tags from content before the img position
-        const contentBeforeImg = decodedContent.slice(0, imgMatch.index);
-        const textBeforeImg = contentBeforeImg.replace(/<[^>]*>/g, '').trim();
-        parsedContent.headerImg = imgSrc;
-        parsedContent.imageFirst = textBeforeImg.length === 0;
-        // Remove the image (and its wrapping block if present) from content
-        // Try to remove a wrapping <div class="separator"...>...</div> block first
-        const separatorRegex = /<div[^>]*class="separator"[^>]*>[\s\S]*?<\/div>/;
-        const sepMatch = decodedContent.match(separatorRegex);
-        if (sepMatch && sepMatch[0].includes(imgMatch[1])) {
-          decodedContent = decodedContent.replace(sepMatch[0], '');
+        if (imgMatch && imgMatch.index !== undefined) {
+          const imgSrc = imgMatch[1];
+          // Estimate text before image: strip tags from content before the img position
+          const contentBeforeImg = decodedContent.slice(0, imgMatch.index);
+          const textBeforeImg = contentBeforeImg.replace(/<[^>]*>/g, '').trim();
+          parsedContent.headerImg = imgSrc;
+          parsedContent.imageFirst = textBeforeImg.length === 0;
+          // Remove the image (and its wrapping block if present) from content
+          // Try to remove a wrapping <div class="separator"...>...</div> block first
+          const separatorRegex = /<div[^>]*class="separator"[^>]*>[\s\S]*?<\/div>/;
+          const sepMatch = decodedContent.match(separatorRegex);
+          if (sepMatch && sepMatch[0].includes(imgMatch[1])) {
+            decodedContent = decodedContent.replace(sepMatch[0], '');
+          } else {
+            decodedContent = decodedContent.replace(imgMatch[0], '');
+          }
         } else {
-          decodedContent = decodedContent.replace(imgMatch[0], '');
-        }
-      } else {
-        // No image in content — fall back to Blogger images[] array
-        if (page.kind === 'blogger#post') {
-          const images = (page as Post).images;
-          if (images && images.length > 0) {
-            parsedContent.headerImg = images[0].url;
-            parsedContent.imageFirst = false; // unknown order, default text-left
+          // No image in content — fall back to Blogger images[] array
+          if (page.kind === 'blogger#post') {
+            const images = (page as Post).images;
+            if (images && images.length > 0) {
+              parsedContent.headerImg = images[0].url;
+              parsedContent.imageFirst = false; // unknown order, default text-left
+            }
           }
         }
       }

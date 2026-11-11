@@ -221,7 +221,7 @@ export default class BlogDetailsComponent {
         return content ? { post, content, sharedLabels, score } : null;
       })
       .filter((item): item is { post: Post; content: IContent; sharedLabels: string[]; score: number } => item !== null);
-
+    });
   // Computed loading state
   isLoading = computed(() => this.postResource.isLoading());
 

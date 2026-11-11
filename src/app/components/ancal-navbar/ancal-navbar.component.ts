@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, PLATFORM_ID, effect } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router, RouterLink } from "@angular/router";
+import { Router, RouterLink, NavigationEnd } from "@angular/router";
 import { SafeHtmlPipe } from "../../pipes/safe-html.pipe";
 import { BloggerService } from "../../services/blogger.service";
 
@@ -17,6 +17,19 @@ export class AncalNavbarComponent {
   private platformId = inject(PLATFORM_ID);
 
   pagesResource = this.bloggerService.pagesResource;
+
+  constructor() {
+    effect(() => {
+      const nav = document.getElementById('mobile-nav-drawer');
+      if (nav) {
+        this.router.events.subscribe(event => {
+          if (event instanceof NavigationEnd) {
+            nav.hidePopover();
+          }
+        });
+      }
+    });
+  }
 
   onStickyLogoClick(event: Event) {
     if (!isPlatformBrowser(this.platformId)) {

@@ -26,7 +26,7 @@ export class AncalBannerComponent {
 
   parsedContent = computed(() => {
     const post = this.mainPost();
-    return post ? this.contentService.parseContent(post) : null;
+    return post ? this.contentService.parseContent(post, { stripHeaderImage: true }) : null;
   });
 
   isLoading = computed(() => this.mainPostResource.isLoading());

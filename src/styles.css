@@ -71,9 +71,9 @@
   }
 }
 
-/* Mobile: justify all text with hyphens */
+/* Mobile: justify only paragraphs with hyphens */
 @media (max-width: 767px) {
-  body {
+  p {
     hyphens: auto;
     overflow-wrap: break-word;
     text-align: justify;

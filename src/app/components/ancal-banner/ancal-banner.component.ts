@@ -26,10 +26,7 @@ export class AncalBannerComponent {
 
   parsedContent = computed(() => {
     const post = this.mainPost();
-    // The banner renders headerImg in its own column, so remove it from the body.
-    return post
-      ? this.contentService.parseContent(post, { stripHeaderImage: true })
-      : null;
+    return post ? this.contentService.parseContent(post, { stripHeaderImage: true }) : null;
   });
 
   isLoading = computed(() => this.mainPostResource.isLoading());

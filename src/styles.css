@@ -71,6 +71,15 @@
   }
 }
 
+/* Mobile: justify only paragraphs with hyphens */
+@media (max-width: 767px) {
+  p {
+    hyphens: auto;
+    overflow-wrap: break-word;
+    text-align: justify;
+  }
+}
+
 ::selection {
   background-color: var(--color-accent);
   color: var(--color-on-accent);

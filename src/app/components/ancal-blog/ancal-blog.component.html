@@ -38,11 +38,11 @@
           <h3 class="text-[18px] md:text-[20px] lg:text-[22px] font-bold leading-[1.3] mb-[12px] md:mb-[15px] text-body transition-all group-hover:text-hover-highlight"
               [innerHTML]="item.content.title | safeHtml">
           </h3>
-          @if (item.content.preview) {
-          <p class="text-[13px] md:text-[14px] lg:text-[15px] text-muted mb-[15px] md:mb-[18px] line-clamp-3">
-            {{ item.content.preview }}...
-          </p>
-          }
+           @if (item.content.preview) {
+           <p class="text-[14px] md:text-[15px] lg:text-[16px] text-muted mb-[15px] md:mb-[18px] line-clamp-3">
+             {{ item.content.preview }}...
+           </p>
+           }
           <span class="inline-block text-[13px] md:text-[14px] lg:text-[15px] font-semibold text-body transition-all group-hover:text-hover-highlight">
             Weiterlesen <i class="ri-arrow-right-line"></i>
           </span>

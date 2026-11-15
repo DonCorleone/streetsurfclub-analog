@@ -5,22 +5,22 @@
     @if (isLoading()) {
     <app-loading-skeleton type="banner" />
     } @else {
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-[25px] lg:gap-[35px] xl:gap-[45px]">
-      @if (parsedContent()) {
-      <div class="self-center order-1" [class.order-2]="parsedContent()!.imageFirst"
-        [class.animate-fade-up]="parsedContent()">
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-[25px] lg:gap-[35px] xl:gap-[45px]">
+       @if (parsedContent()) {
+       <div class="self-center order-2" [class.lg:order-1]="!parsedContent()!.imageFirst" [class.lg:order-2]="parsedContent()!.imageFirst"
+         [class.animate-fade-up]="parsedContent()">
         @if (parsedContent()?.lead) {
         <span
           class="text-[13px] md:text-[15px] lg:text-[16px] text-on-accent bg-accent py-[1px] px-[10px] mb-[10px] inline-block">
           {{ parsedContent()!.lead }}
         </span>
         }
-        <h1 [innerHTML]="parsedContent()!.title | safeHtml"
-          class="text-body font-bold text-[26px] md:text-[34px] lg:text-[44px] 2xl:text-[50px] leading-[1.22] mb-[8px] md:mb-[10px] lg:mb-[12px] xl:mb-[14px]">
-        </h1>
-        <div [innerHTML]="parsedContent()!.content | safeHtml"
-          class="text-[13px] md:text-[15px] lg:text-[15px] xl:text-[16px] text-body leading-[1.8]">
-        </div>
+         <h1 [innerHTML]="parsedContent()!.title | safeHtml"
+           class="text-body font-bold text-[26px] md:text-[34px] lg:text-[44px] 2xl:text-[50px] leading-[1.22] mb-[8px] md:mb-[10px] lg:mb-[12px] xl:mb-[14px]">
+         </h1>
+          <div [innerHTML]="parsedContent()!.content | safeHtml"
+            class="text-[16px] md:text-[17px] lg:text-[17px] xl:text-[18px] text-body leading-[1.8]">
+          </div>
 
         @if (mainPost()?.labels && mainPost()!.labels!.length > 0) {
         <div class="flex flex-wrap gap-[6px] mt-[15px] md:mt-[18px]">
@@ -35,9 +35,9 @@
 
       </div>
       }
-      @if (parsedContent()?.headerImg) {
-      <div class="self-center order-2" [class.order-1]="parsedContent()!.imageFirst"
-        [class.animate-fade-up]="parsedContent()">
+       @if (parsedContent()?.headerImg) {
+       <div class="self-center order-1" [class.lg:order-2]="!parsedContent()!.imageFirst" [class.lg:order-1]="parsedContent()!.imageFirst"
+         [class.animate-fade-up]="parsedContent()">
         <a [href]="parsedContent()!.headerImg" target="_blank" rel="noopener noreferrer" class="block">
           <img [src]="parsedContent()!.headerImg" class="w-full h-auto" alt="banner-image" fetchpriority="high"
             loading="eager">

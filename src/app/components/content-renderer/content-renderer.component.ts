@@ -13,16 +13,31 @@ interface ContentSegment {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SafeHtmlPipe, GalleryComponent],
   template: `
-    @for (segment of segments(); track $index) {
-      @if (segment.type === 'html') {
-        <div [innerHTML]="segment.content | safeHtml"
-             class="prose prose-slate dark:prose-invert max-w-none text-[15px] md:text-[16px] leading-[1.8] text-body">
-        </div>
-      } @else if (segment.type === 'gallery' && segment.images) {
-        <app-gallery [images]="segment.images" />
+    <div class="content-columns">
+      @for (segment of segments(); track $index) {
+       @if (segment.type === 'html') {
+           <div [innerHTML]="segment.content | safeHtml"
+                class="prose prose-slate dark:prose-invert max-w-none text-[16px] md:text-[17px] leading-[1.8] text-body">
+           </div>
+        } @else if (segment.type === 'gallery' && segment.images) {
+          <app-gallery [images]="segment.images" />
+        }
+      }
+    </div>
+  `,
+  styles: [`
+    .content-columns {
+      column-count: 1;
+      column-gap: 2rem;
+      column-fill: balance;
+    }
+
+    @media (min-width: 768px) {
+      .content-columns {
+        column-count: 2;
       }
     }
-  `,
+  `]
 })
 export class ContentRendererComponent {
   // Input for the raw HTML content

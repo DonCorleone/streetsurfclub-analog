@@ -95,15 +95,15 @@ import { ContentRendererComponent } from '../../components/content-renderer/cont
   `
 })
 export default class BlogDetailsComponent {
-  private bloggerService = inject(BloggerService);
-  private contentService = inject(ContentService);
-  private metaService = inject(MetaService);
+  bloggerService = inject(BloggerService);
+  contentService = inject(ContentService);
+  metaService = inject(MetaService);
 
   // Use Analog's injectActivatedRoute for SSR-safe route access
   readonly route = injectActivatedRoute();
 
   // Convert route params to a signal
-  private pageId = toSignal(
+  pageId = toSignal(
     this.route.params.pipe(map(params => params['id'] as string))
   );
 

@@ -152,15 +152,15 @@ const RELATED_COUNT = 3;
   `
 })
 export default class BlogDetailsComponent {
-  private bloggerService = inject(BloggerService);
-  private contentService = inject(ContentService);
-  private metaService = inject(MetaService);
+  bloggerService = inject(BloggerService);
+  contentService = inject(ContentService);
+  metaService = inject(MetaService);
 
   // Use Analog's injectActivatedRoute for SSR-safe route access
   readonly route = injectActivatedRoute();
 
   // Convert route params to a signal
-  private postId = toSignal(
+  postId = toSignal(
     this.route.params.pipe(map(params => params['id'] as string))
   );
 
@@ -221,8 +221,7 @@ export default class BlogDetailsComponent {
         return content ? { post, content, sharedLabels, score } : null;
       })
       .filter((item): item is { post: Post; content: IContent; sharedLabels: string[]; score: number } => item !== null);
-  });
-
+    });
   // Computed loading state
   isLoading = computed(() => this.postResource.isLoading());
 

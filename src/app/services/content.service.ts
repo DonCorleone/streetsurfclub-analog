@@ -45,9 +45,14 @@ export class ContentService {
     }
 
     if (page.content) {
-      let decodedContent = decodeURIComponent(
-        page.content.replace(/\\u/g, '%')
-      );
+      let decodedContent = page.content;
+      try {
+        decodedContent = decodeURIComponent(
+          page.content.replace(/\\u/g, '%')
+        );
+      } catch (e) {
+        console.error('Failed to decode content, using raw:', e);
+      }
 
       // Find first <img> in content and determine its position relative to text
       const imgRegexContent = /<img[^>]+src="([^">]+)"[^>]*>/;
